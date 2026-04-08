@@ -50,6 +50,7 @@ h1 {
     box-sizing: border-box;
     text-align: left;     /* 左寄せ */
     outline: none;        /* クリック時の青い枠を消す */
+    z-index: 2;
 }
 
 .target-toggle-btn {
