@@ -1,13 +1,70 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>レベリングシミュレータ</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>討伐シミュレータ</title>
+    <style>
+        :root { --main-bg: #f8f9fa; --card-bg: #ffffff; --primary-btn: #007bff; }
+        body { font-family: "Helvetica Neue", Arial, sans-serif; background-color: var(--main-bg); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: auto; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h1, h2 { text-align: center; color: #444; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        .input-group { margin-bottom: 10px; }
+        label { display: block; font-size: 0.9em; font-weight: bold; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: var(--primary-btn); color: white; border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #0056b3; }
+        #result-area { text-align: center; border: 2px dashed #007bff; padding: 15px; background: #eef6ff; }
+    </style>
 </head>
 <body>
-  <h1>討伐シミュ</h1>
+
+<div class="container">
+    <h1>討伐シミュレータ</h1>
+
+    <div class="grid">
+        <div class="card">
+            <h2>自分（幻獣）</h2>
+            <div class="input-group"><label>体力 (HP)</label><input type="number" id="p-hp" value="4000"></div>
+            <div class="input-group"><label>攻撃 (ATK)</label><input type="number" id="p-atk" value="4000"></div>
+            <div class="input-group"><label>防御 (DEF)</label><input type="number" id="p-def" value="4000"></div>
+            <div class="input-group"><label>幸運 (LUK)</label><input type="number" id="p-luk" value="6"></div>
+            <div class="input-group">
+                <label>武器</label>
+                <select id="p-weapon">
+                    <option value="0">なし</option>
+                    <option value="500">鋼の剣 (ATK+500)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>ターゲット</h2>
+            <div class="input-group">
+                <label>敵を選択</label>
+                <select id="enemy-preset">
+                    <option value="dragon">闇黒龍</option>
+                    <option value="slime">スライム</option>
+                </select>
+            </div>
+            <div class="input-group"><label>敵HP</label><input type="number" id="e-hp" value="4000"></div>
+            <div class="input-group"><label>敵ATK</label><input type="number" id="e-atk" value="4000"></div>
+            <div class="input-group"><label>敵DEF</label><input type="number" id="e-def" value="4000"></div>
+        </div>
+    </div>
+
+    <button onclick="alert('ここからシミュレーション計算を始めます！')">シミュレーション開始</button>
+
+    <div class="card" style="margin-top: 20px;">
+        <h2>結果</h2>
+        <div id="result-area">
+            ここに勝率などの結果が表示されます
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
