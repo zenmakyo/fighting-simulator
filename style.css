@@ -28,35 +28,71 @@ h1 {
     gap: 0; /* 隙間を詰めたい場合はここを調整 */
 }
 
-/* 討伐対象ボタン（指定のプロパティを反映） */
-.target-toggle-btn {
+/* --- 1行目：検索入力エリア --- */
+.targetBox {
+    margin-top: 1em;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    margin-top: 1em;
-    gap: clamp(0.1px, 1vw, 5px);
-    line-height: 1.4;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-weight: bold;
-    color: #444;
-    padding: 10px;
-    white-space: nowrap;
+    position: relative;
 }
 
-/* 対象名の選択ボックス */
-.enemy-select {
+.inputWrapper {
+    position: relative;
+    margin-left: 0.5em;
+    width: 220px; 
+}
+
+.targetInput {
     font-size: 16px;
-    width: 220px; /* スマホで見やすい幅 */
-    padding: 8px;
+    height: 48px; 
+    width: 100%;
+    padding: 0 12px; /* 左右に少し余裕を */
     border: 1px solid #aaa;
-    border-radius: 4px;
+    border-radius: 6px;
     background-color: #fff;
-    margin-top: 1em; /* ボタンの高さに合わせる */
-    cursor: pointer;
+    box-sizing: border-box;
+    
+    /* 左寄せに修正 */
+    text-align: left; 
+    
     outline: none;
+}
+
+/* 候補リストのデザイン */
+.targetSuggestions {
+    position: absolute;
+    top: 105%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    background: white;
+    display: none; 
+    max-height: 250px;
+    overflow-y: auto;
+    font-size: 16px;
+    z-index: 2000;
+    
+    /* リストの中身も左寄せ */
+    text-align: left; 
+    
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* リスト内の各項目 */
+.targetSuggestions div {
+    padding: 12px 15px; /* タップしやすい広さ */
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.targetSuggestions div:last-child {
+    border-bottom: none;
+}
+
+.targetSuggestions div:hover {
+    background-color: #f0f0ff;
 }
 
 /* --- 2行目：詳細ステータスの箱 --- */
