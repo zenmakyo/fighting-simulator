@@ -25,7 +25,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* 隙間を詰めたい場合はここを調整 */
+    gap: 0px; /* 隙間を詰めたい場合はここを調整 */
 }
 
 /*】入力欄を包む箱の設定 */
