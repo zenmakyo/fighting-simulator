@@ -65,20 +65,39 @@ h1 {
 }
 
 .targetSuggestions {
-    position: absolute;   /* 入力欄のすぐ下に浮かせる */
-    top: 100%;            /* 入力欄の下端に合わせる */
+    position: absolute;   /* 絶対配置で浮かせます */
+    top: 100%;            /* 入力欄のすぐ下から開始 */
     left: 0;
-    width: 100%;          /* 入力欄と同じ幅にする */
-    background: white;    /* 白い背景 */
+    width: 100%;          /* 入力欄と同じ幅 */
+    background: white;    /* 背景を白にして透明を解消 */
     border: 1px solid #aaa;
-    border-top: none;     /* 入力欄との境目の線を消して一体感を出す */
-    border-radius: 0 0 6px 6px; /* 下側だけ角を丸くする */
-    display: none;        /* 最初は隠しておく（重要！） */
-    max-height: 200px;    /* 候補が増えたらスクロールさせる */
-    overflow-y: auto;
-    z-index: 1000;        /* 他の要素より上に表示する */
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* 影をつけて浮いている感を出す */
+    
+    /* --- 高さ制限とスクロールの設定 --- */
+    max-height: calc(40px * 5); /* 1項目40pxとした場合、5個分で固定 */
+    overflow-y: auto;           /* 5個を超えたらスクロール出現 */
+    
+    /* --- 最前面に持ってくる設定 --- */
+    z-index: 9999;        /* 他の文字や箱よりも上に表示 */
+    
+    display: none;        /* 最初は隠す（JSで制御） */
     box-sizing: border-box;
+}
+
+/* 候補リストの中の1項目ごとのデザイン */
+.targetSuggestions div {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
     text-align: left;
+    color: #333;
+    height: 40px;         /* 高さを固定してスクロール計算を正確に */
+    box-sizing: border-box;
+}
+
+.targetSuggestions div:hover {
+    background-color: #f0f0ff; /* マウスを乗せた時に色を変える */
 }
 
 .enemy-select {
