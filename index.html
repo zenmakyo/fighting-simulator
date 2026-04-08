@@ -10,13 +10,13 @@
 <body>
   <h1>討伐勝率計算</h1>
 
-  <div class="targetBox">
-    <button class="target-toggle-btn">討伐対象</button>
-    <div class="inputWrapper">
-        <input type="text" id="targetInput" class="targetInput" autocomplete="off" placeholder="名前を入力...">
-        <div id="targetSuggestions" class="targetSuggestions"></div>
-    </div>
-</div>
+ <div class="target-container">
+    <div class="target-row">
+        <button type="button" class="target-toggle-btn" onclick="toggleEnemyBox()">討伐対象</button>
+
+        <select id="enemy-select" class="enemy-select" onchange="updateEnemyStats()">
+            </select>
+ </div>
 
     <div id="enemy-status-box" class="enemy-status-box" style="display: none;">
         <div class="status-item">
