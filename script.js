@@ -5,67 +5,59 @@ const enemyData = [
     // ここに同じ形式でどんどん追加できます
 ];
 
-window.onload = function() {
+// 2. 討伐幻獣名の箱
+// A. メニューの開閉（ボタンを押したとき）
+function toggleSearchMenu() {
+    const menu = document.getElementById('targetMenu');
     const input = document.getElementById('targetInput');
-    const suggestions = document.getElementById('targetSuggestions');
-
-    // --- A. 入力欄をクリックした時に全リストを表示 ---
-    input.addEventListener('focus', function() {
-        showSuggestions(enemyData);
-    });
-
-    // --- B. 文字を入力した時に部分一致で絞り込む ---
-    input.addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        const filtered = enemyData.filter(enemy => 
-            enemy.name.toLowerCase().includes(query)
-        );
-        showSuggestions(filtered);
-    });
-
-    // --- C. リストを表示する共通処理 ---
-    function showSuggestions(list) {
-    suggestions.innerHTML = '';
     
-    if (list.length === 0) {
-        suggestions.style.display = 'none';
-        return;
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+        input.value = ''; // テキストボックスを空にする
+        filterList();     // 全リストを表示する
+        input.focus();    // すぐに入力できる状態にする
     }
+}
 
-    list.forEach(enemy => {
+// B. リストの絞り込み（文字を打ったとき）
+function filterList() {
+    const query = document.getElementById('targetInput').value.toLowerCase();
+    const suggestions = document.getElementById('targetSuggestions');
+    suggestions.innerHTML = '';
+
+    // enemyDataから部分一致で抽出
+    const filtered = enemyData.filter(enemy => 
+        enemy.name.toLowerCase().includes(query)
+    );
+
+    filtered.forEach(enemy => {
         const div = document.createElement('div');
         div.textContent = enemy.name;
         
-        // CSSで指定しても良いですが、JS側で1行のスタイルを整えます
-        div.style.padding = '10px 12px';
-        div.style.cursor = 'pointer';
-        div.style.backgroundColor = 'white'; // 透明防止
-        div.style.borderBottom = '1px solid #eee';
-
         div.onclick = function() {
-            input.value = enemy.name;
-            suggestions.style.display = 'none';
+            // 選択した名前をボタンに反映
+            document.getElementById('targetSelectBtn').textContent = enemy.name;
+            // 属性ボックス等にステータスを反映（既存の関数）
             applyEnemyStats(enemy);
+            // メニューを閉じる
+            document.getElementById('targetMenu').style.display = 'none';
         };
-        
-        // マウスを乗せた時に色を変える（おまけ）
-        div.onmouseover = () => div.style.backgroundColor = '#f0f0f0';
-        div.onmouseout = () => div.style.backgroundColor = 'white';
-        
         suggestions.appendChild(div);
     });
-    suggestions.style.display = 'block';
 }
 
-    // --- D. 欄外をクリックしたらリストを閉じる ---
-    document.addEventListener('click', function(e) {
-        if (!input.contains(e.target) && !suggestions.contains(e.target)) {
-            suggestions.style.display = 'none';
-        }
-    });
-};
+// C. 欄外をクリックしたら閉じる処理（一番下などに追加）
+document.addEventListener('mousedown', function(e) {
+    const wrapper = document.querySelector('.inputWrapper');
+    const menu = document.getElementById('targetMenu');
+    if (wrapper && !wrapper.contains(e.target)) {
+        menu.style.display = 'none';
+    }
+});
 
-// --- E. 選択したモンスターのステータスを各入力欄に反映 ---
+// D. 選択したモンスターのステータスを各入力欄に反映
 function applyEnemyStats(data) {
     document.getElementById('e-attribute').value = data.attr;
     document.getElementById('e-sta').value = data.sta;
