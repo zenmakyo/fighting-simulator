@@ -65,23 +65,26 @@ h1 {
 }
 
 .targetSuggestions {
-    position: absolute;   /* 絶対配置で浮かせます */
-    top: 100%;            /* 入力欄のすぐ下から開始 */
+    /* 1. 浮かせるための必須設定 */
+    position: absolute;   
+    top: 100%;            /* 入力欄のすぐ下に配置 */
     left: 0;
     width: 100%;          /* 入力欄と同じ幅 */
-    background: white;    /* 背景を白にして透明を解消 */
+    
+    /* 2. 見た目の設定 */
+    background-color: white; 
     border: 1px solid #aaa;
-    border-radius: 0 0 6px 6px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* 影をつけて浮いている感を出す */
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* 浮いている影 */
     
-    /* --- 高さ制限とスクロールの設定 --- */
-    max-height: calc(40px * 5); /* 1項目40pxとした場合、5個分で固定 */
-    overflow-y: auto;           /* 5個を超えたらスクロール出現 */
+    /* 3. 5個分でスクロール */
+    max-height: 200px;    /* 40px × 5個分 */
+    overflow-y: auto;
     
-    /* --- 最前面に持ってくる設定 --- */
-    z-index: 9999;        /* 他の文字や箱よりも上に表示 */
+    /* 4. 最前面に持ってくる */
+    z-index: 9999;        
     
-    display: none;        /* 最初は隠す（JSで制御） */
+    display: none;        
     box-sizing: border-box;
 }
 
