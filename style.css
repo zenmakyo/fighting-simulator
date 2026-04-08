@@ -28,12 +28,21 @@ h1 {
     gap: 0; /* 隙間を詰めたい場合はここを調整 */
 }
 
-/* --- 1行目：検索入力エリア --- */
-.target-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0;
+/*】入力欄を包む箱の設定 */
+.inputWrapper {
+    position: relative;       /* 候補リストを出す基準にする */
+    display: inline-block;    /* これで改行を防ぐ */
+}
+
+.targetInput {
+  font-size: 16px;
+  height: 30px;
+  width: 270px;
+  padding: 5px;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  text-align: left; /* 入力テキストを左寄せ */
 }
 
 .target-toggle-btn {
