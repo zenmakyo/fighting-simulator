@@ -38,7 +38,7 @@ h1 {
 .targetInput {
     font-size: 16px;
     height: 46px;         /* 箱を大きく（高さを出す） */
-    width: 250px;
+    width: 100px;
     padding: 0 12px;      /* 左側に少し余白を作る */
     border: 1px solid #aaa;
     border-radius: 6px;
