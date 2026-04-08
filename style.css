@@ -70,6 +70,7 @@ h1 {
 .targetInput {
     width: 100% !important; /* 前回の 100px ミスを防ぐ */
     height: 36px;
+    font-size: 16px;
     padding: 0 8px;
     margin-bottom: 8px;
     border: 1px solid #ccc;
