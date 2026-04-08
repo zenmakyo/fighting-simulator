@@ -1,0 +1,20 @@
+body {
+  background-color: #e6e6fa; /*　背景色　*/
+  color: #000000; /* 文字色 */
+  font-family: sans-serif; /* フォント */
+  text-align: center; /* 中央揃え */
+}
+
+h1 {
+  font-family: 'Zen Kurenaido', sans-serif; /* タイトルフォント */
+  font-size: 2rem;
+  color: white;
+  -webkit-text-stroke: 3px black;
+  paint-order: stroke fill;
+  font-weight: bold;
+  padding: 0.5rem;
+  line-height: 1.1;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  background-color: #ffffe0;
+}
