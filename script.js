@@ -4,29 +4,34 @@ const enemyData = [
     { name: "Lv150: 叛逆の断罪者", attr: "魔", sta: 87030, atk: 7500, def: 3200, ability: "強打" }
 ];
 
+
 window.onload = function() {
     const select = document.getElementById('enemy-select');
-    
-    // プルダウンの生成
     enemyData.forEach((enemy, index) => {
         const option = document.createElement('option');
         option.value = index; 
         option.text = enemy.name;
         select.appendChild(option);
     });
-
-    // --- ここから追加：デフォルト設定 ---
-    select.value = "0";      // 0番目（闇黒龍）を選択状態にする
-    updateEnemyStats();      // 数値を反映させる関数を今すぐ実行する
-    // ---------------------------------
+    // デフォルト設定
+    select.value = "0";
+    updateEnemyStats();
 };
+
+// 【追加】ボタンを押した時に箱を出し入れする関数
+function toggleEnemyBox() {
+    const box = document.getElementById('enemy-status-box');
+    if (box.style.display === "none") {
+        box.style.display = "block"; // 表示
+    } else {
+        box.style.display = "none";  // 非表示
+    }
+}
 
 function updateEnemyStats() {
     const select = document.getElementById('enemy-select');
-    const selectedIndex = select.value;
-    if (selectedIndex === "") return;
-
-    const data = enemyData[selectedIndex];
+    const data = enemyData[select.value];
+    if (!data) return;
 
     document.getElementById('e-attribute').value = data.attr;
     document.getElementById('e-sta').value = data.sta; 
