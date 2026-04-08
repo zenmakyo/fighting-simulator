@@ -32,6 +32,7 @@ h1 {
 .inputWrapper {
     position: relative;       /* 候補リストを出す基準にする */
     display: inline-block;    /* これで改行を防ぐ */
+    width: 250px;
 }
 
 .targetInput {
