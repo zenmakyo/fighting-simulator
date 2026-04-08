@@ -116,7 +116,4 @@ h1 {
     text-align: center;      /* 数値入力用 */
     text-align-last: center; /* プルダウンの選択前・選択後の文字用 */
     
-    /* ブラウザ固有のスタイルをリセット */
-    appearance: none;
-    -webkit-appearance: none;
 }
