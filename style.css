@@ -35,14 +35,16 @@ h1 {
 }
 
 .targetInput {
-  font-size: 16px;
-  height: 30px;
-  width: 270px;
-  padding: 5px;
-  border: 1px solid #dcdcdc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  text-align: left; /* 入力テキストを左寄せ */
+    font-size: 16px;
+    height: 48px;         /* 箱を大きく（高さを出す） */
+    width: 100%;          /* inputWrapperの幅（220px）に合わせる */
+    padding: 0 12px;      /* 左側に少し余白を作る */
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    background-color: #fff;
+    box-sizing: border-box;
+    text-align: left;     /* 左寄せ */
+    outline: none;        /* クリック時の青い枠を消す */
 }
 
 .target-toggle-btn {
