@@ -28,29 +28,70 @@ h1 {
     gap: 0px; /* 隙間を詰めたい場合はここを調整 */
 }
 
-/*】入力欄を包む箱の設定 */
+/* 親：ボタン1個分のスペースを確保 */
 .inputWrapper {
-    position: relative;       /* 候補リストを出す基準にする */
-    display: inline-block;    /* これで改行を防ぐ */
+    position: relative;
+    display: inline-block;
     width: 300px;
     height: 46px;
+    vertical-align: middle;
 }
 
-.targetInput {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 16px;
-    height: 46px;         /* 箱を大きく（高さを出す） */
+/* 普段見えているボタン */
+.targetSelectBtn {
     width: 100%;
-    padding: 0 12px;      /* 左側に少し余白を作る */
+    height: 100%;
+    background: #fff;
     border: 1px solid #aaa;
     border-radius: 6px;
-    background-color: #fff;
+    padding: 0 12px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* 浮き出るメニュー全体（検索窓＋リスト） */
+.targetMenu {
+    position: absolute;
+    top: 48px; /* ボタンのすぐ下 */
+    left: 0;
+    width: 300px;
+    background: white;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 9999;
+    padding: 8px;
     box-sizing: border-box;
-    text-align: left;     /* 左寄せ */
-    outline: none;        /* クリック時の青い枠を消す */
-    z-index: 2;
+}
+
+/* メニュー内の入力欄 */
+.targetInput {
+    width: 100% !important; /* 前回の 100px ミスを防ぐ */
+    height: 36px;
+    padding: 0 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* リスト部分（5個分スクロール） */
+.targetSuggestions {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* 候補1行のデザイン */
+.targetSuggestions div {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.targetSuggestions div:hover {
+    background-color: #f0f0ff;
 }
 
 .target-toggle-btn {
@@ -67,30 +108,6 @@ h1 {
     color: #444;
     padding: 10px;
     white-space: nowrap;
-}
-
-.targetSuggestions {
-    /* 1. 浮かせるための必須設定 */
-    position: absolute;   
-    top: 100%;            /* 入力欄のすぐ下に配置 */
-    left: 0;
-    width: 100%;          /* 入力欄と同じ幅 */
-    
-    /* 2. 見た目の設定 */
-    background-color: white; 
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* 浮いている影 */
-    
-    /* 3. 5個分でスクロール */
-    max-height: 200px;    /* 40px × 5個分 */
-    overflow-y: auto;
-    
-    /* 4. 最前面に持ってくる */
-    z-index: 9999;        
-    
-    display: none;        
-    box-sizing: border-box;
 }
 
 /* 候補リストの中の1項目ごとのデザイン */
