@@ -60,28 +60,30 @@ h1 {
 }
 
 /* --- 2行目：詳細ステータスの箱 --- */
+/* ステータス箱本体（大元の箱） */
 .enemy-status-box {
-    margin: 10px auto;
-    padding: 20px;
+    margin: 10px auto;      /* 上下10px、左右中央 */
+    padding: 15px;          /* 箱の内側の余白 */
     background-color: #fff;
     border: 1px solid #aaa;
     border-radius: 12px;
-    width: 90%;
-    max-width: 350px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 
-    /* 縦に項目を並べる */
+    /* 画面両端に1%ずつの余白 ＝ 幅98% */
+    width: 98%; 
+    box-sizing: border-box; /* paddingやborderを幅に含める設定（必須） */
+
     display: flex;
     flex-direction: column;
-    gap: 15px; /* 各行の間隔 */
+    gap: 12px;              /* 項目間の隙間 */
 }
 
-/* 各項目（属性やStaminaの行） */
+/* 各ステータス項目（属性、Staminaなどの行） */
 .status-item {
-    display: flex;       /* 横並びにする */
-    align-items: center; /* 上下の中央を合わせる */
-    justify-content: space-between; /* 両端に寄せる */
-    width: 100%;
+    display: flex;
+    align-items: center;    /* 上下中央 */
+    justify-content: flex-start; /* 左詰め（幅指定で調整するため） */
+    width: 100%;            /* 親の98%幅をフルに使う */
 }
 
 /* 左側のラベル */
@@ -89,21 +91,23 @@ h1 {
     font-size: 16px;
     font-weight: bold;
     color: #555;
-    flex: 1;            /* 残りの幅を占有（左側） */
-    text-align: left;
+    flex: 1;                /* 残りの40%エリアを占有 */
+    white-space: nowrap;    /* ラベルの途中で改行させない */
 }
 
-/* 右側の入力・選択欄（ここを60%固定に） */
+/* 右側の入力・選択欄（箱のさらに60%に固定） */
 .status-item input, 
 .status-item select {
-    font-size: 16px;
-    padding: 12px 8px;
+    font-size: 16px;        /* 16px固定でズーム防止 */
+    padding: 12px 5px;      /* 上下をふっくら、左右は少し絞る */
     border: 1px solid #ccc;
     border-radius: 6px;
     background-color: #fafafa;
     text-align: center;
     
-    /* 右側を60%で固定 */
-    width: 60%; 
-    box-sizing: border-box; /* paddingを含めて60%にする */
+    /* 大元の箱に対して「60%」の幅を死守する */
+    width: 70%;
+    min-width: 70%;         /* スマホで縮まないように固定 */
+    max-width: 70%;
+    box-sizing: border-box; /* これがないとpadding分で60%を超えてはみ出す */
 }
