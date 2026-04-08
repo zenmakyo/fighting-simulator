@@ -33,9 +33,13 @@ h1 {
     position: relative;       /* 候補リストを出す基準にする */
     display: inline-block;    /* これで改行を防ぐ */
     width: 300px;
+    height: 46px;
 }
 
 .targetInput {
+    position: absolute;
+    top: 0;
+    left: 0;
     font-size: 16px;
     height: 46px;         /* 箱を大きく（高さを出す） */
     width: 100px;
