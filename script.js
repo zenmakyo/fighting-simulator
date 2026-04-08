@@ -25,29 +25,37 @@ window.onload = function() {
 
     // --- C. リストを表示する共通処理 ---
     function showSuggestions(list) {
-        suggestions.innerHTML = ''; // 一旦クリア
-        
-        if (list.length === 0) {
-            suggestions.style.display = 'none';
-            return;
-        }
-
-        list.forEach(enemy => {
-            const div = document.createElement('div');
-            div.textContent = enemy.name;
-            div.style.padding = '10px'; // 簡易的なデザイン
-            div.style.cursor = 'pointer';
-
-            // 候補をクリックした時の処理
-            div.onclick = function() {
-                input.value = enemy.name;
-                suggestions.style.display = 'none';
-                applyEnemyStats(enemy); // ステータス反映へ
-            };
-            suggestions.appendChild(div);
-        });
-        suggestions.style.display = 'block';
+    suggestions.innerHTML = '';
+    
+    if (list.length === 0) {
+        suggestions.style.display = 'none';
+        return;
     }
+
+    list.forEach(enemy => {
+        const div = document.createElement('div');
+        div.textContent = enemy.name;
+        
+        // CSSで指定しても良いですが、JS側で1行のスタイルを整えます
+        div.style.padding = '10px 12px';
+        div.style.cursor = 'pointer';
+        div.style.backgroundColor = 'white'; // 透明防止
+        div.style.borderBottom = '1px solid #eee';
+
+        div.onclick = function() {
+            input.value = enemy.name;
+            suggestions.style.display = 'none';
+            applyEnemyStats(enemy);
+        };
+        
+        // マウスを乗せた時に色を変える（おまけ）
+        div.onmouseover = () => div.style.backgroundColor = '#f0f0f0';
+        div.onmouseout = () => div.style.backgroundColor = 'white';
+        
+        suggestions.appendChild(div);
+    });
+    suggestions.style.display = 'block';
+}
 
     // --- D. 欄外をクリックしたらリストを閉じる ---
     document.addEventListener('click', function(e) {
