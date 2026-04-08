@@ -99,7 +99,6 @@ h1 {
 .status-item input, 
 .status-item select {
     font-size: 16px;        /* 16px固定でズーム防止 */
-    padding: 12px 5px;      /* 上下をふっくら、左右は少し絞る */
     height: 36px;
     border: 1px solid #ccc;
     border-radius: 6px;
