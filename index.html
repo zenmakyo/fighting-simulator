@@ -10,51 +10,45 @@
 <body>
   <h1>討伐勝率計算</h1>
 
-  <div class="target-row">
-  <select class="category-select">
-    <option value="all">討伐対象</option>
-  </select>
+  <div class="target-container">
+    <div class="target-row">
+        <button type="button" class="target-toggle-btn" onclick="toggleEnemyBox()">討伐対象</button>
 
-  <select id="enemy-select" class="enemy-select" onchange="updateEnemyStats()">
-  </select>
-</div>
+        <select id="enemy-select" class="enemy-select" onchange="updateEnemyStats()">
+            </select>
+    </div>
 
-<div class="enemy-status-box">
-  <div class="status-item">
-    <label>属性</label>
-    <select id="e-attribute">
-      <option value="獣">獣</option>
-      <option value="魔">魔</option>
-      <option value="霊">霊</option>
-      <option value="無">無</option>
-      <option value="地">地</option>
-      <option value="龍">龍</option>
-    </select>
-  </div>
-
-  <div class="status-item">
-    <label>Stamina</label>
-    <input type="number" id="e-sta"> </div>
-
-  <div class="status-item">
-    <label>Attack</label>
-    <input type="number" id="e-atk">
-  </div>
-
-  <div class="status-item">
-    <label>Defense</label>
-    <input type="number" id="e-def">
-  </div>
-
-  <div class="status-item">
-    <label>アビリティ</label>
-    <select id="e-ability">
-      <option value="none">なし</option>
-      <option value="強打">強打</option>
-      <option value="高揚">高揚</option>
-      <option value="粉砕">粉砕</option>
-    </select>
-  </div>
+    <div id="enemy-status-box" class="enemy-status-box" style="display: none;">
+        <div class="status-item">
+            <label>属性：</label>
+            <select id="e-attribute">
+                <option value="獣">獣</option><option value="魔">魔</option>
+                <option value="霊">霊</option><option value="無">無</option>
+                <option value="地">地</option><option value="龍">龍</option>
+            </select>
+        </div>
+        <div class="status-item">
+            <label>Stamina：</label>
+            <input type="number" id="e-sta">
+        </div>
+        <div class="status-item">
+            <label>Attack：</label>
+            <input type="number" id="e-atk">
+        </div>
+        <div class="status-item">
+            <label>Defense：</label>
+            <input type="number" id="e-def">
+        </div>
+        <div class="status-item">
+            <label>アビリティ：</label>
+            <select id="e-ability">
+                <option value="none">なし</option>
+                <option value="強打">強打</option>
+                <option value="高揚">高揚</option>
+                <option value="粉砕">粉砕</option>
+            </select>
+        </div>
+    </div>
 </div>
 
 </body>
