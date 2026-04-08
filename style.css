@@ -77,9 +77,9 @@ h1 {
     align-items: center;    /* 縦方向の中央揃え */
 }
 
-/* 各項目（ラベルと入力のセット） */
+/* 各項目（ラベルと入力のセット）の改行を防ぐ */
 .status-item {
-    display: contents;      /* Gridのルールを直下の要素に適用させる */
+    display: contents; /* Gridの子要素として直接振る舞わせる（これで横に並ぶ） */
 }
 
 /* 左側のラベル（属性、Staminaなど） */
@@ -88,19 +88,22 @@ h1 {
     font-weight: bold;
     color: #555;
     text-align: left;
+    display: inline-block; /* 改行を防ぐ */
+    margin-bottom: 0;      /* 下の余白を消して横のラインを合わせる */
 }
 
 /* 右側の入力・選択欄 */
 .status-item input, 
 .status-item select {
-    font-size: 16px;        /* 16px固定でスマホズーム防止 */
+    font-size: 16px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    width: 100%;            /* 右側のエリアいっぱいに広げる */
-    box-sizing: border-box; /* パディングを含めた幅計算 */
+    width: 100%;            /* Gridの右側カラムいっぱいに広げる */
+    box-sizing: border-box;
     background-color: #fafafa;
-    text-align: center;     /* 数値は見やすいように中央寄せ */
+    text-align: center;
+    margin: 0;              /* 余計なマージンを排除 */
 }
 
 /* セレクトボックスだけは文字を左寄せにする（お好みで） */
