@@ -61,52 +61,49 @@ h1 {
 
 /* --- 2行目：詳細ステータスの箱 --- */
 .enemy-status-box {
-    margin: 10px auto;      /* 画面中央寄せ */
+    margin: 10px auto;
     padding: 20px;
     background-color: #fff;
     border: 1px solid #aaa;
-    border-radius: 12px;    /* 角を丸く */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* 軽い影 */
-    width: 90%;             /* スマホの横幅に合わせる */
-    max-width: 350px;       /* 広がりすぎ防止 */
-    
-    /* グリッドレイアウトで左右を綺麗に揃える */
-    display: grid;
-    grid-template-columns: 110px 1fr; /* 左(ラベル)を110pxで固定、右(入力)を残り全部 */
-    row-gap: 15px;          /* 行の間隔 */
-    align-items: center;    /* 縦方向の中央揃え */
+    border-radius: 12px;
+    width: 90%;
+    max-width: 350px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+    /* 縦に項目を並べる */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 各行の間隔 */
 }
 
-/* 各項目（ラベルと入力のセット）の改行を防ぐ */
+/* 各項目（属性やStaminaの行） */
 .status-item {
-    display: contents; /* Gridの子要素として直接振る舞わせる（これで横に並ぶ） */
+    display: flex;       /* 横並びにする */
+    align-items: center; /* 上下の中央を合わせる */
+    justify-content: space-between; /* 両端に寄せる */
+    width: 100%;
 }
 
-/* 左側のラベル（属性、Staminaなど） */
+/* 左側のラベル */
 .status-item label {
     font-size: 16px;
     font-weight: bold;
     color: #555;
+    flex: 1;            /* 残りの幅を占有（左側） */
     text-align: left;
-    display: inline-block; /* 改行を防ぐ */
-    margin-bottom: 0;      /* 下の余白を消して横のラインを合わせる */
 }
 
-/* 右側の入力・選択欄 */
+/* 右側の入力・選択欄（ここを60%固定に） */
 .status-item input, 
 .status-item select {
     font-size: 16px;
-    padding: 8px;
+    padding: 12px 8px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    width: 100%;            /* Gridの右側カラムいっぱいに広げる */
-    box-sizing: border-box;
     background-color: #fafafa;
     text-align: center;
-    margin: 0;              /* 余計なマージンを排除 */
-}
-
-/* セレクトボックスだけは文字を左寄せにする（お好みで） */
-.status-item select {
-    text-align-last: center; /* プルダウン内のテキストも中央寄せ */
+    
+    /* 右側を60%で固定 */
+    width: 60%; 
+    box-sizing: border-box; /* paddingを含めて60%にする */
 }
