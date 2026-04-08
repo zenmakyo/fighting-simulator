@@ -63,6 +63,23 @@ h1 {
     white-space: nowrap;
 }
 
+.targetSuggestions {
+    position: absolute;   /* 入力欄のすぐ下に浮かせる */
+    top: 100%;            /* 入力欄の下端に合わせる */
+    left: 0;
+    width: 100%;          /* 入力欄と同じ幅にする */
+    background: white;    /* 白い背景 */
+    border: 1px solid #aaa;
+    border-top: none;     /* 入力欄との境目の線を消して一体感を出す */
+    border-radius: 0 0 6px 6px; /* 下側だけ角を丸くする */
+    display: none;        /* 最初は隠しておく（重要！） */
+    max-height: 200px;    /* 候補が増えたらスクロールさせる */
+    overflow-y: auto;
+    z-index: 1000;        /* 他の要素より上に表示する */
+    box-sizing: border-box;
+    text-align: left;
+}
+
 .enemy-select {
     font-size: 16px;
     width: 220px;
