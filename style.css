@@ -50,7 +50,7 @@ h1 {
 .enemy-select {
     font-size: 16px;
     width: 220px; /* スマホで見やすい幅 */
-    padding: 12px 8px;
+    padding: 8px;
     border: 1px solid #aaa;
     border-radius: 4px;
     background-color: #fff;
