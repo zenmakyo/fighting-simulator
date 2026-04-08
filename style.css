@@ -20,30 +20,90 @@ h1 {
   background-color: #ffffe0;
 }
 
-/* 討伐対象ボタン（枠なし、背景なし） */
+/* --- 1行目：ボタンとプルダウンの並び --- */
+.target-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0; /* 隙間を詰めたい場合はここを調整 */
+}
+
+/* 討伐対象ボタン（指定のプロパティを反映） */
 .target-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-top: 1em;
+    gap: clamp(0.1px, 1vw, 5px);
+    line-height: 1.4;
     border: none;
     background: none;
-    font-size: 16px;
     cursor: pointer;
+    font-weight: bold;
+    color: #444;
     padding: 10px;
-    text-decoration: underline; /* ボタンだと分かりやすくするため */
+    white-space: nowrap;
 }
 
-/* 右側の名前選択プルダウン（枠あり） */
+/* 対象名の選択ボックス */
 .enemy-select {
-    border: 1px solid #c0c0c0;
-    padding: 5px;
     font-size: 16px;
-    width: 250px;
+    width: 220px; /* スマホで見やすい幅 */
+    padding: 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-top: 1em; /* ボタンの高さに合わせる */
+    cursor: pointer;
+    outline: none;
 }
 
-/* ステータスが入る箱のスタイル */
+/* --- 2行目：詳細ステータスの箱 --- */
 .enemy-status-box {
-    border: 1px solid #000;
-    padding: 10px;
-    margin-top: 5px;
+    margin: 10px auto;      /* 画面中央寄せ */
+    padding: 20px;
     background-color: #fff;
-    width: fit-content;
-    text-align: left; /* 中身は左寄せ */
+    border: 1px solid #aaa;
+    border-radius: 12px;    /* 角を丸く */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* 軽い影 */
+    width: 90%;             /* スマホの横幅に合わせる */
+    max-width: 350px;       /* 広がりすぎ防止 */
+    
+    /* グリッドレイアウトで左右を綺麗に揃える */
+    display: grid;
+    grid-template-columns: 110px 1fr; /* 左(ラベル)を110pxで固定、右(入力)を残り全部 */
+    row-gap: 15px;          /* 行の間隔 */
+    align-items: center;    /* 縦方向の中央揃え */
+}
+
+/* 各項目（ラベルと入力のセット） */
+.status-item {
+    display: contents;      /* Gridのルールを直下の要素に適用させる */
+}
+
+/* 左側のラベル（属性、Staminaなど） */
+.status-item label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    text-align: left;
+}
+
+/* 右側の入力・選択欄 */
+.status-item input, 
+.status-item select {
+    font-size: 16px;        /* 16px固定でスマホズーム防止 */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;            /* 右側のエリアいっぱいに広げる */
+    box-sizing: border-box; /* パディングを含めた幅計算 */
+    background-color: #fafafa;
+    text-align: center;     /* 数値は見やすいように中央寄せ */
+}
+
+/* セレクトボックスだけは文字を左寄せにする（お好みで） */
+.status-item select {
+    text-align-last: center; /* プルダウン内のテキストも中央寄せ */
 }
