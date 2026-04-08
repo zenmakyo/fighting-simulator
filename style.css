@@ -63,7 +63,7 @@ h1 {
 /* ステータス箱本体（大元の箱） */
 .enemy-status-box {
     margin: 10px auto;      /* 上下10px、左右中央 */
-    padding: 15px;          /* 箱の内側の余白 */
+    padding: 15px 15px;          /* 箱の内側の余白 */
     background-color: #fff;
     border: 1px solid #aaa;
     border-radius: 12px;
@@ -100,6 +100,7 @@ h1 {
 .status-item select {
     font-size: 16px;        /* 16px固定でズーム防止 */
     padding: 12px 5px;      /* 上下をふっくら、左右は少し絞る */
+    height: 48px;
     border: 1px solid #ccc;
     border-radius: 6px;
     background-color: #fafafa;
@@ -110,4 +111,12 @@ h1 {
     min-width: 70%;         /* スマホで縮まないように固定 */
     max-width: 70%;
     box-sizing: border-box; /* これがないとpadding分で60%を超えてはみ出す */
+
+    /* --- 中央寄せの設定 --- */
+    text-align: center;      /* 数値入力用 */
+    text-align-last: center; /* プルダウンの選択前・選択後の文字用 */
+    
+    /* ブラウザ固有のスタイルをリセット */
+    appearance: none;
+    -webkit-appearance: none;
 }
