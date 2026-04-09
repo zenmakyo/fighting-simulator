@@ -166,10 +166,22 @@ function openSearchList(type, num, event) {
     }
 
     // --- B. データの準備 ---
-    let listData = (type === 'weapon') ? weaponList : (type === 'armor' ? armorList : abilityList);
-    let targetId = (type === 'weapon') ? `select-weapon-${num}` : 
-                   (type === 'armor') ? `select-armor-${num}` : 
-                   (type === 'w-ability') ? `select-w-abi-${num}` : `select-a-abi-${num}`;
+    let listData = [];
+    let targetId = "";
+
+    if (type === 'weapon') {
+        listData = weaponList;
+        targetId = `select-weapon-${num}`;
+    } else if (type === 'armor') {
+        listData = armorList;
+        targetId = `select-armor-${num}`;
+    } else if (type === 'w-ability') {
+        listData = weaponAbilityList; // data.jsで作ったリスト名に合わせる
+        targetId = `select-w-abi-${num}`;
+    } else if (type === 'a-ability') {
+        listData = armorAbilityList;  // data.jsで作ったリスト名に合わせる
+        targetId = `select-a-abi-${num}`;
+    }
 
     // --- C. 位置の計算 ---
     const rect = event.currentTarget.getBoundingClientRect();
@@ -193,6 +205,8 @@ function openSearchList(type, num, event) {
                 if (typeof currentPhantomState !== 'undefined') {
                     if (type === 'weapon') currentPhantomState[num].weapon = item;
                     if (type === 'armor') currentPhantomState[num].armor = item;
+                    if (type === 'w-ability') currentPhantomState[num].w_ability = item;
+                    if (type === 'a-ability') currentPhantomState[num].a_ability = item;
                 }
                 
                 // 閉じる
