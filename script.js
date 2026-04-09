@@ -231,17 +231,23 @@ function openSearchList(type, num, event) {
     }, 100);
 }
 
-// ページ読み込み時に強化値の選択肢を作る
-window.addEventListener('DOMContentLoaded', () => {
+// ページ読み込み完了時に強化値の選択肢（+0～+20）を自動生成
+window.addEventListener('load', () => {
     const plusSelects = document.querySelectorAll('.plus-select select');
+    
     plusSelects.forEach(select => {
-        for (let i = 0; i >= 20; i--) {
+        // 一旦中身をリセット
+        select.innerHTML = '';
+        
+        // 0から20までループして作成
+        for (let i = 0; i <= 20; i++) {
             const opt = document.createElement('option');
-            opt.value = i;          // 内部データ（数値の20）
-            opt.textContent = `+${i}`; // 見た目（+20）
+            opt.value = i;          // 内部データ：数値の 0～20
+            opt.textContent = `+${i}`; // 見た目：+0～+20
             select.appendChild(opt);
         }
-        // 初期値を+20に設定する場合
+        
+        // デフォルトを+20にしたい場合はここを20に。+0がいいなら0にする
         select.value = 20;
     });
 });
