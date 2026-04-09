@@ -9,3 +9,18 @@ const weaponList = [
     { name: "不乱：仁双応", grade: 9, baseAtk: 220, ability: "不乱" },
     { name: "不乱：金狐の絵筆", grade: 5, baseAtk: 10, ability: "不乱" }
 ];
+
+// 武器アビリティリスト
+const weaponAbilityList = [
+    { name: "未選択" },
+    { name: "疾風" },
+    { name: "紅舞" },
+    { name: "不乱" }
+];
+
+// 防具アビリティリスト
+const armorAbilityList = [
+    { name: "未選択" },
+    { name: "威風" },
+    { name: "虎咆" }
+];
