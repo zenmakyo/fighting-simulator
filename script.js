@@ -97,3 +97,60 @@ function updateEnemyStats() {
     document.getElementById('e-def').value = data.def;
     document.getElementById('e-ability').value = data.ability;
 }
+
+
+//3.自分の幻獣ステータスとリストの設定
+// 詳細エリアの開閉
+function toggleDetail(num) {
+    const detail = document.getElementById(`detail-${num}`);
+    if (detail.style.display === "none") {
+        detail.style.display = "block";
+    } else {
+        detail.style.display = "none";
+    }
+}
+
+// 浮き上がるリストを表示する共通関数
+function openFloatingList(title, items, callback) {
+    const overlay = document.getElementById('floating-list-overlay');
+    const listTitle = document.getElementById('list-title');
+    const listItems = document.getElementById('list-items');
+
+    listTitle.textContent = title;
+    listItems.innerHTML = ''; // リストを一旦空に
+
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        li.onclick = () => {
+            callback(item);
+            closeList();
+        };
+        listItems.appendChild(li);
+    });
+
+    overlay.style.display = 'flex';
+}
+
+// リストを閉じる
+function closeList() {
+    document.getElementById('floating-list-overlay').style.display = 'none';
+}
+
+// --- 各ボタンの動作例 ---
+
+// 保存先リストを開く
+function openSaveTargetList(num) {
+    const targets = ["保存スロット1 (未設定)", "保存スロット2 (未設定)", "保存スロット3 (未設定)"];
+    openFloatingList(`幻獣${num}の保存先を選択`, targets, (selected) => {
+        alert(`${num}番のデータを「${selected}」に保存しました（仮）`);
+    });
+}
+
+// 強化値リストを開く
+function openPlusList(type, num) {
+    const levels = Array.from({length: 21}, (_, i) => `+${i}`);
+    openFloatingList(`${type === 'weapon' ? '武器' : '防具'}強化値`, levels, (val) => {
+        document.getElementById(`plus-${type}-${num}`).textContent = val;
+    });
+}
