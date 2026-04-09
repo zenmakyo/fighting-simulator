@@ -306,3 +306,224 @@ h1 {
 .reset-btn:hover {
     background-color: #333;
 }
+
+
+/*　自分の幻獣の設定　*/
+/* --- 全体コンテナ --- */
+.my-phantom-manager {
+    max-width: 500px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* --- 幻獣ユニット外枠 --- */
+.phantom-unit {
+    border: 2px solid #333;
+    border-radius: 24px; /* 強めの角丸 */
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* --- ヘッダー --- */
+.phantom-header {
+    display: flex;
+    height: 48px;
+    background-color: #fff;
+}
+
+.phantom-toggle-btn {
+    width: 90px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-right: 2px solid #333;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.phantom-toggle-btn:hover { background-color: #222; }
+
+.phantom-name-display {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 18px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.arrow-icon { font-size: 10px; color: #888; }
+
+/* --- 詳細入力エリア --- */
+.phantom-detail-area {
+    border-top: 2px solid #333;
+    padding: 12px;
+    background-color: #f9f9f9;
+}
+
+/* --- 入力行（表形式風） --- */
+.input-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.input-row:last-of-type { border-bottom: none; }
+
+.input-label {
+    width: 85px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-label.sub { width: 70px; padding-left: 15px; font-size: 11px; }
+
+/* 入力フィールド */
+.input-field.full { flex: 1; }
+.input-field.short { width: 90px; }
+.input-field.mid { flex: 1; margin-right: 8px; }
+
+.input-field input, .input-field select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* --- 計算結果表示 --- */
+.calc-res {
+    flex: 1;
+    margin-left: 12px;
+    background-color: #eee;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+/* --- 装備選択と強化値 --- */
+.flex-col { flex-direction: column; align-items: stretch; gap: 4px; }
+.sub-row { display: flex; align-items: center; width: 100%; }
+
+.select-box {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    min-height: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.item-name { flex: 1; margin-right: 8px; }
+
+.plus-select {
+    width: 50px;
+    height: 32px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- ボタン類 --- */
+.btn-group { display: flex; gap: 5px; }
+
+.small-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    background-color: #666;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.main-save-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.main-save-btn:hover { background-color: #222; }
+
+/* --- 浮き上がるリスト（オーバーレイ） --- */
+.floating-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.floating-list-content {
+    background: #fff;
+    width: 85%;
+    max-width: 320px;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+.floating-list-content h4 { margin: 0 0 15px 0; text-align: center; }
+
+#list-items {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#list-items li {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.close-list-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #eee;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
