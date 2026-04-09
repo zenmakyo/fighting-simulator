@@ -435,18 +435,28 @@ h1 {
 
 .item-name { flex: 1; margin-right: 8px; }
 
+/* 親の箱は、位置を整えるだけにします */
 .plus-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 本体のデザイン（ここを以前のボタン風のデザインに統一） */
+.plus-select select {
     width: 80px;
     height: 32px;
     background-color: #eee;
     border: 1px solid #ccc;
     border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
+    text-align: center;
+    text-align-last: center; /* 文字を中央に寄せる */
+    outline: none;
+    appearance: none; /* ブラウザ標準の矢印を消す */
+    -webkit-appearance: none;
 }
 
 /* --- ボタン類 --- */
