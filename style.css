@@ -379,7 +379,7 @@ h1 {
 .input-row:last-of-type { border-bottom: none; }
 
 .input-label {
-    width: 85px;
+    width: 70px;
     font-size: 12px;
     font-weight: bold;
     color: #555;
