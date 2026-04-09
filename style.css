@@ -218,7 +218,7 @@ h1 {
 
 .result-table th, .result-table td {
     border: 1px solid #333;
-    height: 64px;
+    height: 48px;
     padding: 0;
     text-align: center;
     box-sizing: border-box;
