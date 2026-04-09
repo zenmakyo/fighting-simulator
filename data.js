@@ -13,10 +13,10 @@ const weaponList = [
 // 防具リスト
 const armorList = [
     { name: "未選択", grade: 0, baseDef: 0, ability: "なし" },
-    { name: "蚩尤ノ冥煌鎧", grade: 10, baseDef: 245, ability: "猛皇" },
-    { name: "飛翔の武冠", grade: 9, baseDef: 35, ability: "猛将" },
-    { name: "鏖魔瞳", grade: 10, baseDef: 500, ability: "修羅" },
-    { name: "虎乗の覇気", grade: 6, baseDef: 10, ability: "虎咆" }
+    { name: "猛皇：蚩尤ノ冥煌鎧", grade: 10, baseDef: 245, ability: "猛皇" },
+    { name: "猛将：飛翔の武冠", grade: 9, baseDef: 35, ability: "猛将" },
+    { name: "修羅：鏖魔瞳", grade: 10, baseDef: 500, ability: "修羅" },
+    { name: "虎咆：虎乗の覇気", grade: 6, baseDef: 10, ability: "虎咆" }
 ];
 
 // 武器アビリティリスト
