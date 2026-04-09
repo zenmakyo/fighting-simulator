@@ -215,6 +215,9 @@ function openSearchList(type, num, event) {
     searchInput.focus();
 
     // --- F. 「外側クリック」の監視を開始 ---
+    searchInput.oninput = (e) => {
+        render(e.target.value);
+    };
     const currentBtn = event.currentTarget; 
     activeCloseHandler = (e) => {
         // メニュー内をクリックしたなら何もしない
