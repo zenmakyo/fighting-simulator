@@ -341,7 +341,7 @@ h1 {
     border: none;
     border-right: 2px solid #333;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     transition: background 0.2s;
 }
@@ -397,7 +397,7 @@ h1 {
     padding: 6px 8px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 16px;
     box-sizing: border-box;
 }
 
@@ -412,7 +412,7 @@ h1 {
     justify-content: center;
     border-radius: 6px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
     color: #333;
     border: 1px solid #ccc;
 }
@@ -424,9 +424,9 @@ h1 {
 .select-box {
     background-color: #fff;
     border: 1px solid #ccc;
-    padding: 6px 12px;
+    padding: 2px 12px;
     border-radius: 6px;
-    font-size: 13px;
+    font-size: 16px;
     cursor: pointer;
     min-height: 18px;
     display: flex;
@@ -521,7 +521,7 @@ h1 {
     padding: 10px;
     border-bottom: 1px solid #eee;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 #dropdown-items li:hover {
