@@ -90,6 +90,131 @@
     </table>
 </div>
 
+<div class="my-phantom-manager">
+    
+    <div class="phantom-unit">
+        <div class="phantom-header">
+            <button type="button" class="phantom-toggle-btn" onclick="toggleDetail(1)">
+                幻獣1
+            </button>
+            <div class="phantom-name-display" onclick="openLoadList(1)">
+                <span id="display-name-1">未設定</span>
+                <i class="arrow-icon">▼</i>
+            </div>
+        </div>
+
+        <div id="detail-1" class="phantom-detail-area" style="display: none;">
+            
+            <div class="input-row">
+                <div class="input-label">幻獣名</div>
+                <div class="input-field full">
+                    <input type="text" id="input-name-1" placeholder="名前を入力">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-label">属性</div>
+                <div class="input-field full">
+                    <select id="input-element-1">
+                        <option value="無">無</option>
+                        <option value="火">火</option>
+                        <option value="水">水</option>
+                        <option value="風">風</option>
+                        <option value="地">地</option>
+                        <option value="光">光</option>
+                        <option value="闇">闇</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-label">Stamina</div>
+                <div class="input-field short">
+                    <input type="number" id="base-hp-1" placeholder="0">
+                </div>
+                <div class="calc-res" id="res-hp-1">0</div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-label">Attack</div>
+                <div class="input-field short">
+                    <input type="number" id="base-atk-1" placeholder="0">
+                </div>
+                <div class="calc-res" id="res-atk-1">0</div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-label">Defense</div>
+                <div class="input-field short">
+                    <input type="number" id="base-def-1" placeholder="0">
+                </div>
+                <div class="calc-res" id="res-def-1">0</div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-label">Luck</div>
+                <div class="input-field short">
+                    <input type="number" id="base-luck-1" placeholder="0">
+                </div>
+                <div class="calc-res" id="res-luck-1">0</div>
+            </div>
+
+            <div class="input-row flex-col">
+                <div class="sub-row">
+                    <div class="input-label">武器</div>
+                    <div class="input-field select-box item-name" id="select-weapon-1" onclick="openSearchList('weapon', 1)">
+                        未選択
+                    </div>
+                    <div class="plus-select" id="plus-weapon-1" onclick="openPlusList('weapon', 1)">+0</div>
+                </div>
+                <div class="sub-row">
+                    <div class="input-label sub">付与ｱﾋﾞ</div>
+                    <div class="input-field mid select-box" id="select-w-abi-1" onclick="openSearchList('ability', 1)">
+                        未選択
+                    </div>
+                    <button type="button" class="small-btn" onclick="syncWeaponAbi(1)">武器同調</button>
+                </div>
+            </div>
+
+            <div class="input-row flex-col">
+                <div class="sub-row">
+                    <div class="input-label">防具</div>
+                    <div class="input-field select-box item-name" id="select-armor-1" onclick="openSearchList('armor', 1)">
+                        未選択
+                    </div>
+                    <div class="plus-select" id="plus-armor-1" onclick="openPlusList('armor', 1)">+0</div>
+                </div>
+                <div class="sub-row">
+                    <div class="input-label sub">付与ｱﾋﾞ</div>
+                    <div class="input-field mid select-box" id="select-a-abi-1" onclick="openSearchList('ability', 1)">
+                        未選択
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="small-btn">ソロ</button>
+                        <button type="button" class="small-btn">極向</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="save-row">
+                <button type="button" class="main-save-btn" onclick="openSaveTargetList(1)">
+                    保存先を選択して保存
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<div id="floating-list-overlay" class="floating-overlay" style="display: none;">
+    <div class="floating-list-content">
+        <h4 id="list-title">リストを選択</h4>
+        <input type="text" id="list-search" placeholder="検索..." style="display:none;">
+        <ul id="list-items">
+            </ul>
+        <button type="button" class="close-list-btn" onclick="closeList()">閉じる</button>
+    </div>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>
