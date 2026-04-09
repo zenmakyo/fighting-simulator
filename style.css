@@ -198,7 +198,7 @@ h1 {
 
 /* 戦績結果の表について */
 .result-container {
-    margin: 20px auto; /* 左右autoで中央揃え */
+    margin: 20px auto;
     width: 100%;
     max-width: 500px;
 }
@@ -207,61 +207,67 @@ h1 {
     width: 100%;
     border-collapse: collapse;
     border: 2px solid #333;
-    table-layout: fixed; /* これでwidth指定を厳格にする */
+    table-layout: fixed; /* これが最重要です */
 }
 
-/* 共通のセル設定 */
+/* 列ごとの幅を強制固定（これで縦ラインが揃います） */
+.result-table th.label-cell { width: 25%; }
+.result-table td.value-cell { width: 45%; }
+.result-table td.action-cell, 
+.result-table td.stacked-cell { width: 30%; }
+
 .result-table th, .result-table td {
     border: 1px solid #333;
-    height: 64px; /* 上下分割に合わせた高さ */
+    height: 64px;
     padding: 0;
     text-align: center;
     box-sizing: border-box;
-    vertical-align: middle;
+    overflow: hidden; /* はみ出し防止 */
 }
 
-/* --- 列幅の指定 --- */
-/* 1列目：項目ラベル（結果・戦績・最大最小） */
-.result-table th.label-cell {
-    width: 25%;
-    background-color: #eee;
+/* --- 背景色の設定 --- */
+.label-cell {
+    background-color: #eee !important;
     font-weight: bold;
 }
 
-/* 2列目：メイン表示セル */
-.result-table td.value-cell {
-    width: 45%;
-    background-color: #fff;
+.value-cell {
+    background-color: #fff !important;
     font-weight: bold;
 }
 
-/* 3列目：右端セル（リセット・勝率・平均） */
-.result-table td.action-cell, 
-.result-table td.stacked-cell {
-    width: 30% !important;   /* !importantで優先度を上げます */
-    min-width: 30%;          /* 狭まらないように固定 */
-    max-width: 30%;          /* 広がらないように固定 */
-}
-
-/* 上下2段セルの内部微調整 */
+/* --- 上下分割セルの設定 --- */
 .stacked-cell {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    border: none !important; /* セル自体の枠線と重ならないように調整 */
+    /* 背景色はあえて指定せず、中身のdivに塗ります */
+    vertical-align: top; 
 }
 
-/* セル内の要素も幅100%に */
-.stack-label, .stack-value {
-    width: 100%;
+.stack-label {
+    height: 50%; /* ちょうど半分 */
+    background-color: #eee; /* ラベルのグレーを復活 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    border-bottom: 1px solid #333; /* 中の仕切り線 */
     box-sizing: border-box;
 }
 
-/* --- リセットボタンのデザイン --- */
+.stack-value {
+    height: 50%; /* ちょうど半分 */
+    background-color: #fff; /* 数値の白を復活 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* --- リセットボタン --- */
 .action-cell {
     padding: 8px !important;
+    background-color: #fff; /* ボタンの背景も白に */
 }
 
 .reset-btn {
@@ -273,7 +279,6 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    transition: background 0.2s;
 }
 
 .reset-btn:hover {
