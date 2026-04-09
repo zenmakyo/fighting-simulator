@@ -192,7 +192,7 @@ function openSearchList(type, num, event) {
     const render = (query = "") => {
         listItems.innerHTML = '';
         listData.filter(item => 
-            item.name !== "未装備" && 
+            item.name !== "未選択" && 
             item.name.toLowerCase().includes(query.toLowerCase())
         ).forEach(item => {
             const li = document.createElement('li');
