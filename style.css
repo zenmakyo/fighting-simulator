@@ -196,8 +196,9 @@ h1 {
     
 }
 
+/* 戦績結果の表について */
 .result-container {
-    margin-top: 20px;
+    margin: 20px auto; /* 左右autoで中央揃え */
     width: 100%;
     max-width: 500px;
 }
@@ -206,57 +207,61 @@ h1 {
     width: 100%;
     border-collapse: collapse;
     border: 2px solid #333;
-    table-layout: fixed;
+    table-layout: fixed; /* これでwidth指定を厳格にする */
 }
 
-/* 全体のセル高さ（ここを基準にする） */
+/* 共通のセル設定 */
 .result-table th, .result-table td {
     border: 1px solid #333;
-    height: 60px; /* 上下2段にするために少し高さを出します */
-    padding: 0;   /* 内部のdivで制御するため0に */
+    height: 64px; /* 上下分割に合わせた高さ */
+    padding: 0;
     text-align: center;
     box-sizing: border-box;
     vertical-align: middle;
 }
 
-/* 左側のラベル列の幅 */
-.label-cell {
+/* --- 列幅の指定 --- */
+/* 1列目：項目ラベル（結果・戦績・最大最小） */
+.result-table th.label-cell {
     width: 25%;
     background-color: #eee;
     font-weight: bold;
-    padding: 0 5px !important;
 }
 
-/* 中央の数値列の幅 */
-.value-cell {
+/* 2列目：メイン表示セル */
+.result-table td.value-cell {
     width: 45%;
     background-color: #fff;
     font-weight: bold;
 }
 
-/* 右側の上下2段セルの設定 */
-.stacked-cell {
+/* 3列目：右端セル（リセット・勝率・平均） */
+/* ここを共通の幅に固定します */
+.result-table td.action-cell, 
+.result-table td.stacked-cell {
     width: 30%;
-    display: flex;
-    flex-direction: column; /* 上下に並べる */
-    height: 100%;           /* セルいっぱいに広げる */
 }
 
-/* 上段のラベル */
+/* --- 右端：上下2段セルの内部設定 --- */
+.stacked-cell {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .stack-label {
-    flex: 1;                /* 高さを半分にする */
-    background-color: #eee; /* ラベル色 */
+    flex: 1;
+    background-color: #eee;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     font-size: 12px;
-    border-bottom: 1px solid #333; /* 真ん中の仕切り線 */
+    border-bottom: 1px solid #333;
 }
 
-/* 下段の数値 */
 .stack-value {
-    flex: 1;                /* 高さを半分にする */
+    flex: 1;
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -265,17 +270,23 @@ h1 {
     font-size: 14px;
 }
 
-/* リセットボタン用のセル（ここは上下分割しないので調整） */
+/* --- リセットボタンのデザイン --- */
 .action-cell {
-    padding: 5px !important;
+    padding: 8px !important;
 }
 
 .reset-btn {
     width: 100%;
-    height: 80%;
+    height: 100%;
     background-color: #666;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.reset-btn:hover {
+    background-color: #333;
 }
