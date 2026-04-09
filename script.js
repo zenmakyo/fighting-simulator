@@ -270,23 +270,32 @@ function updatePlusValue(type, num) {
 }
 
 /**
- * 武器の固有アビリティを付与アビリティ欄に同期する
+ * 画面の表示から直接武器名を取得して同期する
  */
 function syncWeaponAbi(num) {
-    const weaponData = currentPhantomState[num].weapon;
+    // 1. 今、画面の「武器」のところに表示されているテキストを取得
+    const weaponDisplayName = document.getElementById(`select-weapon-${num}`).textContent.trim();
 
-    // 武器未選択、またはabilityプロパティがない場合は処理を抜ける
-    if (!weaponData || weaponData.name === "未選択" || !weaponData.ability) return;
+    // 2. 「未選択」なら何もしない
+    if (weaponDisplayName === "未選択") return;
 
-    // 武器アビリティリストから、武器のabilityと名前が一致するものを検索
-    const foundAbi = weaponAbilityList.find(abi => abi.name === weaponData.ability);
+    // 3. 武器リスト(weaponList)の中から、その名前の武器のデータを探す
+    const weaponData = weaponList.find(w => w.name === weaponDisplayName);
 
-    // 一致するものがあった場合のみ更新
-    if (foundAbi) {
-        // 表示を更新
-        document.getElementById(`select-w-abi-${num}`).textContent = foundAbi.name;
-        // 内部データを更新
-        currentPhantomState[num].w_ability = foundAbi;
+    // 武器が見つかり、かつその武器がabilityを持っている場合
+    if (weaponData && weaponData.ability) {
+        
+        // 4. 武器アビリティリストから、そのability名と一致するものを探す
+        const foundAbi = weaponAbilityList.find(abi => abi.name === weaponData.ability);
+
+        if (foundAbi) {
+            // 5. 画面の「付与アビ」の表示を更新
+            document.getElementById(`select-w-abi-${num}`).textContent = foundAbi.name;
+            
+            // 6. ついでに内部データ（ステート）も最新にしておく
+            if (typeof currentPhantomState !== 'undefined') {
+                currentPhantomState[num].w_ability = foundAbi;
+            }
+        }
     }
-    // 一致しない場合は、HTMLもステートも「未選択」の状態を維持
 }
