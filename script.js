@@ -147,14 +147,6 @@ function openSaveTargetList(num) {
     });
 }
 
-// 強化値リストを開く
-function openPlusList(type, num) {
-    const levels = Array.from({length: 21}, (_, i) => `+${i}`);
-    openFloatingList(`${type === 'weapon' ? '武器' : '防具'}強化値`, levels, (val) => {
-        document.getElementById(`plus-${type}-${num}`).textContent = val;
-    });
-}
-
 
 // 武器・防具・アビリティリストの表示
 
@@ -237,4 +229,33 @@ function openSearchList(type, num, event) {
     setTimeout(() => {
         document.addEventListener('click', activeCloseHandler);
     }, 100);
+}
+
+// ページ読み込み時に強化値の選択肢を作る
+window.addEventListener('DOMContentLoaded', () => {
+    const plusSelects = document.querySelectorAll('.plus-select select');
+    plusSelects.forEach(select => {
+        for (let i = 20; i >= 0; i--) { // +20を一番上にしたい場合は逆順
+            const opt = document.createElement('option');
+            opt.value = i;          // 内部データ（数値の20）
+            opt.textContent = `+${i}`; // 見た目（+20）
+            select.appendChild(opt);
+        }
+        // 初期値を+20に設定する場合
+        select.value = 20;
+    });
+});
+
+// 値が変わった時の処理
+function updatePlusValue(type, num) {
+    const select = document.getElementById(`plus-${type}-${num}`);
+    const val = parseInt(select.value); // ここで数値として取得
+    
+    // 計算用のデータに保存
+    if (typeof currentPhantomState !== 'undefined') {
+        if (type === 'weapon') currentPhantomState[num].weapon_plus = val;
+        if (type === 'armor') currentPhantomState[num].armor_plus = val;
+    }
+    
+    console.log(`${type}強化値: ${val} (型: ${typeof val})`);
 }
