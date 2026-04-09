@@ -279,3 +279,33 @@ function updatePlusValue(type, num) {
     
     console.log(`${type}強化値: ${val} (型: ${typeof val})`);
 }
+
+/**
+ * 武器の固有アビリティを付与アビリティ欄に同期する
+ */
+function syncWeaponAbi(num) {
+    // 1. 現在の武器情報を取得
+    const weapon = currentPhantomState[num].weapon;
+
+    // 武器が未選択、またはアビリティが「なし」の場合は中断
+    if (!weapon || weapon.name === "未選択" || weapon.ability === "なし") {
+        return;
+    }
+
+    // 2. 武器アビリティリストから、武器の固有アビリティと同じ名前のものを探す
+    const targetAbi = weaponAbilityList.find(a => a.name === weapon.ability);
+
+    if (targetAbi) {
+        // 3. 表示を更新
+        document.getElementById(`select-w-abi-${num}`).textContent = targetAbi.name;
+        
+        // 4. 内部データを更新
+        currentPhantomState[num].w_ability = targetAbi;
+        
+        console.log(`Step ${num}: 「${targetAbi.name}」を同期しました`);
+    } else {
+        // もしリスト側にその名前がない場合のフォールバック
+        document.getElementById(`select-w-abi-${num}`).textContent = weapon.ability;
+        currentPhantomState[num].w_ability = { name: weapon.ability };
+    }
+}
