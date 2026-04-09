@@ -436,7 +436,7 @@ h1 {
 .item-name { flex: 1; margin-right: 8px; }
 
 .plus-select {
-    width: 50px;
+    width: 60px;
     height: 32px;
     background-color: #eee;
     border: 1px solid #ccc;
@@ -450,17 +450,26 @@ h1 {
 }
 
 /* --- ボタン類 --- */
-.btn-group { display: flex; gap: 5px; }
+.btn-group { display: flex;
+             gap: 5px;
+             width: 100px;
+           }
 
 .small-btn {
-    padding: 6px 10px;
-    font-size: 11px;
+    width: 100px;
+    padding: 6px 0;
+    font-size: 12px;
     background-color: #666;
     color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     white-space: nowrap;
+}
+
+.btn-group .small-btn {
+    width: 100%;         /* 親（group）の幅に対して計算させる */
+    flex: 1;             /* これを入れると、2つのボタンが均等に並びます */
 }
 
 .main-save-btn {
