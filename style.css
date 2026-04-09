@@ -195,3 +195,87 @@ h1 {
     text-align-last: center; /* プルダウンの選択前・選択後の文字用 */
     
 }
+
+.result-container {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #333;
+    table-layout: fixed;
+}
+
+/* 全体のセル高さ（ここを基準にする） */
+.result-table th, .result-table td {
+    border: 1px solid #333;
+    height: 60px; /* 上下2段にするために少し高さを出します */
+    padding: 0;   /* 内部のdivで制御するため0に */
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+/* 左側のラベル列の幅 */
+.label-cell {
+    width: 25%;
+    background-color: #eee;
+    font-weight: bold;
+    padding: 0 5px !important;
+}
+
+/* 中央の数値列の幅 */
+.value-cell {
+    width: 45%;
+    background-color: #fff;
+    font-weight: bold;
+}
+
+/* 右側の上下2段セルの設定 */
+.stacked-cell {
+    width: 30%;
+    display: flex;
+    flex-direction: column; /* 上下に並べる */
+    height: 100%;           /* セルいっぱいに広げる */
+}
+
+/* 上段のラベル */
+.stack-label {
+    flex: 1;                /* 高さを半分にする */
+    background-color: #eee; /* ラベル色 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    border-bottom: 1px solid #333; /* 真ん中の仕切り線 */
+}
+
+/* 下段の数値 */
+.stack-value {
+    flex: 1;                /* 高さを半分にする */
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* リセットボタン用のセル（ここは上下分割しないので調整） */
+.action-cell {
+    padding: 5px !important;
+}
+
+.reset-btn {
+    width: 100%;
+    height: 80%;
+    background-color: #666;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
