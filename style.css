@@ -529,6 +529,7 @@ h1 {
 }
 
 #dropdown-items li {
+    text-align: left;
     padding: 10px;
     border-bottom: 1px solid #eee;
     cursor: pointer;
