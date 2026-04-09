@@ -235,7 +235,7 @@ function openSearchList(type, num, event) {
 window.addEventListener('DOMContentLoaded', () => {
     const plusSelects = document.querySelectorAll('.plus-select select');
     plusSelects.forEach(select => {
-        for (let i = 20; i >= 0; i--) { // +20を一番上にしたい場合は逆順
+        for (let i = 0; i >= 20; i--) {
             const opt = document.createElement('option');
             opt.value = i;          // 内部データ（数値の20）
             opt.textContent = `+${i}`; // 見た目（+20）
