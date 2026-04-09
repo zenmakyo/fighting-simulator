@@ -158,144 +158,73 @@ function openPlusList(type, num) {
 
 // 武器・防具・アビリティリストの表示
 /**
- * ボタンのすぐ下にリストを展開する
- */
+ * ボタンのすぐ下にリストを展開する
+ */
 function openSearchList(type, num, event) {
-    // 1. データの準備
-    let listData = (type === 'weapon') ? weaponList : (type === 'armor' ? armorList : abilityList);
-    let targetId = (type === 'weapon') ? `select-weapon-${num}` : 
-                   (type === 'armor') ? `select-armor-${num}` : 
-                   (type === 'w-ability') ? `select-w-abi-${num}` : `select-a-abi-${num}`;
-
-    const menu = document.getElementById('dropdown-menu');
-    const searchInput = document.getElementById('dropdown-search');
-    const listItems = document.getElementById('dropdown-items');
-
-    // 2. 表示位置の計算 (クリックした要素の真下)
-    const rect = event.currentTarget.getBoundingClientRect();
-    menu.style.top = `${rect.bottom + window.scrollY}px`;
-    menu.style.left = `${rect.left + window.scrollX}px`;
-
-    // 3. リスト描画
-    const render = (query = "") => {
-        listItems.innerHTML = '';
-        listData.filter(item => 
-            item.name !== "未装備" && 
-            item.name.toLowerCase().includes(query.toLowerCase())
-        ).forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item.name;
-            li.onclick = () => {
-                document.getElementById(targetId).textContent = item.name;
-                // 内部データ保存
-                if (type === 'weapon') currentPhantomState[num].weapon = item;
-                if (type === 'armor') currentPhantomState[num].armor = item;
-                menu.style.display = 'none';
-            };
-            listItems.appendChild(li);
-        });
-    };
-
-    render(); // 初期表示
-
-    // 検索イベント
-    searchInput.value = '';
-    searchInput.oninput = (e) => render(e.target.value);
-
-    // 表示
-    menu.style.display = 'block';
-    searchInput.focus();
-
-    // 外側をクリックしたら閉じる設定
-    const closeHandler = (e) => {
-        if (!menu.contains(e.target) && e.target !== event.currentTarget) {
-            menu.style.display = 'none';
-            document.removeEventListener('click', closeHandler);
-        }
-    };
-    setTimeout(() => document.addEventListener('click', closeHandler), 10);
-}            name.toLowerCase().includes(query.toLowerCase())
-        );
-
-        filtered.forEach(name => {
-            const li = document.createElement('li');
-            li.textContent = name;
-            li.onclick = (e) => {
-                e.stopPropagation(); // 伝播防止
-                callback(name);      // 選んだ時の処理
-                menu.style.display = 'none'; // ★確実に閉じる
-            };
-            listItems.appendChild(li);
-        });
-    };
-
-    render();
-    searchInput.oninput = (e) => render(e.target.value);
-    menu.style.display = 'block';
-    if(showSearch) searchInput.focus();
-}
-
-// --- 各ボタンからの呼び出し ---
-
-// 武器・防具・アビリティ用
-function openSearchList(type, num, event) {
+    // 1. データの準備
     let listData = (type === 'weapon') ? weaponList : (type === 'armor' ? armorList : abilityList);
     let targetId = (type === 'weapon') ? `select-weapon-${num}` : 
                    (type === 'armor') ? `select-armor-${num}` : 
                    (type === 'w-ability') ? `select-w-abi-${num}` : `select-a-abi-${num}`;
 
-    const names = listData.filter(i => i.name !== "未装備").map(i => i.name);
-
-    openUnifiedList(event, "", names, (selectedName) => {
-        document.getElementById(targetId).textContent = selectedName;
-        const data = listData.find(i => i.name === selectedName);
-        if (type === 'weapon') currentPhantomState[num].weapon = data;
-        if (type === 'armor') currentPhantomState[num].armor = data;
-    });
-}
-
-// 強化値用（eventを引数に追加してください）
-function openPlusList(type, num, event) {
-    const levels = Array.from({length: 21}, (_, i) => `+${i}`);
-    openUnifiedList(event, "", levels, (val) => {
-        document.getElementById(`plus-${type}-${num}`).textContent = val;
-    }, false); // 強化値は検索不要
-}
-
-// 討伐幻獣のメニュー（既存のものを活かすならそのまま、統一するなら書き換え）
-function toggleSearchMenu() {
-    const menu = document.getElementById('targetMenu');
-    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    document.getElementById('targetInput').focus();
-}
-
-function filterList() {
-    const query = document.getElementById('targetInput').value.toLowerCase();
-    const suggestions = document.getElementById('targetSuggestions');
-    suggestions.innerHTML = '';
-    enemyData.filter(e => e.name.toLowerCase().includes(query)).forEach(enemy => {
-        const div = document.createElement('div');
-        div.textContent = enemy.name;
-        div.onclick = () => {
-            document.getElementById('targetSelectBtn').textContent = enemy.name;
-            applyEnemyStats(enemy);
-            document.getElementById('targetMenu').style.display = 'none';
-        };
-        suggestions.appendChild(div);
-    });
-}
-
-// ステータス反映
-function applyEnemyStats(data) {
-    document.getElementById('e-attribute').value = data.attr;
-    document.getElementById('e-sta').value = data.sta;
-    document.getElementById('e-atk').value = data.atk;
-    document.getElementById('e-def').value = data.def;
-    document.getElementById('e-ability').value = data.ability;
-}
-
-// 閉じる関数
-function closeList() {
     const menu = document.getElementById('dropdown-menu');
-    if(menu) menu.style.display = 'none';
+    const searchInput = document.getElementById('dropdown-search');
+    const listItems = document.getElementById('dropdown-items');
+
+    // 2. 表示位置の計算
+    const rect = event.currentTarget.getBoundingClientRect();
+    menu.style.top = `${rect.bottom + window.scrollY}px`;
+    menu.style.left = `${rect.left + window.scrollX}px`;
+
+    // 3. リスト描画
+    const render = (query = "") => {
+        listItems.innerHTML = '';
+        listData.filter(item => 
+            item.name !== "未装備" && 
+            item.name.toLowerCase().includes(query.toLowerCase())
+        ).forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item.name;
+            
+            // ★ ここを修正：e（イベント）を受け取って、stopPropagationを入れる
+            li.onclick = (e) => {
+                e.stopPropagation(); // クリックイベントが他に広がるのを防ぐ
+                
+                document.getElementById(targetId).textContent = item.name;
+                
+                // 内部データ保存
+                if (typeof currentPhantomState !== 'undefined') {
+                    if (type === 'weapon') currentPhantomState[num].weapon = item;
+                    if (type === 'armor') currentPhantomState[num].armor = item;
+                }
+                
+                // ★ 確実にメニューを閉じる
+                menu.style.display = 'none';
+            };
+            listItems.appendChild(li);
+        });
+    };
+
+    render(); // 初期表示
+
+    // 検索イベント
+    searchInput.value = '';
+    searchInput.oninput = (e) => render(e.target.value);
+
+    // 4. 表示
+    menu.style.display = 'block';
+    searchInput.focus();
+
+    // 5. 外側をクリックしたら閉じる設定（バグ防止のため、一旦古いリスナーを消す処理を追加）
+    const closeHandler = (e) => {
+        // クリックした先がメニュー自体でもなく、ボタン自体でもない場合のみ閉じる
+        if (!menu.contains(e.target) && !event.currentTarget.contains(e.target)) {
+            menu.style.display = 'none';
+            document.removeEventListener('click', closeHandler);
+        }
+    };
+    
+    // 前回のクリックイベントが残っている可能性があるのでリセット
+    document.removeEventListener('click', closeHandler);
+    setTimeout(() => document.addEventListener('click', closeHandler), 10);
 }
