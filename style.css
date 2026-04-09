@@ -385,7 +385,7 @@ h1 {
     color: #555;
 }
 
-.input-label.sub { width: 70px; padding-left: 15px; font-size: 11px; }
+.input-label.sub { width: 70px; font-size: 12px; }
 
 /* 入力フィールド */
 .input-field.full { flex: 1; }
