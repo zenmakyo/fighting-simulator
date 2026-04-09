@@ -536,3 +536,79 @@ h1 {
     border-radius: 10px;
     cursor: pointer;
 }
+
+/* 武器・防具・アビリティ検索のスタイル　*/
+/* フローティングリスト全体の重なり */
+#floating-list-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* ポップアップ本体 */
+#floating-list {
+    background: #fff;
+    width: 90%;
+    max-width: 320px;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+#list-title {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+/* 検索ボックス */
+#list-search {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* リストエリア：4行分でスクロール */
+#list-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 160px; /* 1行約40px × 4行 */
+    overflow-y: auto;   /* はみ出したらスクロール */
+    border: 1px solid #eee;
+}
+
+#list-items li {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#list-items li:hover {
+    background: #f0f7ff;
+}
+
+/* 閉じるボタン */
+.close-list-btn {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    background: #666;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
