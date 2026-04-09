@@ -161,14 +161,14 @@
             <div class="input-row flex-col">
                 <div class="sub-row">
                     <div class="input-label">武器</div>
-                    <div class="input-field select-box item-name" id="select-weapon-1" onclick="openSearchList('weapon', 1)">
+                    <div class="input-field select-box item-name" id="select-weapon-1" onclick="openSearchList('weapon', 1, event)">
                         未選択
                     </div>
                     <div class="plus-select" id="plus-weapon-1" onclick="openPlusList('weapon', 1)">+20</div>
                 </div>
                 <div class="sub-row">
                     <div class="input-label sub">付与アビ</div>
-                    <div class="input-field mid select-box" id="select-w-abi-1" onclick="openSearchList('ability', 1)">
+                    <div class="input-field mid select-box" id="select-w-abi-1" onclick="openSearchList('w-ability', 1, event)">
                         未選択
                     </div>
                     <button type="button" class="small-btn" onclick="syncWeaponAbi(1)">重ね</button>
@@ -178,14 +178,14 @@
             <div class="input-row flex-col">
                 <div class="sub-row">
                     <div class="input-label">防具</div>
-                    <div class="input-field select-box item-name" id="select-armor-1" onclick="openSearchList('armor', 1)">
+                    <div class="input-field select-box item-name" id="select-armor-1" onclick="openSearchList('armor', 1, event)">
                         未選択
                     </div>
                     <div class="plus-select" id="plus-armor-1" onclick="openPlusList('armor', 1)">+20</div>
                 </div>
                 <div class="sub-row">
                     <div class="input-label sub">付与アビ</div>
-                    <div class="input-field mid select-box" id="select-a-abi-1" onclick="openSearchList('ability', 1)">
+                    <div class="input-field mid select-box" id="select-a-abi-1" onclick="openSearchList('a-ability', 1, event)">
                         未選択
                     </div>
                     <div class="btn-group">
