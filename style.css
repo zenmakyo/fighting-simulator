@@ -206,11 +206,30 @@ h1 {
 
 .result-table {
     border-radius: 10px;
+    overflow: hidden;
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     border: 2px solid #333;
     table-layout: fixed; /* これが最重要です */
 }
+
+/* --- 縦横のラインを綺麗に揃えるための微調整（追加） --- */
+/* 右端の列は右線を消す（外枠があるため） */
+.result-table td:last-child {
+    border-right: none;
+}
+/* 一番下の行は下線を消す（外枠があるため） */
+.result-table tr:last-child th,
+.result-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- 四隅の背景が角丸を上書きしないように個別に丸める（追加） --- */
+.result-table tr:first-child th:first-child { border-top-left-radius: 10px; }
+.result-table tr:first-child td:last-child { border-top-right-radius: 10px; }
+.result-table tr:last-child th:first-child { border-bottom-left-radius: 10px; }
+.result-table tr:last-child td:last-child { border-bottom-right-radius: 10px; }
 
 /* 列ごとの幅を強制固定（これで縦ラインが揃います） */
 .result-table th.label-cell { width: 25%; }
@@ -219,7 +238,8 @@ h1 {
 .result-table td.stacked-cell { width: 30%; }
 
 .result-table th, .result-table td {
-    border: 1px solid #333;
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
     height: 48px;
     padding: 0;
     text-align: center;
