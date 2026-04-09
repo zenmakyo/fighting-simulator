@@ -157,26 +157,34 @@ function openPlusList(type, num) {
 
 
 // 武器・防具・アビリティリストの表示
+
+let activeCloseHandler = null; // 監視役を覚えるための変数
+
 /**
  * ボタンのすぐ下にリストを展開する
  */
 function openSearchList(type, num, event) {
-    // 1. データの準備
+    const menu = document.getElementById('dropdown-menu');
+    const searchInput = document.getElementById('dropdown-search');
+    const listItems = document.getElementById('dropdown-items');
+
+    // --- A. 前回の監視役がいればクビにする ---
+    if (activeCloseHandler) {
+        document.removeEventListener('click', activeCloseHandler);
+    }
+
+    // --- B. データの準備 ---
     let listData = (type === 'weapon') ? weaponList : (type === 'armor' ? armorList : abilityList);
     let targetId = (type === 'weapon') ? `select-weapon-${num}` : 
                    (type === 'armor') ? `select-armor-${num}` : 
                    (type === 'w-ability') ? `select-w-abi-${num}` : `select-a-abi-${num}`;
 
-    const menu = document.getElementById('dropdown-menu');
-    const searchInput = document.getElementById('dropdown-search');
-    const listItems = document.getElementById('dropdown-items');
-
-    // 2. 表示位置の計算
+    // --- C. 位置の計算 ---
     const rect = event.currentTarget.getBoundingClientRect();
     menu.style.top = `${rect.bottom + window.scrollY}px`;
     menu.style.left = `${rect.left + window.scrollX}px`;
 
-    // 3. リスト描画
+    // --- D. リストの描画 ---
     const render = (query = "") => {
         listItems.innerHTML = '';
         listData.filter(item => 
@@ -185,11 +193,8 @@ function openSearchList(type, num, event) {
         ).forEach(item => {
             const li = document.createElement('li');
             li.textContent = item.name;
-            
-            // ★ ここを修正：e（イベント）を受け取って、stopPropagationを入れる
             li.onclick = (e) => {
-                e.stopPropagation(); // クリックイベントが他に広がるのを防ぐ
-                
+                e.stopPropagation(); // クリックが外側に伝わるのを防ぐ
                 document.getElementById(targetId).textContent = item.name;
                 
                 // 内部データ保存
@@ -198,33 +203,38 @@ function openSearchList(type, num, event) {
                     if (type === 'armor') currentPhantomState[num].armor = item;
                 }
                 
-                // ★ 確実にメニューを閉じる
+                // 閉じる
                 menu.style.display = 'none';
+                document.removeEventListener('click', activeCloseHandler);
+                activeCloseHandler = null;
             };
             listItems.appendChild(li);
         });
     };
 
-    render(); // 初期表示
+    render();
 
-    // 検索イベント
-    searchInput.value = '';
-    searchInput.oninput = (e) => render(e.target.value);
-
-    // 4. 表示
+    // --- E. メニューを表示 ---
     menu.style.display = 'block';
+    searchInput.value = '';
     searchInput.focus();
 
-    // 5. 外側をクリックしたら閉じる設定（バグ防止のため、一旦古いリスナーを消す処理を追加）
-    const closeHandler = (e) => {
-        // クリックした先がメニュー自体でもなく、ボタン自体でもない場合のみ閉じる
-        if (!menu.contains(e.target) && !event.currentTarget.contains(e.target)) {
-            menu.style.display = 'none';
-            document.removeEventListener('click', closeHandler);
-        }
+    // --- F. 「外側クリック」の監視を開始 ---
+    const currentBtn = event.currentTarget; 
+    activeCloseHandler = (e) => {
+        // メニュー内をクリックしたなら何もしない
+        if (menu.contains(e.target)) return;
+        // 開いたボタン自体をクリックしたなら何もしない（toggle処理に任せる）
+        if (currentBtn.contains(e.target)) return;
+
+        // それ以外（外側）をクリックしたら閉じる
+        menu.style.display = 'none';
+        document.removeEventListener('click', activeCloseHandler);
+        activeCloseHandler = null;
     };
-    
-    // 前回のクリックイベントが残っている可能性があるのでリセット
-    document.removeEventListener('click', closeHandler);
-    setTimeout(() => document.addEventListener('click', closeHandler), 10);
+
+    // 0.1秒待ってから監視をスタート（即自爆を防ぐ）
+    setTimeout(() => {
+        document.addEventListener('click', activeCloseHandler);
+    }, 100);
 }
