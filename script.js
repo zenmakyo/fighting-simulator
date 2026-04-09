@@ -154,3 +154,98 @@ function openPlusList(type, num) {
         document.getElementById(`plus-${type}-${num}`).textContent = val;
     });
 }
+
+
+// 武器・防具・アビリティリストの表示
+// 各ユニットの状態保持（初期値は未装備）
+let currentPhantomState = {
+    1: { weapon: null, armor: null },
+    2: { weapon: null, armor: null },
+    3: { weapon: null, armor: null },
+    4: { weapon: null, armor: null }
+};
+
+/**
+ * 1. HTMLのonclickから呼ばれる入り口
+ */
+function openSearchList(type, num) {
+    let listData = [];
+    let title = "";
+    let targetId = "";
+
+    // data.js のリストを参照
+    if (type === 'weapon') {
+        listData = weaponList;
+        title = "武器を選択";
+        targetId = `select-weapon-${num}`;
+    } else if (type === 'armor') {
+        listData = armorList;
+        title = "防具を選択";
+        targetId = `select-armor-${num}`;
+    } else if (type === 'w-ability' || type === 'a-ability') {
+        listData = abilityList;
+        title = "アビリティを選択";
+        targetId = (type === 'w-ability') ? `select-w-abi-${num}` : `select-a-abi-${num}`;
+    }
+
+    // 名前だけの配列（「未装備」除外）を作ってポップアップに渡す
+    const namesOnly = listData
+        .filter(item => item.name !== "未装備" && item.name !== "未選択")
+        .map(item => item.name);
+
+    openFloatingList(title, namesOnly, (selectedName) => {
+        // 表示を更新
+        document.getElementById(targetId).textContent = selectedName;
+
+        // 選んだデータを内部状態に保存
+        const selectedData = listData.find(item => item.name === selectedName);
+        if (type === 'weapon') currentPhantomState[num].weapon = selectedData;
+        if (type === 'armor') currentPhantomState[num].armor = selectedData;
+
+        // ★ここで後ほど作成する計算関数を動かす
+        // updateAtkDisplay(num); 
+    });
+}
+
+/**
+ * 2. 検索・スクロール機能付きポップアップの本体
+ */
+function openFloatingList(title, items, callback) {
+    const overlay = document.getElementById('floating-list-overlay');
+    const listTitle = document.getElementById('list-title');
+    const listItems = document.getElementById('list-items');
+    const searchInput = document.getElementById('list-search');
+
+    listTitle.textContent = title;
+    searchInput.value = ''; // 検索窓リセット
+    searchInput.placeholder = "検索可能です";
+
+    const render = (filteredItems) => {
+        listItems.innerHTML = '';
+        filteredItems.forEach(name => {
+            const li = document.createElement('li');
+            li.textContent = name;
+            li.onclick = () => {
+                callback(name);
+                closeList();
+            };
+            listItems.appendChild(li);
+        });
+    };
+
+    // 初期表示
+    render(items);
+
+    // 検索イベント
+    searchInput.oninput = () => {
+        const word = searchInput.value.toLowerCase();
+        const filtered = items.filter(name => name.toLowerCase().includes(word));
+        render(filtered);
+    };
+
+    overlay.style.display = 'flex';
+}
+
+function closeList() {
+    document.getElementById('floating-list-overlay').style.display = 'none';
+}
