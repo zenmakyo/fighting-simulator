@@ -10,7 +10,7 @@ const weaponList = [
     { name: "高揚：金剛双刃", grade: 8, baseAtk: 200, ability: "高揚" },
     { name: "高揚：リリジェンアーク", grade: 7, baseAtk: 190, ability: "高揚" },
     { name: "高揚：脈打つ打楽器", grade: 7, baseAtk: 120, ability: "高揚" },
-    { name: "高揚：銀狐の絵筆", grade: , baseAtk: , ability: "" },
+    { name: "高揚：銀狐の絵筆", grade: 5, baseAtk: 10, ability: "高揚" },
     { name: "盟旗：天響の尖槍", grade: 7, baseAtk: 120, ability: "盟旗" },
     { name: "盟旗：虎将の軍配", grade: 5, baseAtk: 100, ability: "盟旗" },
     { name: "不乱：天巴之御佩刀", grade: 9, baseAtk: 310, ability: "不乱" },
@@ -18,8 +18,7 @@ const weaponList = [
     { name: "不乱：金狐の絵筆", grade: 5, baseAtk: 10, ability: "不乱" },
     { name: "壮健：朧蒼月", grade: 10, baseAtk: 500, ability: "壮健" },
     { name: "壮健：轟天の大槍", grade:9 , baseAtk: 200, ability: "壮健" },
-    { name: "大撃：レーヴァテイン『戒』", grade: 9, baseAtk: 240, ability: "大撃" },
-    { name: "", grade: , baseAtk: , ability: "" }
+    { name: "大撃：レーヴァテイン『戒』", grade: 9, baseAtk: 240, ability: "大撃" }
 ];
 
 // 防具リスト
