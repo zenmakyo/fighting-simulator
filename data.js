@@ -5,9 +5,21 @@ const weaponList = [
     { name: "紅舞：ブラッディローズ", grade: 10, baseAtk: 780, ability: "紅舞" },
     { name: "紅舞：衝天ノ神楽鉾", grade: 9, baseAtk: 250, ability: "紅舞" },
     { name: "紅舞：丹青の打楽器", grade: 3, baseAtk: 5, ability: "紅舞" },
+    { name: "高揚：エンドオブルイン", grade: 9, baseAtk: 240, ability: "高揚" },
+    { name: "高揚：斬魔刀", grade: 8, baseAtk: 200, ability: "高揚" },
+    { name: "高揚：金剛双刃", grade: 8, baseAtk: 200, ability: "高揚" },
+    { name: "高揚：リリジェンアーク", grade: 7, baseAtk: 190, ability: "高揚" },
+    { name: "高揚：脈打つ打楽器", grade: 7, baseAtk: 120, ability: "高揚" },
+    { name: "高揚：銀狐の絵筆", grade: , baseAtk: , ability: "" },
+    { name: "盟旗：天響の尖槍", grade: 7, baseAtk: 120, ability: "盟旗" },
+    { name: "盟旗：虎将の軍配", grade: 5, baseAtk: 100, ability: "盟旗" },
     { name: "不乱：天巴之御佩刀", grade: 9, baseAtk: 310, ability: "不乱" },
     { name: "不乱：仁双応", grade: 9, baseAtk: 220, ability: "不乱" },
-    { name: "不乱：金狐の絵筆", grade: 5, baseAtk: 10, ability: "不乱" }
+    { name: "不乱：金狐の絵筆", grade: 5, baseAtk: 10, ability: "不乱" },
+    { name: "壮健：朧蒼月", grade: 10, baseAtk: 500, ability: "壮健" },
+    { name: "壮健：轟天の大槍", grade:9 , baseAtk: 200, ability: "壮健" },
+    { name: "大撃：レーヴァテイン『戒』", grade: 9, baseAtk: 240, ability: "大撃" },
+    { name: "", grade: , baseAtk: , ability: "" }
 ];
 
 // 防具リスト
@@ -24,7 +36,11 @@ const weaponAbilityList = [
     { name: "未選択" },
     { name: "疾風" },
     { name: "紅舞" },
-    { name: "不乱" }
+    { name: "高揚" },
+    { name: "盟旗" },
+    { name: "不乱" },
+    { name: "壮健" },
+    { name: "大撃" }
 ];
 
 // 防具アビリティリスト
