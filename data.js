@@ -86,7 +86,47 @@ const weaponList = [
     { name: "地属：妖刀『龍殺し』", grade: 4, baseAtk: 80, ability: "地属" },
     { name: "龍属：竜族の紋章", grade: 8, baseAtk: 185, ability: "龍属" },
     { name: "龍属：ドラゴンファング", grade: 5, baseAtk: 85, ability: "龍属" },
-    { name: "龍属：ドラゴンクロー", grade: 4, baseAtk: 80, ability: "龍属" }
+    { name: "龍属：ドラゴンクロー", grade: 4, baseAtk: 80, ability: "龍属" },
+    { name: "なし：エクスカリバー", grade: 7, baseAtk: 160, ability: "なし" },
+    { name: "なし：グレイトソード", grade: 6, baseAtk: 120, ability: "なし" },
+    { name: "なし：メガアックス", grade: 5, baseAtk: 90, ability: "なし" },
+    { name: "なし：手提げ提灯", grade: 5, baseAtk: 50, ability: "なし" },
+    { name: "なし：導きのベル", grade: 5, baseAtk: 30, ability: "なし" },
+    { name: "なし：破魔矢", grade: 4, baseAtk: 90, ability: "なし" },
+    { name: "なし：かまいたち", grade: 4, baseAtk: 75, ability: "なし" },
+    { name: "なし：重い槍", grade: 4, baseAtk: 65, ability: "なし" },
+    { name: "なし：カチンコ", grade: 4, baseAtk: 50, ability: "なし" },
+    { name: "なし：ギャラルホルン", grade: 4, baseAtk: 50, ability: "なし" },
+    { name: "なし：木枝の釣竿", grade: 4, baseAtk: 45, ability: "なし" },
+    { name: "なし：兎印の杵", grade: 4, baseAtk: 45, ability: "なし" },
+    { name: "なし：カタログ", grade: 4, baseAtk: 45, ability: "なし" },
+    { name: "なし：背負い籠", grade: 4, baseAtk: 40, ability: "なし" },
+    { name: "なし：豆鉄砲", grade: 4, baseAtk: 30, ability: "なし" },
+    { name: "なし：コンパス", grade: 4, baseAtk: 30, ability: "なし" },
+    { name: "なし：招待ハガキ", grade: 4, baseAtk: 20, ability: "なし" },
+    { name: "なし：バトン", grade: 4, baseAtk: 20, ability: "なし" },
+    { name: "なし：隠れ郷への招待状", grade: 4, baseAtk: 15, ability: "なし" },
+    { name: "なし：勇者の剣", grade: 3, baseAtk: 60, ability: "なし" },
+    { name: "なし：ナイフグローブ", grade: 3, baseAtk: 45, ability: "なし" },
+    { name: "なし：灯篭", grade: 3, baseAtk: 40, ability: "なし" },
+    { name: "なし：芽切鋏", grade: 3, baseAtk: 40, ability: "なし" },
+    { name: "なし：黒き書物", grade: 3, baseAtk: 40, ability: "なし" },
+    { name: "なし：イベント出店証", grade: 3, baseAtk: 35, ability: "なし" },
+    { name: "なし：スプーン", grade: 3, baseAtk: 30, ability: "なし" },
+    { name: "なし：樽のコルク抜き", grade: 3, baseAtk: 30, ability: "なし" },
+    { name: "なし：白の手形", grade: 3, baseAtk: 30, ability: "なし" },
+    { name: "なし：黒の手形", grade: 3, baseAtk: 30, ability: "なし" },
+    { name: "なし：ロックボウ", grade: 2, baseAtk: 30, ability: "なし" },
+    { name: "なし：過ちの杖", grade: 2, baseAtk: 30, ability: "なし" },
+    { name: "なし：つるはし", grade: 2, baseAtk: 25, ability: "なし" },
+    { name: "なし：カラフル熊手", grade: 2, baseAtk: 25, ability: "なし" },
+    { name: "なし：エンゲージリング", grade: 2, baseAtk: 22, ability: "なし" },
+    { name: "なし：果物ナイフ", grade: 2, baseAtk: 20, ability: "なし" },
+    { name: "なし：ランタン", grade: 1, baseAtk: 20, ability: "なし" },
+    { name: "なし：アイスピック", grade: 1, baseAtk: 15, ability: "なし" },
+    { name: "なし：鉄製の弓", grade: 1, baseAtk: 10, ability: "なし" },
+    { name: "なし：観覧のお供", grade: 1, baseAtk: 10, ability: "なし" },
+    { name: "なし：木の棒", grade: 1, baseAtk: 5, ability: "なし" }
 ];
 
 // 防具リスト
@@ -127,7 +167,8 @@ const weaponAbilityList = [
     { name: "霊属" },
     { name: "無属" },
     { name: "地属" },
-    { name: "龍属" }
+    { name: "龍属" },
+    { name: "なし" }
 ];
 
 // 防具アビリティリスト
