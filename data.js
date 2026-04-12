@@ -161,7 +161,7 @@ const armorList = [
     { name: "改命：プロジェクトѰ", grade: 10, baseDef: 230, ability: "改命" },
     { name: "瞑想：プロジェクトΩ", grade: 8, baseDef: 180, ability: "瞑想" },
     { name: "瞑想：プロジェクトΛ", grade: 6, baseDef: 110, ability: "瞑想" },
-    { name: "砕身："瞋恚ノ鬼面, grade: 9, baseDef: 35, ability: "砕身" },
+    { name: "砕身：瞋恚ノ鬼面", grade: 9, baseDef: 35, ability: "砕身" },
     { name: "悪戯：マッドハット", grade: 9, baseDef: 220, ability: "悪戯" },
     { name: "悪戯：オブマスカレード", grade: 7, baseDef: 120, ability: "悪戯" },
     { name: "悪戯：妖狐の尾", grade: 4, baseDef: 80, ability: "悪戯" },
