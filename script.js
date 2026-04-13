@@ -325,27 +325,29 @@ function updatePhantomStats(num = 1) {
     const weaponData = weaponList.find(w => w.name === weaponName) || { baseAtk: 0 };
     const armorData = armorList.find(a => a.name === armorName) || { baseDef: 0, grade: 0, ability: "なし" };
 
-    // 2. 装備加算値の計算 (アビリティ計算には含めないため、先に計算だけしておく)
+    // 2. 装備の固定値を先に準備（最後の方で使います）
     const totalWeaponAtk = calculateEquipmentValue(weaponData.baseAtk, wPlus);
     const totalArmorDef = calculateEquipmentValue(armorData.baseDef, aPlus);
 
-    // 3. アビリティ対象となる「基礎ステータス」の確定
-    // 防具グレードボーナスをここで計算
-    const gradeBonusDef = Math.ceil(base.def * (armorData.grade * 0.01));
-    
+    // 3. 【基礎】の確定
+    // 素のDefにグレードボーナスを足したものを「基礎Def」とする
     let current = {
         sta: base.sta,
         atk: base.atk,
-        def: base.def + gradeBonusDef, // 防具加算はまだ入れない
+        def: base.def + Math.ceil(base.def * (armorData.grade * 0.01)),
         luck: base.luck
     };
 
-    // 4. アビリティ適用（防具固有・防具付与）
-    // current (素ステ+グレード分) に対してアビリティをかける
-    current = applyAbility(current, armorData.ability, aPlus);
+    // 4. アビリティの連鎖適用（ここが「中間」を作る工程）
+    // ① 基礎に対して防具固有をかける（結果：中間1）
+    current = applyAbility(current, armorData.ability, aPlus); 
+
+    // ② 中間1に対して防具付与をかける（結果：中間2）
     current = applyAbility(current, aAbiName, aPlus);
 
-    // 5. 最後に装備加算分を合流させる (Defenseはここ！)
+    // ※ 武器アビリティはステータス計算には含めない（あなたの指定通り！）
+
+    // 5. 【最後】に装備の固定値を合流させる
     const finalResult = {
         sta: current.sta,
         atk: current.atk + totalWeaponAtk,
