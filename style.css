@@ -563,13 +563,6 @@ h1 {
     overflow: hidden !important; /* これで中のリストを箱の中に閉じ込める */
 }
 
-/* 検索窓（もし表示されているなら） */
-.save-modal-mode #dropdown-search {
-    flex-shrink: 0; 
-    margin: 10px;
-    box-sizing: border-box;
-}
-
 /* --- 【最重要】リストのスクロール --- */
 .save-modal-mode #dropdown-items {
     flex: 1 !important;        /* これで下までピッタリ広がる */
