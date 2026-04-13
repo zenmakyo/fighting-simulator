@@ -427,8 +427,8 @@ function openSaveTargetList(num) {
             action: () => savePhantomData(num, i)
         });
     }
-    // 保存時は検索不要なので false
-    showCustomMenu(items, event, false);
+    
+    showCustomMenu(items, event, false, true);
 }
 
 /**
@@ -507,16 +507,26 @@ function loadPhantomData(unitNum, slotIndex) {
 /**
  * 保存・呼び出し専用のメニュー表示
  */
-function showCustomMenu(allItems, event, showSearch) {
+function showCustomMenu(allItems, event, showSearch, isSaveModal = false) {
     const menu = document.getElementById('dropdown-menu');
     const list = document.getElementById('dropdown-items');
     const searchInput = document.getElementById('dropdown-search');
 
     if (activeCloseHandler) document.removeEventListener('click', activeCloseHandler);
 
-    const rect = event.currentTarget.getBoundingClientRect();
-    menu.style.top = `${rect.bottom + window.scrollY}px`;
-    menu.style.left = `${rect.left + window.scrollX}px`;
+    // --- ここからモード切り替えロジック ---
+    if (isSaveModal) {
+        // 保存の時：中央モーダル化
+        menu.classList.add('save-modal-mode');
+        menu.style.top = "";  // 通常の位置指定を無効化
+        menu.style.left = "";
+    } else {
+        // 読込や武器選択の時：通常ドロップダウン
+        menu.classList.remove('save-modal-mode');
+        const rect = event.currentTarget.getBoundingClientRect();
+        menu.style.top = `${rect.bottom + window.scrollY}px`;
+        menu.style.left = `${rect.left + window.scrollX}px`;
+    }
 
     const render = (filterText = "") => {
         list.innerHTML = '';
@@ -524,28 +534,27 @@ function showCustomMenu(allItems, event, showSearch) {
         .forEach(item => {
             const li = document.createElement('li');
             li.textContent = item.name;
-            li.onclick = item.action; // 保存や読込の実行
+            li.onclick = (e) => {
+                e.stopPropagation();
+                if (item.action) item.action();
+                closeDropdown(); // 実行したら閉じる
+            };
             list.appendChild(li);
         });
     };
 
-    // 検索窓を出すか出さないか（保存時は不要、読込時はあっても便利）
     searchInput.style.display = showSearch ? 'block' : 'none';
     searchInput.value = '';
     render();
     
     menu.style.display = 'block';
 
-    // 外側クリックで閉じる
     activeCloseHandler = (e) => {
-    // 1. メニュー本体 (dropdown-menu)
-    const menu = document.getElementById('dropdown-menu');
-    
-    // もしクリックした場所が「メニューの中」じゃないなら閉じる
-    if (menu && !menu.contains(e.target)) {
-        closeDropdown();
-    }
-};
+        // メニューの中身以外をクリックしたら閉じる
+        if (menu && !menu.contains(e.target)) {
+            closeDropdown();
+        }
+    };
     setTimeout(() => document.addEventListener('click', activeCloseHandler), 100);
 }
 
