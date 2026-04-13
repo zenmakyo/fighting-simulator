@@ -558,8 +558,8 @@ h1 {
     outline: 100vmax solid rgba(0, 0, 0, 0.7) !important;
 
     /* --- 【修正】はみ出し防止 --- */
-    display: flex !important;
-    flex-direction: column !important;
+    display: flex;
+    flex-direction: column;
     overflow: hidden !important; /* これで中のリストを箱の中に閉じ込める */
 }
 
