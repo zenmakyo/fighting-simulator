@@ -560,4 +560,3 @@ function closeDropdown() {
         activeCloseHandler = null;
     }
 }
-}
