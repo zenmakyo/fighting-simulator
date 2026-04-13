@@ -418,3 +418,84 @@ window.addEventListener('change', (e) => {
         updatePhantomStats(num);
     }
 });
+
+// --- 幻獣データ保存・呼び出し機能 ---
+
+const MAX_SAVE_SLOTS = 30;
+
+/**
+ * 1. 保存先スロットを選択するメニューを表示
+ */
+function openSaveTargetList(num) {
+    const items = [];
+    for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
+        const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${i}`));
+        const label = savedData ? `${i}: ${savedData.name}` : `${i}: 空きスロット`;
+        
+        items.push({
+            name: label,
+            action: () => savePhantomData(num, i)
+        });
+    }
+    // 保存時は検索不要なので false
+    showCustomMenu(items, event, false);
+}
+
+/**
+ * 2. 実際に localStorage へ保存
+ */
+function savePhantomData(unitNum, slotIndex) {
+    const data = {
+        name: document.getElementById(`input-name-${unitNum}`).value || "名称未設定",
+        element: document.getElementById(`input-element-${unitNum}`).value,
+        baseSta: document.getElementById(`base-sta-${unitNum}`).value,
+        baseAtk: document.getElementById(`base-atk-${unitNum}`).value,
+        baseDef: document.getElementById(`base-def-${unitNum}`).value,
+        baseLuck: document.getElementById(`base-luck-${unitNum}`).value,
+        weapon: document.getElementById(`select-weapon-${unitNum}`).textContent.trim(),
+        wAbi: document.getElementById(`select-w-abi-${unitNum}`).textContent.trim(),
+        armor: document.getElementById(`select-armor-${unitNum}`).textContent.trim(),
+        aAbi: document.getElementById(`select-a-abi-${unitNum}`).textContent.trim()
+    };
+
+    localStorage.setItem(`savedPhantom_${slotIndex}`, JSON.stringify(data));
+    alert(`スロット ${slotIndex} に「${data.name}」を保存しました。`);
+    closeDropdown();
+}
+
+/**
+ * 3. 保存済みリストから呼び出しメニューを表示
+ */
+function openLoadList(num) {
+    const items = [];
+    for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
+        const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${i}`));
+        if (savedData) {
+            items.push({
+                name: `${i}: ${savedData.name}`,
+                action: () => loadPhantomData(num, i)
+            });
+        } else {
+            items.push({
+                name: `${i}: ---`,
+                action: null
+            });
+        }
+    }
+    // 呼び出し時は検索したい場合もあるので true
+    showCustomMenu(items, event, true);
+}
+
+/**
+ * 4. localStorage からデータを読み込んでフォームにセット
+ */
+function loadPhantomData(unitNum, slotIndex) {
+    const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
+    if (!savedData) return;
+
+    // 入力欄への反映
+    document.getElementById(`input-name-${unitNum}`).value = savedData.name;
+    document.getElementById(`display-name-${unitNum}`).textContent = savedData.name;
+    document.getElementById(`input-element-${unitNum}`).value = savedData.element;
+    document.getElementById(`base-sta-${unitNum}`).value = savedData.baseSta;
+    document.getElementById(`base-atk-${
