@@ -525,7 +525,7 @@ function showCustomMenu(allItems, event, showSearch, isSaveModal = false) {
         // 【重要】JSで直接レイアウトを指定（これでCSSの!important競合を回避）
         menu.style.display = 'flex';           // リスト内スクロールを有効にする
         menu.style.flexDirection = 'column';    // 縦並び
-        
+        menu.style.overflow = 'hidden';
         menu.style.top = ""; 
         menu.style.left = "";
     } else {
