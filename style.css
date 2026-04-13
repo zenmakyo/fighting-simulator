@@ -547,7 +547,9 @@ h1 {
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
     width: 90% !important;
-    max-width: 400px !important;
+    max-width: 500px !important;
+    height: auto !important;
+    max-height: 70vh !important;
     z-index: 10000 !important;
     /* 背景を暗くする「影」を巨大に出す */
     box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7) !important;
