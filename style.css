@@ -548,9 +548,13 @@ h1 {
     transform: translate(-50%, -50%) !important;
     width: 90% !important;
     max-width: 500px !important;
-    height: auto !important;
-    max-height: 70vh !important;
+    height: 70vh !important;
     z-index: 10000 !important;
-    /* 背景を暗くする「影」を巨大に出す */
-    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7) !important;
+    outline: 100vmax solid rgba(0, 0, 0, 0.7) !important;
+    pointer-events: auto !important;
+}
+
+.save-modal-mode #dropdown-items {
+    max-height: calc(70vh - 80px) !important; /* 枠の高さに合わせてリストを伸ばす */
+    overflow-y: auto; /* はみ出たらスクロール */
 }
