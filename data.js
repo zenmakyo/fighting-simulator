@@ -423,4 +423,5 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
+    }
     };
