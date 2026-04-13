@@ -567,8 +567,6 @@ function showCustomMenu(allItems, event, showSearch, isSaveModal = false) {
     searchInput.style.display = showSearch ? 'block' : 'none';
     searchInput.value = '';
     render(); // 最初に全リストを表示
-    
-    menu.style.display = 'block';
 
     // 外側クリック監視
     activeCloseHandler = (e) => {
