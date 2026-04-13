@@ -513,26 +513,26 @@ function showCustomMenu(allItems, event, showSearch, isSaveModal = false) {
     const list = document.getElementById('dropdown-items');
     const searchInput = document.getElementById('dropdown-search');
 
-    // --- 【修正ポイント1】古いイベントを完全にクリア ---
-    // これをしないと、前回の検索処理が裏で生き残ってしまいます
     if (activeCloseHandler) document.removeEventListener('click', activeCloseHandler);
     searchInput.oninput = null; 
 
-    // モード切り替え（保存かそれ以外か）
     if (isSaveModal) {
+        // --- 保存モード：中央に大きく表示 ---
         menu.classList.add('save-modal-mode');
+        menu.style.display = 'flex';
+        menu.style.flexDirection = 'column';
+        menu.style.overflow = 'hidden'; // 箱を固定して中身をスクロールさせる
         
-        // 【重要】JSで直接レイアウトを指定（これでCSSの!important競合を回避）
-        menu.style.display = 'flex';           // リスト内スクロールを有効にする
-        menu.style.flexDirection = 'column';    // 縦並び
-        menu.style.overflow = 'hidden';
         menu.style.top = ""; 
         menu.style.left = "";
     } else {
+        // --- 通常モード：ここを「リセット」する ---
         menu.classList.remove('save-modal-mode');
         
-        // 【重要】通常時はブロック表示
+        // JSがつけた保存用の設定を全部消して元に戻す
         menu.style.display = 'block'; 
+        menu.style.flexDirection = '';
+        menu.style.overflow = ''; 
         
         const rect = event.currentTarget.getBoundingClientRect();
         menu.style.top = `${rect.bottom + window.scrollY}px`;
