@@ -444,7 +444,7 @@ h1 {
 
 /* 本体のデザイン（ここを以前のボタン風のデザインに統一） */
 .plus-select select {
-    width: 80px;
+    width: 70px;
     height: 32px;
     background-color: #eee;
     border: 1px solid #ccc;
