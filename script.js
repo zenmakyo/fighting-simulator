@@ -449,6 +449,10 @@ function savePhantomData(unitNum, slotIndex) {
     };
 
     localStorage.setItem(`savedPhantom_${slotIndex}`, JSON.stringify(data));
+
+  const nameInput = document.getElementById(`input-name-${unitNum}`).value || "名称未設定";
+    document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${nameInput}`;
+    
     alert(`スロット ${slotIndex} に「${data.name}」を保存しました。`);
     closeDropdown();
 }
@@ -485,7 +489,7 @@ function loadPhantomData(unitNum, slotIndex) {
 
     // 保存された値をそれぞれの入力欄やボタンに反映させる
     document.getElementById(`input-name-${unitNum}`).value = savedData.name;
-    document.getElementById(`display-name-${unitNum}`).textContent = savedData.name;
+    document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${savedData.name}`;
     document.getElementById(`input-element-${unitNum}`).value = savedData.element;
     document.getElementById(`base-sta-${unitNum}`).value = savedData.baseSta;
     document.getElementById(`base-atk-${unitNum}`).value = savedData.baseAtk;
