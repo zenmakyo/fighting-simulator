@@ -327,7 +327,7 @@ function updatePhantomStats(num = 1) {
 
     // 2. 装備の固定値を先に準備（最後の方で使います）
     const totalWeaponAtk = calculateEquipmentValue(weaponData.baseAtk, wPlus, weaponData.grade || 0);
-    const totalArmorDef = calculateEquipmentValue(armorData.baseDef, aPlus, weaponData.grade || 0);
+    const totalArmorDef = calculateEquipmentValue(armorData.baseDef, aPlus, armorData.grade || 0);
 
     // 3. 【基礎】の確定
     // 素のDefにグレードボーナスを足したものを「基礎Def」とする
