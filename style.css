@@ -539,3 +539,16 @@ h1 {
 #dropdown-items li:hover {
     background-color: #f0f7ff;
 }
+
+/* 保存スロット選択時（中央・暗転）のスタイル */
+.save-modal-mode {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 400px !important;
+    z-index: 10000 !important;
+    /* 背景を暗くする「影」を巨大に出す */
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7) !important;
+}
