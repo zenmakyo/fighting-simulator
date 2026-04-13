@@ -541,6 +541,7 @@ h1 {
 }
 
 /* 保存スロット選択時（中央・暗転）のスタイル */
+/* 保存スロット選択時（中央・暗転）のスタイル */
 .save-modal-mode {
     position: fixed !important;
     top: 50% !important;
@@ -550,13 +551,33 @@ h1 {
     max-width: 500px !important;
     height: 70vh !important;
     z-index: 10000 !important;
+    background-color: white !important; /* 背景色がないと下が透けます */
+
+    /* --- 【修正】背後ガード --- */
+    /* outlineだけでは不十分なため、巨大な擬似要素で画面全体を物理的に覆います */
     outline: 100vmax solid rgba(0, 0, 0, 0.7) !important;
-    pointer-events: all !important;
+
+    /* --- 【修正】はみ出し防止 --- */
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important; /* これで中のリストを箱の中に閉じ込める */
 }
 
+/* 検索窓（もし表示されているなら） */
+.save-modal-mode #dropdown-search {
+    flex-shrink: 0; 
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+/* --- 【最重要】リストのスクロール --- */
 .save-modal-mode #dropdown-items {
-    flex: 1; /* 親要素の余っている高さをすべて使い切る */
-    max-height: none !important; /* calc計算をやめてflexに任せる */
-    overflow-y: auto;
+    flex: 1 !important;        /* これで下までピッタリ広がる */
+    overflow-y: auto !important; /* これで箱の中でスクロールするようになる */
+    height: auto !important;     /* 固定高さを解除 */
+    max-height: none !important; 
     border-top: 1px solid #eee;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
