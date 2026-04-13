@@ -538,18 +538,26 @@ function showCustomMenu(allItems, event, showSearch) {
 
     // 外側クリックで閉じる
     activeCloseHandler = (e) => {
-        if (menu.contains(e.target) || event.currentTarget.contains(e.target)) return;
+    // 1. メニュー本体 (dropdown-menu)
+    const menu = document.getElementById('dropdown-menu');
+    
+    // もしクリックした場所が「メニューの中」じゃないなら閉じる
+    if (menu && !menu.contains(e.target)) {
         closeDropdown();
-    };
+    }
+};
     setTimeout(() => document.addEventListener('click', activeCloseHandler), 100);
 }
 
 // ドロップダウンを閉じる共通関数
 function closeDropdown() {
     const menu = document.getElementById('dropdown-menu');
-    menu.style.display = 'none';
+    if (menu) {
+        menu.style.display = 'none';
+    }
     if (activeCloseHandler) {
         document.removeEventListener('click', activeCloseHandler);
         activeCloseHandler = null;
     }
+}
 }
