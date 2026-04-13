@@ -197,6 +197,8 @@ function openSearchList(type, num, event) {
                     if (type === 'w-ability') currentPhantomState[num].w_ability = item;
                     if (type === 'a-ability') currentPhantomState[num].a_ability = item;
                 }
+
+                updatePhantomStats(num);
                 
                 // 閉じる
                 menu.style.display = 'none';
@@ -288,8 +290,8 @@ function syncWeaponAbi(num) {
     // 武器が見つかり、かつその武器がabilityを持っている場合
     if (weaponData && weaponData.ability) {
         
-        // 4. 武器アビリティリストから、そのability名と一致するものを探す
-        const foundAbi = weaponAbilityList.find(abi => abi.name === weaponData.ability);
+    // 4. 武器アビリティリストから、そのability名と一致するものを探す
+    const foundAbi = weaponAbilityList.find(abi => abi.name === weaponData.ability);
 
         if (foundAbi) {
             // 5. 画面の「付与アビ」の表示を更新
@@ -299,6 +301,7 @@ function syncWeaponAbi(num) {
             if (typeof currentPhantomState !== 'undefined') {
                 currentPhantomState[num].w_ability = foundAbi;
             }
+            updatePhantomStats(num);
         }
     }
 }
@@ -356,3 +359,50 @@ function updatePhantomStats(num = 1) {
     document.getElementById(`res-def-${num}`).textContent = finalResult.def.toLocaleString();
     document.getElementById(`res-luck-${num}`).textContent = finalResult.luck.toLocaleString();
 }
+
+// --- ここから貼り付け ---
+
+/**
+ * 装備の最終ステータスを計算（基本値 + 強化値）
+ */
+function calculateEquipmentValue(baseVal, plus) {
+    if (baseVal <= 0) return 0;
+    // 強化値1につき5%アップ
+    return Math.floor(baseVal * (1 + (plus * 0.05)));
+}
+
+/**
+ * アビリティを適用する
+ */
+function applyAbility(stats, abiName, plusValue) {
+    // 辞書(data.js)にアビリティがあれば計算を実行
+    if (typeof ABILITY_MASTER !== 'undefined' && ABILITY_MASTER[abiName]) {
+        const bonus = ABILITY_MASTER[abiName].logic(stats, plusValue);
+        return {
+            sta: stats.sta + (bonus.sta || 0),
+            atk: stats.atk + (bonus.atk || 0),
+            def: stats.def + (bonus.def || 0),
+            luck: stats.luck + (bonus.luck || 0)
+        };
+    }
+    return stats;
+}
+
+/**
+ * リアルタイム監視設定
+ */
+window.addEventListener('input', (e) => {
+    // 幻獣の入力欄（base-sta-1など）が変更されたら計算
+    if (e.target.id && e.target.id.includes('base-')) {
+        const num = e.target.id.split('-').pop();
+        updatePhantomStats(num);
+    }
+});
+
+window.addEventListener('change', (e) => {
+    // 強化値プルダウンが変更されたら計算
+    if (e.target.id && e.target.id.includes('plus-')) {
+        const num = e.target.id.split('-').pop();
+        updatePhantomStats(num);
+    }
+});
