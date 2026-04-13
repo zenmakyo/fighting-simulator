@@ -551,10 +551,12 @@ h1 {
     height: 70vh !important;
     z-index: 10000 !important;
     outline: 100vmax solid rgba(0, 0, 0, 0.7) !important;
-    pointer-events: auto !important;
+    pointer-events: all !important;
 }
 
 .save-modal-mode #dropdown-items {
-    max-height: calc(70vh - 80px) !important; /* 枠の高さに合わせてリストを伸ばす */
-    overflow-y: auto; /* はみ出たらスクロール */
+    flex: 1; /* 親要素の余っている高さをすべて使い切る */
+    max-height: none !important; /* calc計算をやめてflexに任せる */
+    overflow-y: auto;
+    border-top: 1px solid #eee;
 }
