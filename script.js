@@ -356,10 +356,10 @@ function updatePhantomStats(num = 1) {
     };
 
     // 6. 画面に反映
-    document.getElementById(`res-sta-${num}`).textContent = finalResult.sta.toLocaleString();
-    document.getElementById(`res-atk-${num}`).textContent = finalResult.atk.toLocaleString();
-    document.getElementById(`res-def-${num}`).textContent = finalResult.def.toLocaleString();
-    document.getElementById(`res-luck-${num}`).textContent = finalResult.luck.toLocaleString();
+    document.getElementById(`res-sta-${num}`).textContent = finalResult.sta;
+    document.getElementById(`res-atk-${num}`).textContent = finalResult.atk;
+    document.getElementById(`res-def-${num}`).textContent = finalResult.def;
+    document.getElementById(`res-luck-${num}`).textContent = finalResult.luck;
 }
 
 // --- ここから貼り付け ---
