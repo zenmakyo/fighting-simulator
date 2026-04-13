@@ -326,8 +326,8 @@ function updatePhantomStats(num = 1) {
     const armorData = armorList.find(a => a.name === armorName) || { baseDef: 0, grade: 0, ability: "なし" };
 
     // 2. 装備の固定値を先に準備（最後の方で使います）
-    const totalWeaponAtk = calculateEquipmentValue(weaponData.baseAtk, wPlus);
-    const totalArmorDef = calculateEquipmentValue(armorData.baseDef, aPlus);
+    const totalWeaponAtk = calculateEquipmentValue(weaponData.baseAtk, wPlus, weaponData.grade || 0);
+    const totalArmorDef = calculateEquipmentValue(armorData.baseDef, aPlus, weaponData.grade || 0);
 
     // 3. 【基礎】の確定
     // 素のDefにグレードボーナスを足したものを「基礎Def」とする
@@ -367,10 +367,20 @@ function updatePhantomStats(num = 1) {
 /**
  * 装備の最終ステータスを計算（基本値 + 強化値）
  */
-function calculateEquipmentValue(baseVal, plus) {
+function calculateEquipmentValue(baseVal, plus, grade = 0) {
     if (baseVal <= 0) return 0;
-    // 強化値1につき5%アップ
-    return Math.floor(baseVal * (1 + (plus * 0.05)));
+
+    let multiplierRate;
+    if (plus <= 10) {
+        // +10までの計算式: 強化値n x (20 + Grade) %
+        multiplierRate = plus * (20 + grade);
+    } else {
+        // +11からの計算式: 強化値n x (30 + Grade) %
+        multiplierRate = plus * (30 + grade);
+    }
+
+    // 基本値 + (基本値 * 倍率%) 
+    return Math.ceil(baseVal * (1 + (multiplierRate / 100)));
 }
 
 /**
