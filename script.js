@@ -302,3 +302,57 @@ function syncWeaponAbi(num) {
         }
     }
 }
+
+// 装備込みステータスの計算
+function updatePhantomStats(num = 1) {
+    // 1. 入力値の取得
+    const base = {
+        sta: parseInt(document.getElementById(`base-sta-${num}`).value) || 0,
+        atk: parseInt(document.getElementById(`base-atk-${num}`).value) || 0,
+        def: parseInt(document.getElementById(`base-def-${num}`).value) || 0,
+        luck: parseInt(document.getElementById(`base-luck-${num}`).value) || 0
+    };
+
+    const weaponName = document.getElementById(`select-weapon-${num}`).textContent.trim();
+    const armorName = document.getElementById(`select-armor-${num}`).textContent.trim();
+    const aAbiName = document.getElementById(`select-a-abi-${num}`).textContent.trim();
+    const wPlus = parseInt(document.getElementById(`plus-weapon-${num}`).value) || 0;
+    const aPlus = parseInt(document.getElementById(`plus-armor-${num}`).value) || 0;
+
+    const weaponData = weaponList.find(w => w.name === weaponName) || { baseAtk: 0 };
+    const armorData = armorList.find(a => a.name === armorName) || { baseDef: 0, grade: 0, ability: "なし" };
+
+    // 2. 装備加算値の計算 (アビリティ計算には含めないため、先に計算だけしておく)
+    const totalWeaponAtk = calculateEquipmentValue(weaponData.baseAtk, wPlus);
+    const totalArmorDef = calculateEquipmentValue(armorData.baseDef, aPlus);
+
+    // 3. アビリティ対象となる「基礎ステータス」の確定
+    // 防具グレードボーナスをここで計算
+    const gradeBonusDef = Math.ceil(base.def * (armorData.grade * 0.01));
+    
+    let current = {
+        sta: base.sta,
+        atk: base.atk,
+        def: base.def + gradeBonusDef, // 防具加算はまだ入れない
+        luck: base.luck
+    };
+
+    // 4. アビリティ適用（防具固有・防具付与）
+    // current (素ステ+グレード分) に対してアビリティをかける
+    current = applyAbility(current, armorData.ability, aPlus);
+    current = applyAbility(current, aAbiName, aPlus);
+
+    // 5. 最後に装備加算分を合流させる (Defenseはここ！)
+    const finalResult = {
+        sta: current.sta,
+        atk: current.atk + totalWeaponAtk,
+        def: current.def + totalArmorDef,
+        luck: current.luck
+    };
+
+    // 6. 画面に反映
+    document.getElementById(`res-sta-${num}`).textContent = finalResult.sta.toLocaleString();
+    document.getElementById(`res-atk-${num}`).textContent = finalResult.atk.toLocaleString();
+    document.getElementById(`res-def-${num}`).textContent = finalResult.def.toLocaleString();
+    document.getElementById(`res-luck-${num}`).textContent = finalResult.luck.toLocaleString();
+}
