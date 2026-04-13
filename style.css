@@ -552,14 +552,7 @@ h1 {
     height: 70vh !important;
     z-index: 10000 !important;
     background-color: white !important; /* 背景色がないと下が透けます */
-
-    /* --- 【修正】背後ガード --- */
-    /* outlineだけでは不十分なため、巨大な擬似要素で画面全体を物理的に覆います */
     outline: 100vmax solid rgba(0, 0, 0, 0.7) !important;
-
-    /* --- 【修正】はみ出し防止 --- */
-    display: flex;
-    flex-direction: column;
     overflow: hidden !important; /* これで中のリストを箱の中に閉じ込める */
 }
 
