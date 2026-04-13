@@ -126,16 +126,6 @@ function closeList() {
     document.getElementById('floating-list-overlay').style.display = 'none';
 }
 
-// --- 各ボタンの動作例 ---
-
-// 保存先リストを開く
-function openSaveTargetList(num) {
-    const targets = ["保存スロット1 (未設定)", "保存スロット2 (未設定)", "保存スロット3 (未設定)"];
-    openFloatingList(`幻獣${num}の保存先を選択`, targets, (selected) => {
-        alert(`${num}番のデータを「${selected}」に保存しました（仮）`);
-    });
-}
-
 
 // 武器・防具・アビリティリストの表示
 
@@ -493,9 +483,73 @@ function loadPhantomData(unitNum, slotIndex) {
     const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
     if (!savedData) return;
 
-    // 入力欄への反映
+    // 保存された値をそれぞれの入力欄やボタンに反映させる
     document.getElementById(`input-name-${unitNum}`).value = savedData.name;
     document.getElementById(`display-name-${unitNum}`).textContent = savedData.name;
     document.getElementById(`input-element-${unitNum}`).value = savedData.element;
     document.getElementById(`base-sta-${unitNum}`).value = savedData.baseSta;
-    document.getElementById(`base-atk-${
+    document.getElementById(`base-atk-${unitNum}`).value = savedData.baseAtk;
+    document.getElementById(`base-def-${unitNum}`).value = savedData.baseDef;
+    document.getElementById(`base-luck-${unitNum}`).value = savedData.baseLuck;
+
+    // ボタンのテキスト表示も更新
+    document.getElementById(`select-weapon-${unitNum}`).textContent = savedData.weapon;
+    document.getElementById(`select-w-abi-${unitNum}`).textContent = savedData.wAbi;
+    document.getElementById(`select-armor-${unitNum}`).textContent = savedData.armor;
+    document.getElementById(`select-a-abi-${unitNum}`).textContent = savedData.aAbi;
+
+    // 反映後に再計算を行う
+    updatePhantomStats(unitNum);
+    // メニューを閉じる
+    closeDropdown();
+}
+
+/**
+ * 保存・呼び出し専用のメニュー表示
+ */
+function showCustomMenu(allItems, event, showSearch) {
+    const menu = document.getElementById('dropdown-menu');
+    const list = document.getElementById('dropdown-items');
+    const searchInput = document.getElementById('dropdown-search');
+
+    if (activeCloseHandler) document.removeEventListener('click', activeCloseHandler);
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    menu.style.top = `${rect.bottom + window.scrollY}px`;
+    menu.style.left = `${rect.left + window.scrollX}px`;
+
+    const render = (filterText = "") => {
+        list.innerHTML = '';
+        allItems.filter(item => item.name.toLowerCase().includes(filterText.toLowerCase()))
+        .forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item.name;
+            li.onclick = item.action; // 保存や読込の実行
+            list.appendChild(li);
+        });
+    };
+
+    // 検索窓を出すか出さないか（保存時は不要、読込時はあっても便利）
+    searchInput.style.display = showSearch ? 'block' : 'none';
+    searchInput.value = '';
+    render();
+    
+    menu.style.display = 'block';
+
+    // 外側クリックで閉じる
+    activeCloseHandler = (e) => {
+        if (menu.contains(e.target) || event.currentTarget.contains(e.target)) return;
+        closeDropdown();
+    };
+    setTimeout(() => document.addEventListener('click', activeCloseHandler), 100);
+}
+
+// ドロップダウンを閉じる共通関数
+function closeDropdown() {
+    const menu = document.getElementById('dropdown-menu');
+    menu.style.display = 'none';
+    if (activeCloseHandler) {
+        document.removeEventListener('click', activeCloseHandler);
+        activeCloseHandler = null;
+    }
+}
