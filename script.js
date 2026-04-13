@@ -207,9 +207,6 @@ function openSearchList(type, num, event) {
     searchInput.focus();
 
     // --- F. 「外側クリック」の監視を開始 ---
-    searchInput.oninput = (e) => {
-        render(e.target.value);
-    };
     const currentBtn = event.currentTarget; 
     activeCloseHandler = (e) => {
         // メニュー内をクリックしたなら何もしない
@@ -516,45 +513,56 @@ function showCustomMenu(allItems, event, showSearch, isSaveModal = false) {
     const list = document.getElementById('dropdown-items');
     const searchInput = document.getElementById('dropdown-search');
 
+    // --- 【修正ポイント1】古いイベントを完全にクリア ---
+    // これをしないと、前回の検索処理が裏で生き残ってしまいます
     if (activeCloseHandler) document.removeEventListener('click', activeCloseHandler);
+    searchInput.oninput = null; 
 
-    // --- ここからモード切り替えロジック ---
+    // モード切り替え（保存かそれ以外か）
     if (isSaveModal) {
-        // 保存の時：中央モーダル化
         menu.classList.add('save-modal-mode');
-        menu.style.top = "";  // 通常の位置指定を無効化
+        menu.style.top = ""; 
         menu.style.left = "";
     } else {
-        // 読込や武器選択の時：通常ドロップダウン
         menu.classList.remove('save-modal-mode');
         const rect = event.currentTarget.getBoundingClientRect();
         menu.style.top = `${rect.bottom + window.scrollY}px`;
         menu.style.left = `${rect.left + window.scrollX}px`;
     }
 
+    // --- 【修正ポイント2】描画関数をこの中で定義 ---
+    // 「今渡されたリスト(allItems)」だけを使うように固定します
     const render = (filterText = "") => {
         list.innerHTML = '';
-        allItems.filter(item => item.name.toLowerCase().includes(filterText.toLowerCase()))
-        .forEach(item => {
+        const filtered = allItems.filter(item => 
+            item.name.toLowerCase().includes(filterText.toLowerCase())
+        );
+        
+        filtered.forEach(item => {
             const li = document.createElement('li');
             li.textContent = item.name;
             li.onclick = (e) => {
                 e.stopPropagation();
                 if (item.action) item.action();
-                closeDropdown(); // 実行したら閉じる
+                closeDropdown();
             };
             list.appendChild(li);
         });
     };
 
+    // --- 【修正ポイント3】検索イベントを最新のリストで上書き ---
+    searchInput.oninput = (e) => {
+        render(e.target.value);
+    };
+
     searchInput.style.display = showSearch ? 'block' : 'none';
     searchInput.value = '';
-    render();
+    render(); // 最初に全リストを表示
     
     menu.style.display = 'block';
 
+    // 外側クリック監視
     activeCloseHandler = (e) => {
-        // メニューの中身以外をクリックしたら閉じる
         if (menu && !menu.contains(e.target)) {
             closeDropdown();
         }
