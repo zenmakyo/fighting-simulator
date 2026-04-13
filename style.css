@@ -462,11 +462,11 @@ h1 {
 /* --- ボタン類 --- */
 .btn-group { display: flex;
              gap: 5px;
-             width: 80px;
+             width: 70px;
            }
 
 .small-btn {
-    width: 80px;
+    width: 70px;
     padding: 6px 0;
     font-size: 12px;
     background-color: #666;
