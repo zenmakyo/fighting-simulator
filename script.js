@@ -521,10 +521,19 @@ function showCustomMenu(allItems, event, showSearch, isSaveModal = false) {
     // モード切り替え（保存かそれ以外か）
     if (isSaveModal) {
         menu.classList.add('save-modal-mode');
+        
+        // 【重要】JSで直接レイアウトを指定（これでCSSの!important競合を回避）
+        menu.style.display = 'flex';           // リスト内スクロールを有効にする
+        menu.style.flexDirection = 'column';    // 縦並び
+        
         menu.style.top = ""; 
         menu.style.left = "";
     } else {
         menu.classList.remove('save-modal-mode');
+        
+        // 【重要】通常時はブロック表示
+        menu.style.display = 'block'; 
+        
         const rect = event.currentTarget.getBoundingClientRect();
         menu.style.top = `${rect.bottom + window.scrollY}px`;
         menu.style.left = `${rect.left + window.scrollX}px`;
