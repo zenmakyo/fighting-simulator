@@ -542,7 +542,6 @@ h1 {
 
 /* 保存スロット選択時（中央・暗転）のスタイル */
 .save-modal-mode {
-    display: block !important;
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
