@@ -338,3 +338,89 @@ const armorAbilityList = [
     { name: "龍属" },
     { name: "なし" }
 ];
+
+// 防具アビリティの計算ロジックを集約する辞書
+const ABILITY_MASTER = {
+    "猛皇": {
+        logic: (s, p) => ({
+            sta: 0,
+            atk: Math.ceil(s.atk * (p * 0.04)),
+            def: 0,
+            luck: 0
+        })
+    },
+
+    "猛将": {
+        logic: (s, p) => ({
+            sta: 0,
+            atk: Math.ceil(s.atk * (p * 0.02)),
+            def: 0,
+            luck: 0
+        })
+    },
+
+    "虎咆": {
+        logic: (s, p) => ({
+            sta: 0,
+            atk: Math.ceil(s.atk * (p * 0.0125)),
+            def: 0,
+            luck: 100
+        })
+    },
+
+    "闘争": {
+        logic: (s, p) => ({
+            sta: 0,
+            atk: Math.ceil(s.atk * (p * 0.01)),
+            def: 0,
+            luck: 0
+        })
+    },
+    
+    "威風": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.atk * 0.1);
+            return {
+                sta: Math.ceil(loss * 15.0),
+                atk: -loss,
+                def: 0,
+                luck: Math.ceil(loss * 0.12)
+            };
+        }
+    },
+
+    "戦略": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.atk * 0.15);
+            return {
+                sta: Math.ceil(loss * 8.0),
+                atk: -loss,
+                def: 0,
+                luck: Math.ceil(loss * 0.15)
+            };
+        }
+    },
+
+    "遊戯": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.atk * 0.2);
+            return {
+                sta: loss,
+                atk: -loss,
+                def: loss,
+                luck: 0
+            };
+        }
+    },
+
+    "慈恵": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.atk * 0.15);
+            return {
+                sta: Math.ceil(loss * 0.5),
+                atk: -loss,
+                def: Math.ceil(loss * 4.0),
+                luck: 0
+            };
+        }
+    };
