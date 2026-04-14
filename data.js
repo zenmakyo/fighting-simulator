@@ -423,7 +423,7 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
-    }
+    },
 
     "賢皇": {
         logic: (s, p) => {
@@ -434,7 +434,7 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
-    }
+    },
 
     "賢将": {
         logic: (s, p) => {
@@ -445,7 +445,7 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
-    }
+    },
 
     "護鶴": {
         logic: (s, p) => {
@@ -456,7 +456,7 @@ const ABILITY_MASTER = {
                 luck: 100
             };
         }
-    }
+    },
 
     "防衛": {
         logic: (s, p) => {
@@ -467,7 +467,7 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
-    }
+    },
 
     "鉄壁": {
         logic: (s, p) => {
@@ -478,7 +478,29 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
-    }
+    },
+
+    "頑固": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: Math.ceil(s.def * 0.1),
+                luck: 0
+            };
+        }
+    },
+
+    "強固": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: 50,
+                luck: 0
+            };
+        }
+    },
 
     "改命": {
         logic: (s, p) => {
@@ -490,7 +512,7 @@ const ABILITY_MASTER = {
                 luck: Math.ceil(loss * 0.12)
             };
         }
-    }
+    },
 
     "瞑想": {
         logic: (s, p) => {
@@ -502,7 +524,7 @@ const ABILITY_MASTER = {
                 luck: Math.ceil(loss * 0.15)
             };
         }
-    }
+    },
 
     "砕身": {
         logic: (s, p) => {
@@ -514,7 +536,7 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
-    }
+    },
 
     "悪戯": {
         logic: (s, p) => {
@@ -523,6 +545,84 @@ const ABILITY_MASTER = {
                 sta: loss,
                 atk: loss,
                 def: -loss,
+                luck: 0
+            };
+        }
+    },
+
+    "勇将": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * (p * 0.075)),
+                atk: 0,
+                def: 0,
+                luck: 0
+            };
+        }
+    },
+
+    "生存": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * (p * 0.05)),
+                atk: 0,
+                def: 0,
+                luck: 0
+            };
+        }
+    },
+
+    "雲竜": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * (p * 0.06)),
+                atk: 0,
+                def: 0,
+                luck: 100
+            };
+        }
+    },
+
+    "底力": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * 0.2),
+                atk: 0,
+                def: 0,
+                luck: 0
+            };
+        }
+    },
+
+    "持久": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * 0.15),
+                atk: 0,
+                def: 0,
+                luck: 0
+            };
+        }
+    },
+
+    "成長": {
+        logic: (s, p) => {
+            return {
+                sta: 300,
+                atk: 0,
+                def: 0,
+                luck: 0
+            };
+        }
+    },
+
+    "誘惑": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.sta * 0.2)
+            return {
+                sta: -loss,
+                atk: loss,
+                def: 0,
                 luck: 0
             };
         }
