@@ -424,4 +424,107 @@ const ABILITY_MASTER = {
             };
         }
     }
+
+    "賢皇": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: Math.ceil(s.def * (p * 0.04)),
+                luck: 0
+            };
+        }
+    }
+
+    "賢将": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: Math.ceil(s.def * (p * 0.02)),
+                luck: 0
+            };
+        }
+    }
+
+    "護鶴": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: Math.ceil(s.def * (p * 0.0125)),
+                luck: 100
+            };
+        }
+    }
+
+    "防衛": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: Math.ceil(s.def * (p * 0.01)),
+                luck: 0
+            };
+        }
+    }
+
+    "鉄壁": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: Math.ceil(s.def * 0.15),
+                luck: 0
+            };
+        }
+    }
+
+    "改命": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.def * 0.10);
+            return {
+                sta: Math.ceil(loss * 15.0),
+                atk: 0,
+                def: -loss,
+                luck: Math.ceil(loss * 0.12)
+            };
+        }
+    }
+
+    "瞑想": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.def * 0.15);
+            return {
+                sta: Math.ceil(loss * 8.0),
+                atk: 0,
+                def: -loss,
+                luck: Math.ceil(loss * 0.15)
+            };
+        }
+    }
+
+    "砕身": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.def * 0.15);
+            return {
+                sta: Math.ceil(loss * 0.5),
+                atk: Math.ceil(loss * 4.0),
+                def: -loss,
+                luck: 0
+            };
+        }
+    }
+
+    "悪戯": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.def * 0.20);
+            return {
+                sta: loss,
+                atk: loss,
+                def: -loss,
+                luck: 0
+            };
+        }
+    }
     };
