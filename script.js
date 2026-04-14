@@ -131,101 +131,6 @@ function closeList() {
 
 let activeCloseHandler = null; // 監視役を覚えるための変数
 
-/**
- * ボタンのすぐ下にリストを展開する
- */
-function openSearchList(type, num, event) {
-    const menu = document.getElementById('dropdown-menu');
-    const searchInput = document.getElementById('dropdown-search');
-    const listItems = document.getElementById('dropdown-items');
-
-    // --- A. 前回の監視役がいればクビにする ---
-    if (activeCloseHandler) {
-        document.removeEventListener('click', activeCloseHandler);
-    }
-
-    // --- B. データの準備 ---
-    let listData = [];
-    let targetId = "";
-
-    if (type === 'weapon') {
-        listData = weaponList;
-        targetId = `select-weapon-${num}`;
-    } else if (type === 'armor') {
-        listData = armorList;
-        targetId = `select-armor-${num}`;
-    } else if (type === 'w-ability') {
-        listData = weaponAbilityList; // data.jsで作ったリスト名に合わせる
-        targetId = `select-w-abi-${num}`;
-    } else if (type === 'a-ability') {
-        listData = armorAbilityList;  // data.jsで作ったリスト名に合わせる
-        targetId = `select-a-abi-${num}`;
-    }
-
-    // --- C. 位置の計算 ---
-    const rect = event.currentTarget.getBoundingClientRect();
-    menu.style.top = `${rect.bottom + window.scrollY}px`;
-    menu.style.left = `${rect.left + window.scrollX}px`;
-
-    // --- D. リストの描画 ---
-    const render = (query = "") => {
-        listItems.innerHTML = '';
-        listData.filter(item => 
-            item.name !== "未選択" && 
-            item.name.toLowerCase().includes(query.toLowerCase())
-        ).forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item.name;
-            li.onclick = (e) => {
-                e.stopPropagation(); // クリックが外側に伝わるのを防ぐ
-                document.getElementById(targetId).textContent = item.name;
-                
-                // 内部データ保存
-                if (typeof currentPhantomState !== 'undefined') {
-                    if (type === 'weapon') currentPhantomState[num].weapon = item;
-                    if (type === 'armor') currentPhantomState[num].armor = item;
-                    if (type === 'w-ability') currentPhantomState[num].w_ability = item;
-                    if (type === 'a-ability') currentPhantomState[num].a_ability = item;
-                }
-
-                updatePhantomStats(num);
-                
-                // 閉じる
-                menu.style.display = 'none';
-                document.removeEventListener('click', activeCloseHandler);
-                activeCloseHandler = null;
-            };
-            listItems.appendChild(li);
-        });
-    };
-
-    render();
-
-    // --- E. メニューを表示 ---
-    menu.style.display = 'block';
-    searchInput.value = '';
-    searchInput.focus();
-
-    // --- F. 「外側クリック」の監視を開始 ---
-    const currentBtn = event.currentTarget; 
-    activeCloseHandler = (e) => {
-        // メニュー内をクリックしたなら何もしない
-        if (menu.contains(e.target)) return;
-        // 開いたボタン自体をクリックしたなら何もしない（toggle処理に任せる）
-        if (currentBtn.contains(e.target)) return;
-
-        // それ以外（外側）をクリックしたら閉じる
-        menu.style.display = 'none';
-        document.removeEventListener('click', activeCloseHandler);
-        activeCloseHandler = null;
-    };
-
-    // 0.1秒待ってから監視をスタート（即自爆を防ぐ）
-    setTimeout(() => {
-        document.addEventListener('click', activeCloseHandler);
-    }, 100);
-}
-
 // ページ読み込み完了時に強化値の選択肢（+0～+20）を自動生成
 window.addEventListener('load', () => {
     const plusSelects = document.querySelectorAll('.plus-select select');
@@ -414,18 +319,7 @@ const MAX_SAVE_SLOTS = 30;
  * 1. 保存先スロットを選択するメニューを表示
  */
 function openSaveTargetList(num) {
-    const items = [];
-    for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
-        const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${i}`));
-        const label = savedData ? `${i}: ${savedData.name}` : `${i}: 空きスロット`;
-        
-        items.push({
-            name: label,
-            action: () => savePhantomData(num, i)
-        });
-    }
-    
-    showCustomMenu(items, event, false, true);
+    openDropdown('save', num, event);
 }
 
 /**
@@ -458,23 +352,7 @@ function savePhantomData(unitNum, slotIndex) {
  * 3. 保存済みリストから呼び出しメニューを表示
  */
 function openLoadList(num) {
-    const items = [];
-    for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
-        const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${i}`));
-        if (savedData) {
-            items.push({
-                name: `${i}: ${savedData.name}`,
-                action: () => loadPhantomData(num, i)
-            });
-        } else {
-            items.push({
-                name: `${i}: ---`,
-                action: null
-            });
-        }
-    }
-    // 呼び出し時は検索したい場合もあるので true
-    showCustomMenu(items, event, true);
+    openDropdown('load', num, event);
 }
 
 /**
@@ -506,73 +384,90 @@ function loadPhantomData(unitNum, slotIndex) {
 }
 
 /**
- * 保存・呼び出し専用のメニュー表示
+ * すべてのリスト表示（武器・防具・保存・読込）を一括管理する
  */
-function showCustomMenu(allItems, event, showSearch, isSaveModal = false) {
+function openDropdown(type, num, event) {
     const menu = document.getElementById('dropdown-menu');
     const list = document.getElementById('dropdown-items');
     const searchInput = document.getElementById('dropdown-search');
 
+    // 【重要】これまでの検索命令を一旦リセット（これが混線の解決策）
     if (activeCloseHandler) document.removeEventListener('click', activeCloseHandler);
     searchInput.oninput = null; 
 
+    // --- A. 表示するデータの仕分け ---
+    let listData = [];
+    let showSearch = true; 
+    let isSaveModal = false;
+
+    if (type === 'weapon') listData = weaponList;
+    else if (type === 'armor') listData = armorList;
+    else if (type === 'w-ability') listData = weaponAbilityList;
+    else if (type === 'a-ability') listData = armorAbilityList;
+    else if (type === 'save' || type === 'load') {
+        // 保存・読込用のデータ作成
+        isSaveModal = (type === 'save');
+        showSearch = (type === 'load'); // 保存時は検索不要、読込時は検索あり
+        for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
+            const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${i}`));
+            listData.push({ 
+                name: savedData ? `${i}: ${savedData.name}` : `${i}: ---`, 
+                slot: i,
+                hasData: !!savedData
+            });
+        }
+    }
+
+    // --- B. CSS表示の切り替え ---
     if (isSaveModal) {
-        // --- 保存モード：中央に大きく表示 ---
-        menu.classList.add('save-modal-mode');
+        menu.classList.add('save-modal-mode'); // 中央表示
         menu.style.display = 'flex';
-        menu.style.flexDirection = 'column';
-        menu.style.overflow = 'hidden'; // 箱を固定して中身をスクロールさせる
-        
-        menu.style.top = ""; 
-        menu.style.left = "";
+        menu.style.top = ""; menu.style.left = "";
     } else {
-        // --- 通常モード：ここを「リセット」する ---
-        menu.classList.remove('save-modal-mode');
-        
-        // JSがつけた保存用の設定を全部消して元に戻す
-        menu.style.display = 'block'; 
-        menu.style.flexDirection = '';
-        menu.style.overflow = ''; 
-        
+        menu.classList.remove('save-modal-mode'); // ボタンの横に表示
+        menu.style.display = 'block';
         const rect = event.currentTarget.getBoundingClientRect();
         menu.style.top = `${rect.bottom + window.scrollY}px`;
         menu.style.left = `${rect.left + window.scrollX}px`;
     }
 
-    // --- 【修正ポイント2】描画関数をこの中で定義 ---
-    // 「今渡されたリスト(allItems)」だけを使うように固定します
-    const render = (filterText = "") => {
+    // --- C. リスト描画（検索するたびにここが動く） ---
+    const render = (query = "") => {
         list.innerHTML = '';
-        const filtered = allItems.filter(item => 
-            item.name.toLowerCase().includes(filterText.toLowerCase())
-        );
-        
-        filtered.forEach(item => {
+        listData.filter(item => 
+            (item.name || "").toLowerCase().includes(query.toLowerCase()) && item.name !== "未選択"
+        ).forEach(item => {
             const li = document.createElement('li');
             li.textContent = item.name;
             li.onclick = (e) => {
                 e.stopPropagation();
-                if (item.action) item.action();
+                // typeによってクリック時の動作を変える
+                if (type === 'save') {
+                    savePhantomData(num, item.slot);
+                } else if (type === 'load') {
+                    if (item.hasData) loadPhantomData(num, item.slot);
+                } else {
+                    const idMap = { 'weapon':`select-weapon-${num}`, 'armor':`select-armor-${num}`, 'w-ability':`select-w-abi-${num}`, 'a-ability':`select-a-abi-${num}` };
+                    document.getElementById(idMap[type]).textContent = item.name;
+                    updatePhantomStats(num);
+                }
                 closeDropdown();
             };
             list.appendChild(li);
         });
     };
 
-    // --- 【修正ポイント3】検索イベントを最新のリストで上書き ---
-    searchInput.oninput = (e) => {
-        render(e.target.value);
-    };
-
+    // --- D. 検索窓の再設定 ---
     searchInput.style.display = showSearch ? 'block' : 'none';
     searchInput.value = '';
-    render(); // 最初に全リストを表示
+    searchInput.oninput = (e) => render(e.target.value); // 「今」のリストに対して検索をかける
 
-    // 外側クリック監視
+    render(); // 初期表示
+    if (showSearch) setTimeout(() => searchInput.focus(), 10);
+
+    // 外側クリックで閉じる
     activeCloseHandler = (e) => {
-        if (menu && !menu.contains(e.target)) {
-            closeDropdown();
-        }
+        if (!menu.contains(e.target) && !event.currentTarget.contains(e.target)) closeDropdown();
     };
     setTimeout(() => document.addEventListener('click', activeCloseHandler), 100);
 }
