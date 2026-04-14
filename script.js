@@ -466,10 +466,24 @@ function openDropdown(type, num, event) {
     if (showSearch) setTimeout(() => searchInput.focus(), 10);
 
     // 外側クリックで閉じる
+    // 1. まず、今押したボタンを変数「currentBtn」にしっかり覚えさせる
+    const currentBtn = event.currentTarget;
+
+    // 2. 外側クリックを判定する関数
     activeCloseHandler = (e) => {
-        if (!menu.contains(e.target) && !event.currentTarget.contains(e.target)) closeDropdown();
+        // メニューの中をクリックしたなら閉じない
+        if (menu.contains(e.target)) return;
+        // 今押したボタン自体をクリックしたなら閉じない
+        if (currentBtn && currentBtn.contains(e.target)) return;
+
+        // それ以外（外側）なら閉じる！
+        closeDropdown();
     };
-    setTimeout(() => document.addEventListener('click', activeCloseHandler), 100);
+
+    // 3. 0.1秒後に監視を開始
+    setTimeout(() => {
+        document.addEventListener('click', activeCloseHandler);
+    }, 100);
 }
 
 // ドロップダウンを閉じる共通関数
