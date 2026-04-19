@@ -328,7 +328,7 @@ function openSaveTargetList(num) {
 /**
  * 2. 実際に localStorage へ保存
  */
-let lastUsedSlot = null;
+let lastUsedSlot = { 1: null, 2: null, 3: null, 4: null };
 function savePhantomData(unitNum, slotIndex) {
     const data = {
         name: document.getElementById(`input-name-${unitNum}`).value || "名称未設定",
@@ -348,7 +348,7 @@ function savePhantomData(unitNum, slotIndex) {
   const nameInput = document.getElementById(`input-name-${unitNum}`).value || "名称未設定";
     document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${nameInput}`;
 
-    lastUsedSlot = slotIndex;
+    lastUsedSlots[unitNum] = slotIndex;
     alert(`スロット ${slotIndex} に「${data.name}」を保存しました。`);
     closeDropdown();
 }
@@ -366,7 +366,7 @@ function openLoadList(num) {
 function loadPhantomData(unitNum, slotIndex) {
     const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
 
-    lastUsedSlot = slotIndex;
+    lastUsedSlots[unitNum] = slotIndex;
     if (!savedData) {
         // ★ 空スロット(---)を押した時：すべての項目をデフォルトに戻す
         
@@ -420,9 +420,10 @@ function loadPhantomData(unitNum, slotIndex) {
  * 上書きボタン用の関数
  */
 function handleOverwrite(unitNum) {
-    if (lastUsedSlot !== null) {
+    const currentSlot = lastUsedSlots[unitNum];
+    if (currentSlot !== null) {
         // すでにスロット番号がある場合は、そのまま保存処理へ
-        savePhantomData(unitNum, lastUsedSlot);
+        savePhantomData(unitNum, currentSlot);
     } else {
         // 番号がない（未保存・未読込）なら、スロット選択を開く
         openSaveTargetList(unitNum);
