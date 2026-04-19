@@ -362,6 +362,8 @@ function openLoadList(num) {
  */
 function loadPhantomData(unitNum, slotIndex) {
     const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
+
+    lastUsedSlot = slotIndex;
     if (!savedData) return;
 
     // 保存された値をそれぞれの入力欄やボタンに反映させる
@@ -379,7 +381,6 @@ function loadPhantomData(unitNum, slotIndex) {
     document.getElementById(`select-armor-${unitNum}`).textContent = savedData.armor;
     document.getElementById(`select-a-abi-${unitNum}`).textContent = savedData.aAbi;
 
-    lastUsedSlot = slotIndex;
     // 反映後に再計算を行う
     updatePhantomStats(unitNum);
     // メニューを閉じる
