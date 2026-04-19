@@ -628,6 +628,20 @@ const ABILITY_MASTER = {
         }
     },
 
+    "博打": {
+        logic: (s, p) => {
+            const staRsnd = Math.random() * (24.0 - 4.0) + 1.0;
+            const atkRand = Math.random() * (11.0 - 2.0) + 1.0;
+            const defRand = Math.random() * (10.5 - 0.5) + 1.0;
+
+            return {
+                sta: Math.ceil(s.sta * staRand),
+                atk: Math.ceil(s.atk * atkRand),
+                def: Math.ceil(s.def * defRand),
+                luck: 0
+            };
+    },
+
     "才華": {
         logic: (s, p) => {
             const loss = Math.ceil(s.luck * 0.5)
@@ -638,6 +652,25 @@ const ABILITY_MASTER = {
                 luck: -loss
             };
         }
+    },
+
+    "浪漫": {
+        logic: (s, p) => {
+            const baseBonus = s.luck * 7;
+            const maxBonus = baseBonus + 6000;
+            const minBonus = baseBonus - 6000;
+
+            const randomAddValue = Math.ceil(Math.random() * (maxBonus - minBonus + 1)) + minBonus;
+
+            let finalAtk = s.atk + randomAddValue;
+
+            if (finalAtk < 10) {
+                finalAtk = 10;
+            }
+
+            return {
+                atk: finalAtk
+            };
     },
 
     "天運": {
