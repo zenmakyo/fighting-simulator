@@ -620,9 +620,131 @@ const ABILITY_MASTER = {
         logic: (s, p) => {
             const loss = Math.ceil(s.sta * 0.2)
             return {
-                sta: -loss,
+                sta: loss,
                 atk: loss,
                 def: 0,
+                luck: 0
+            };
+        }
+    },
+
+    "才華": {
+        logic: (s, p) => {
+            const loss = Math.ceil(s.luck * 0.5)
+            return {
+                sta: Math.ceil(loss * 7.5),
+                atk: Math.ceil(loss * 7.5),
+                def: Math.ceil(loss * 7.5),
+                luck: -loss
+            };
+        }
+    },
+
+    "天運": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: 0,
+                luck: Math.ceil(p * 5.0)
+            };
+        }
+    },
+
+    "激運": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: 0,
+                def: 0,
+                luck: 50
+            };
+        }
+    },
+
+    "修羅": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * (p * 0.04)),
+                atk: Math.ceil(s.atk * (p * 0.015)),
+                def: Math.ceil(s.def * (p * 0.015)),
+                luck: 0
+            };
+        }
+    },
+
+    "覇王": {
+        logic: (s, p) => {
+            return {
+                sta: 0,
+                atk: Math.ceil(s.atk * 0.15),
+                def: Math.ceil(s.def * 0.15),
+                luck: 0
+            };
+        }
+    },
+
+    "天佑": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * 0.12),
+                atk: Math.ceil(s.atk * 0.12),
+                def: Math.ceil(s.def * 0.12),
+                luck: Math.ceil(s.luck * 0.12)
+            };
+        }
+    },
+
+    "加護": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * 0.10),
+                atk: Math.ceil(s.atk * 0.10),
+                def: Math.ceil(s.def * 0.10),
+                luck: 0
+            };
+        }
+    },
+
+    "大帝": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * 0.45),
+                atk: Math.ceil(s.atk * 0.15),
+                def: 0,
+                luck: 0
+            };
+        }
+    },
+
+    "一八": {
+        logic: (s, p) => {
+            return {
+                sta: Math.ceil(s.sta * (p * 0.03)),
+                atk: Math.ceil(s.atk * (p * 0.01)),
+                def: Math.ceil(s.def * (p * 0.01)),
+                luck: 0
+            };
+        }
+    },
+
+    "早熟": {
+        logic: (s, p) => {
+            return {
+                sta: -Math.ceil(s.sta * 0.80),
+                atk: -Math.ceil(s.atk * 0.80),
+                def: -Math.ceil(s.def * 0.80),
+                luck: 100
+            };
+        }
+    },
+
+    "強欲": {
+        logic: (s, p) => {
+            return {
+                sta: -Math.ceil(s.sta * 0.80),
+                atk: -Math.ceil(s.atk * 0.80),
+                def: -Math.ceil(s.def * 0.80),
                 luck: 0
             };
         }
