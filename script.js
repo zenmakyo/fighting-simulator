@@ -325,6 +325,7 @@ function openSaveTargetList(num) {
 /**
  * 2. 実際に localStorage へ保存
  */
+let lastUsedSlot = null;
 function savePhantomData(unitNum, slotIndex) {
     const data = {
         name: document.getElementById(`input-name-${unitNum}`).value || "名称未設定",
@@ -343,7 +344,8 @@ function savePhantomData(unitNum, slotIndex) {
 
   const nameInput = document.getElementById(`input-name-${unitNum}`).value || "名称未設定";
     document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${nameInput}`;
-    
+
+    lastUsedSlot = slotIndex;
     alert(`スロット ${slotIndex} に「${data.name}」を保存しました。`);
     closeDropdown();
 }
@@ -377,10 +379,24 @@ function loadPhantomData(unitNum, slotIndex) {
     document.getElementById(`select-armor-${unitNum}`).textContent = savedData.armor;
     document.getElementById(`select-a-abi-${unitNum}`).textContent = savedData.aAbi;
 
+    lastUsedSlot = slotIndex;
     // 反映後に再計算を行う
     updatePhantomStats(unitNum);
     // メニューを閉じる
     closeDropdown();
+}
+
+/**
+ * 上書きボタン用の関数
+ */
+function handleOverwrite(unitNum) {
+    if (lastUsedSlot !== null) {
+        // すでにスロット番号がある場合は、そのまま保存処理へ
+        savePhantomData(unitNum, lastUsedSlot);
+    } else {
+        // 番号がない（未保存・未読込）なら、スロット選択を開く
+        openSaveTargetList(unitNum);
+    }
 }
 
 /**
