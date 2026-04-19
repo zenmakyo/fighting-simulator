@@ -483,6 +483,7 @@ h1 {
 }
 
 .main-save-btn {
+    flex: 1;
     width: 100%;
     margin-top: 15px;
     padding: 12px;
