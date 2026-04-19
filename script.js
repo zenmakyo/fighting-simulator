@@ -59,12 +59,6 @@ function applyEnemyStats(data) {
     document.getElementById('e-ability').value = data.ability;
 }
 
-// 【既存の関数】箱の出し入れ用
-function toggleEnemyBox() {
-    const box = document.getElementById('enemy-status-box');
-    box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
-}
-
 // 【追加】ボタンを押した時に箱を出し入れする関数
 function toggleEnemyBox() {
     const box = document.getElementById('enemy-status-box');
