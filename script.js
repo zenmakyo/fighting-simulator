@@ -205,7 +205,8 @@ function updatePhantomStats(num = 1) {
         sta: parseInt(document.getElementById(`base-sta-${num}`).value) || 0,
         atk: parseInt(document.getElementById(`base-atk-${num}`).value) || 0,
         def: parseInt(document.getElementById(`base-def-${num}`).value) || 0,
-        luck: parseInt(document.getElementById(`base-luck-${num}`).value) || 0
+        luck: parseInt(document.getElementById(`base-luck-${num}`).value) || 0,
+        element: document.getElementById(`input-element-${num}`).value
     };
 
     const weaponName = document.getElementById(`select-weapon-${num}`).textContent.trim();
@@ -227,7 +228,8 @@ function updatePhantomStats(num = 1) {
         sta: base.sta,
         atk: base.atk,
         def: base.def + Math.ceil(base.def * (armorData.grade * 0.01)),
-        luck: base.luck
+        luck: base.luck,
+        element: base.element
     };
 
     // 4. アビリティの連鎖適用（ここが「中間」を作る工程）
@@ -244,7 +246,8 @@ function updatePhantomStats(num = 1) {
         sta: current.sta,
         atk: current.atk + totalWeaponAtk,
         def: current.def + totalArmorDef,
-        luck: current.luck
+        luck: current.luck,
+        element: current.element
     };
 
     // 6. 画面に反映
@@ -252,6 +255,11 @@ function updatePhantomStats(num = 1) {
     document.getElementById(`res-atk-${num}`).textContent = finalResult.atk;
     document.getElementById(`res-def-${num}`).textContent = finalResult.def;
     document.getElementById(`res-luck-${num}`).textContent = finalResult.luck;
+
+    const resElem = document.getElementById(`res-element-${num}`);
+    if (resElem) {
+        resElem.textContent = finalResult.element;
+    }
 }
 
 // --- ここから貼り付け ---
@@ -286,7 +294,8 @@ function applyAbility(stats, abiName, plusValue) {
             sta: stats.sta + (bonus.sta || 0),
             atk: stats.atk + (bonus.atk || 0),
             def: stats.def + (bonus.def || 0),
-            luck: stats.luck + (bonus.luck || 0)
+            luck: stats.luck + (bonus.luck || 0),
+            element: bonus.element || stats.element
         };
     }
     return stats;
