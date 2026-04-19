@@ -161,7 +161,7 @@ function updatePlusValue(type, num) {
 }
 
 /**
- * 画面の表示から直接武器名を取得して同期する
+ * 重ねボタン、画面の表示から直接武器名を取得して同期する
  */
 function syncWeaponAbi(num) {
     // 1. 今、画面の「武器」のところに表示されているテキストを取得
@@ -189,6 +189,30 @@ function syncWeaponAbi(num) {
             }
             updatePhantomStats(num);
         }
+    }
+}
+
+/**
+ * 防具の固有アビリティに基づいて、付与アビリティを同期する
+ */
+function syncArmorAbi(num, mode) {
+    const armorDisplayName = document.getElementById(`select-armor-${num}`).textContent.trim();
+    if (armorDisplayName === "未選択") return;
+
+    const armorData = armorList.find(a => a.name === armorDisplayName);
+    if (!armorData || !armorData.ability || armorData.ability === "なし") return;
+
+    const baseAbiName = armorData.ability;
+
+    // ★修正ポイント：data.js に定義した ARMOR_SYNC_MAP を参照する
+    const setting = ARMOR_SYNC_MAP[baseAbiName];
+
+    if (setting) {
+        const targetAbiName = (mode === 'solo') ? setting.solo : setting.kyoku;
+        document.getElementById(`select-a-abi-${num}`).textContent = targetAbiName;
+        updatePhantomStats(num);
+        
+        console.log(`幻獣${num}: ${baseAbiName} → ${mode}用アビを同期しました`);
     }
 }
 
