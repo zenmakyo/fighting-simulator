@@ -348,7 +348,7 @@ function savePhantomData(unitNum, slotIndex) {
   const nameInput = document.getElementById(`input-name-${unitNum}`).value || "名称未設定";
     document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${nameInput}`;
 
-    lastUsedSlots[unitNum] = slotIndex;
+    lastUsedSlot[unitNum] = slotIndex;
     alert(`スロット ${slotIndex} に「${data.name}」を保存しました。`);
     closeDropdown();
 }
@@ -366,7 +366,7 @@ function openLoadList(num) {
 function loadPhantomData(unitNum, slotIndex) {
     const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
 
-    lastUsedSlots[unitNum] = slotIndex;
+    lastUsedSlot[unitNum] = slotIndex;
     if (!savedData) {
         // ★ 空スロット(---)を押した時：すべての項目をデフォルトに戻す
         
@@ -420,7 +420,7 @@ function loadPhantomData(unitNum, slotIndex) {
  * 上書きボタン用の関数
  */
 function handleOverwrite(unitNum) {
-    const currentSlot = lastUsedSlots[unitNum];
+    const currentSlot = lastUsedSlot[unitNum];
     if (currentSlot !== null) {
         // すでにスロット番号がある場合は、そのまま保存処理へ
         savePhantomData(unitNum, currentSlot);
