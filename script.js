@@ -364,7 +364,11 @@ function loadPhantomData(unitNum, slotIndex) {
     const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
 
     lastUsedSlot = slotIndex;
-    if (!savedData) return;
+    if (!savedData) {
+        document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ---`;
+        closeDropdown(); // これを入れないとメニューが開きっぱなしになる
+        return; 
+    }
 
     // 保存された値をそれぞれの入力欄やボタンに反映させる
     document.getElementById(`input-name-${unitNum}`).value = savedData.name;
