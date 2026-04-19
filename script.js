@@ -372,10 +372,10 @@ function loadPhantomData(unitNum, slotIndex) {
         document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: 未設定`;
         
         // ステータスのリセット（0にする）
-        document.getElementById(`base-sta-${unitNum}`).value = 0;
-        document.getElementById(`base-atk-${unitNum}`).value = 0;
-        document.getElementById(`base-def-${unitNum}`).value = 0;
-        document.getElementById(`base-luck-${unitNum}`).value = 0;
+        document.getElementById(`base-sta-${unitNum}`).value = "";
+        document.getElementById(`base-atk-${unitNum}`).value = "";
+        document.getElementById(`base-def-${unitNum}`).value = "";
+        document.getElementById(`base-luck-${unitNum}`).value = "";
 
         // 装備・アビリティの表示を「未選択」に戻す
         document.getElementById(`select-weapon-${unitNum}`).textContent = "未選択";
