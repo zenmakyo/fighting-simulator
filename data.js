@@ -748,5 +748,53 @@ const ABILITY_MASTER = {
                 luck: 0
             };
         }
+    },
+
+    "獣属": {
+        logic: (s, p) => {
+            return {
+                element: "獣"
+            };
+        }
+    },
+
+    "魔属": {
+        logic: (s, p) => {
+            return {
+                element: "魔"
+            };
+        }
+    },
+
+    "霊属": {
+        logic: (s, p) => {
+            return {
+                element: "霊"
+            };
+        }
+    },
+
+    "無属": {
+        logic: (s, p) => {
+            return {
+                element: "無"
+            };
+        }
+    },
+
+    "地属": {
+        logic: (s, p) => {
+            return {
+                element: "地"
+            };
+        }
+    },
+
+    "龍属": {
+        logic: (s, p) => {
+            return {
+                element: "龍"
+            };
+        }
     }
     };
