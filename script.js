@@ -461,7 +461,7 @@ function openDropdown(type, num, event) {
                 if (type === 'save') {
                     savePhantomData(num, item.slot);
                 } else if (type === 'load') {
-                    if (item.hasData) loadPhantomData(num, item.slot);
+                    loadPhantomData(num, item.slot);
                 } else {
                     const idMap = { 'weapon':`select-weapon-${num}`, 'armor':`select-armor-${num}`, 'w-ability':`select-w-abi-${num}`, 'a-ability':`select-a-abi-${num}` };
                     document.getElementById(idMap[type]).textContent = item.name;
