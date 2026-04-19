@@ -833,3 +833,14 @@ const ABILITY_MASTER = {
         }
     }
     };
+
+// ソロ・極向ボタンの辞書
+const ARMOR_SYNC_MAP = {
+    "猛皇": { solo: "威風", kyoku: "虎咆" },
+    "猛将": { solo: "戦略", kyoku: "虎咆" },
+    "虎咆": { solo: "戦略", kyoku: "闘争" },
+    "闘争": { solo: "戦略", kyoku: "闘争" },
+    "威風": { solo: "大帝", kyoku: "威風" },
+    "戦略": { solo: "大帝", kyoku: "大帝" },
+    "なし": { solo: "なし", kyoku: "なし" }
+};
