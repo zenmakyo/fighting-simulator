@@ -365,8 +365,30 @@ function loadPhantomData(unitNum, slotIndex) {
 
     lastUsedSlot = slotIndex;
     if (!savedData) {
-        document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ---`;
-        closeDropdown(); // これを入れないとメニューが開きっぱなしになる
+        // ★ 空スロット(---)を押した時：すべての項目をデフォルトに戻す
+        
+        // 名称とスロット表示のリセット
+        document.getElementById(`input-name-${unitNum}`).value = "";
+        document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: 未設定`;
+        
+        // ステータスのリセット（0にする）
+        document.getElementById(`base-sta-${unitNum}`).value = 0;
+        document.getElementById(`base-atk-${unitNum}`).value = 0;
+        document.getElementById(`base-def-${unitNum}`).value = 0;
+        document.getElementById(`base-luck-${unitNum}`).value = 0;
+
+        // 装備・アビリティの表示を「未選択」に戻す
+        document.getElementById(`select-weapon-${unitNum}`).textContent = "未選択";
+        document.getElementById(`select-w-abi-${unitNum}`).textContent = "未選択";
+        document.getElementById(`select-armor-${unitNum}`).textContent = "未選択";
+        document.getElementById(`select-a-abi-${unitNum}`).textContent = "未選択";
+
+        // 属性をデフォルトに戻す
+        document.getElementById(`input-element-${unitNum}`).value = "獣";
+
+        // 計算を再実行して画面上の合計値もリセット
+        updatePhantomStats(unitNum);
+        closeDropdown();
         return; 
     }
 
