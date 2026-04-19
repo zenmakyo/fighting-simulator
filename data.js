@@ -635,9 +635,9 @@ const ABILITY_MASTER = {
             const defRand = Math.random() * (10.5 - 0.5) + 1.0;
 
             return {
-                sta: Math.ceil(s.sta * staRand),
-                atk: Math.ceil(s.atk * atkRand),
-                def: Math.ceil(s.def * defRand),
+                sta: Math.ceil(s.luck * staRand),
+                atk: Math.ceil(s.luck * atkRand),
+                def: Math.ceil(s.luck * defRand),
                 luck: 0
             };
     },
