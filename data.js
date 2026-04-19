@@ -640,6 +640,7 @@ const ABILITY_MASTER = {
                 def: Math.ceil(s.luck * defRand),
                 luck: 0
             };
+        }
     },
 
     "才華": {
@@ -671,6 +672,7 @@ const ABILITY_MASTER = {
             return {
                 atk: finalAtk
             };
+        }
     },
 
     "天運": {
