@@ -312,7 +312,7 @@ h1 {
 /* --- 全体コンテナ --- */
 .my-phantom-manager {
     max-width: 500px;
-    margin: 10px auto;
+    margin: 12px auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
