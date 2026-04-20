@@ -15,7 +15,7 @@ h1 {
   font-weight: bold;
   padding: 0.5rem;
   line-height: 1.1;
-  margin-top: 0.3rem;
+  margin-top: 0.1rem;
   margin-bottom: 0.3rem;
   background-color: #ffffe0;
 }
@@ -199,7 +199,7 @@ h1 {
 
 /* 戦績結果の表について */
 .result-container {
-    margin: 20px auto;
+    margin: 10px auto;
     width: 100%;
     max-width: 500px;
 }
@@ -312,10 +312,10 @@ h1 {
 /* --- 全体コンテナ --- */
 .my-phantom-manager {
     max-width: 500px;
-    margin: 20px auto;
+    margin: 10px auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 /* --- 幻獣ユニット外枠 --- */
