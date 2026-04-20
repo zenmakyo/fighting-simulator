@@ -589,3 +589,27 @@ h1 {
     align-items: center;
     gap: 5px;
 }
+
+/* 討伐開始ボタン */
+.btn-group-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.sim-btn {
+    flex: 1;
+    padding: 12px;
+    background-color: #e67e22; /* 攻撃的なオレンジ色 */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.sim-btn:hover {
+    background-color: #d35400;
+}
