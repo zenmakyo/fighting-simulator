@@ -572,3 +572,20 @@ h1 {
     max-height: none !important;
     border-top: 1px solid #eee;
 }
+
+/* 参加幻獣について */
+.participant-selector {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.participant-selector label {
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
