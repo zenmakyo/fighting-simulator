@@ -77,6 +77,7 @@ function createBattleField(context) {
             
             return {
                 id: p.id,
+                name: p.name,
                 element: p.element,
 
                 //  変動ステータスと固定ステータスの保持
@@ -102,6 +103,7 @@ function createBattleField(context) {
 
         // ⑥ 敵の状態構築
         enemy: {
+            name: context.enemy.name,
             element: context.enemy.element,
             currentSta: context.enemy.sta,
             maxSta: context.enemy.sta,
