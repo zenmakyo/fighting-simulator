@@ -117,3 +117,28 @@ function createBattleField(context) {
         logs: []
     };
 }
+
+/**
+ * 最終的な発動確率を算出する
+ * @param {number} baseRate - 武器アビリティの基礎発動率 (例: 0.15)
+ * @param {Object} attacker - 幻獣（攻撃者）のデータ
+ * @returns {number} 0.0〜1.0 の確率
+ */
+function calcFinalRate(baseRate, attacker) {
+    // 1. Luck加算：luck × 0.05% (上限25%)
+    let luckAdd = (attacker.luck * 0.05) / 100;
+    if (luckAdd > 0.25) luckAdd = 0.25;
+
+    // 2. 強化値加算：10未満は0%、10〜20は[7+(強化値-10)×1.8]%
+    let plusAdd = 0;
+    const plus = Math.min(attacker.weaponPlus, 20); // max 20
+    if (plus >= 10) {
+        plusAdd = (7 + (plus - 10) * 1.8) / 100;
+    }
+
+    // 3. 武器グレード加算：グレード(1~10) × 1.2%
+    const gradeAdd = (attacker.weaponGrade * 1.2) / 100;
+
+    // 合計
+    return baseRate + luckAdd + plusAdd + gradeAdd;
+}
