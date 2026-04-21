@@ -4,6 +4,7 @@
 function fetchBattleContext() {
     // 1. 敵データの読み取り
     const enemy = {
+        name: document.getElementById("targetSelectBtn").textContent.trim(),
         element: document.getElementById("e-attribute").value,
         sta: parseInt(document.getElementById("e-sta").value) || 0,
         atk: parseInt(document.getElementById("e-atk").value) || 0,
@@ -20,6 +21,7 @@ function fetchBattleContext() {
         // 計算済みステータス(res-系)をテキストから取得
         participants.push({
             id: i,
+            name: document.getElementById(`input-name-${i}`).value || `幻獣${i}`,
             element: document.getElementById(`res-element-${i}`).textContent,
             sta: parseInt(document.getElementById(`res-sta-${i}`).textContent) || 0,
             atk: parseInt(document.getElementById(`res-atk-${i}`).textContent) || 0,
@@ -60,4 +62,56 @@ function startSimulation(count) {
 function executeSingleBattle(context) {
     console.log("戦闘開始データ:", context);
     // ここにこの後「ダメージ計算」「アビリティ発動」のロジックを書いていきます
+}
+
+/**
+ * 戦闘用のフィールド（状態）を作成する
+ */
+function createBattleField(context) {
+    return {
+        //  味方チームの構築
+        allies: context.participants.map(p => {
+            
+            //  アビリティ定義の紐付け
+            const abiDef = WEAPON_ABILITY_DEFS[p.weaponAbi] || WEAPON_ABILITY_DEFS["なし"];
+            
+            return {
+                id: p.id,
+                element: p.element,
+
+                //  変動ステータスと固定ステータスの保持
+                currentSta: p.sta,  // 戦闘中に減っていく現在のスタミナ
+                maxSta: p.sta,      // 最大スタミナ
+                currentAtk: p.atk,  // バフで増減する現在のアタック
+                baseAtk: p.atk,     // 元のアタック
+                currentDef: p.def,  // 増減するディフェンス
+                baseDef: p.def,     // 元のディフェンス
+                luck: p.luck,
+
+                // ④ アビリティ情報のパッケージ化
+                ability: {
+                    name: p.weaponAbi,
+                    power: abiDef.power,
+                    type: abiDef.type
+                },
+
+                // ⑤ 生存フラグ
+                isAlive: true
+            };
+        }),
+
+        // ⑥ 敵の状態構築
+        enemy: {
+            element: context.enemy.element,
+            currentSta: context.enemy.sta,
+            maxSta: context.enemy.sta,
+            atk: context.enemy.atk,
+            def: context.enemy.def,
+            isAlive: true
+        },
+
+        // ⑦ 進行管理データ
+        turn: 1,
+        logs: []
+    };
 }
