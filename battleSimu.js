@@ -1,31 +1,63 @@
 /**
- * 1回討伐のメイン実行関数
+ * 画面から戦闘に必要な全データを読み取る
  */
-function runSingleBattle() {
-    // ① ステータス読み取りフェーズ
-    const context = fetchBattleContext(); 
-    if (!context) return;
+function fetchBattleContext() {
+    // 1. 敵データの読み取り
+    const enemy = {
+        element: document.getElementById("e-attribute").value,
+        sta: parseInt(document.getElementById("e-sta").value) || 0,
+        atk: parseInt(document.getElementById("e-atk").value) || 0,
+        def: parseInt(document.getElementById("e-def").value) || 0,
+        ability: document.getElementById("e-ability").value
+    };
 
-    let log = []; // 戦闘ログ格納用
-    let turn = 1;
-    let enemySta = context.enemy.sta;
-    
-    // ② ターンループ（どちらかのSTAが0になるか20ターンまで）
-    while (turn <= 20 && enemySta > 0 && isAnyAllyAlive(context.participants)) {
-        log.push(`--- ターン ${turn} ---`);
-        
-        context.participants.forEach(ally => {
-            if (ally.currentSta <= 0) return;
+    // 2. 参加幻獣データの読み取り
+    const participants = [];
+    for (let i = 1; i <= 4; i++) {
+        const isJoined = document.getElementById(`join-${i}`).checked;
+        if (!isJoined) continue;
 
-            // ③ ダメージ計算（武器アビリティJSから倍率を取得して計算）
-            const damage = calculateDamage(ally, context.enemy);
-            enemySta -= damage;
-            log.push(`${ally.name}の攻撃！ ${damage}のダメージ（敵残りHP: ${Math.max(0, enemySta)}）`);
+        // 計算済みステータス(res-系)をテキストから取得
+        participants.push({
+            id: i,
+            element: document.getElementById(`res-element-${i}`).textContent,
+            sta: parseInt(document.getElementById(`res-sta-${i}`).textContent) || 0,
+            atk: parseInt(document.getElementById(`res-atk-${i}`).textContent) || 0,
+            def: parseInt(document.getElementById(`res-def-${i}`).textContent) || 0,
+            luck: parseInt(document.getElementById(`res-luck-${i}`).textContent) || 0,
+            
+            // 武器情報（アビリティ判定用）
+            weaponName: document.getElementById(`select-weapon-${i}`).textContent.trim(),
+            weaponPlus: parseInt(document.getElementById(`plus-weapon-${i}`).value) || 0,
+            weaponAbi: document.getElementById(`select-w-abi-${i}`).textContent.trim()
         });
-
-        turn++;
     }
 
-    // ④ 結果表示
-    showBattleResult(enemySta <= 0, log);
+    if (participants.length === 0) {
+        alert("参加幻獣にチェックを入れてください");
+        return null;
+    }
+
+    return { enemy, participants };
+}
+
+/**
+ * シミュレーション実行メイン（1回 / 100回 / 1000回 共通）
+ */
+function startSimulation(count) {
+    const context = fetchBattleContext();
+    if (!context) return;
+
+    if (count === 1) {
+        // 1回討伐ロジック（ログ詳細表示）
+        executeSingleBattle(context);
+    } else {
+        // 複数回討伐ロジック（統計のみ）
+        executeMultiBattle(context, count);
+    }
+}
+
+function executeSingleBattle(context) {
+    console.log("戦闘開始データ:", context);
+    // ここにこの後「ダメージ計算」「アビリティ発動」のロジックを書いていきます
 }
