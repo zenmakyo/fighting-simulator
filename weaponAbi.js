@@ -15,7 +15,7 @@ const ABILITY_SPECS = {
         baseRate: 0.28,
         execute: (attacker, enemy) => {
             attacker.tempAtkModifier = 1.7;
-            attacker.damegeTakenModifier = 0.7;
+            attacker.damageTakenModifier = 0.7;
         }
     },
     
