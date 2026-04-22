@@ -126,7 +126,8 @@ const weaponList = [
     { name: "なし：アイスピック", grade: 1, baseAtk: 15, ability: "なし" },
     { name: "なし：鉄製の弓", grade: 1, baseAtk: 10, ability: "なし" },
     { name: "なし：観覧のお供", grade: 1, baseAtk: 10, ability: "なし" },
-    { name: "なし：木の棒", grade: 1, baseAtk: 5, ability: "なし" }
+    { name: "なし：木の棒", grade: 1, baseAtk: 5, ability: "なし" },
+    { name: "武器なし", grade: 0, baseAtk: 0, ability: "なし" }
 ];
 
 // 防具リスト
@@ -252,7 +253,8 @@ const armorList = [
     { name: "なし：乗舟証", grade: 1, baseDef: 20, ability: "なし" },
     { name: "なし：作業用シューズ", grade: 1, baseDef: 15, ability: "なし" },
     { name: "なし：鍋のふた", grade: 1, baseDef: 10, ability: "なし" },
-    { name: "なし：布のシャツ", grade: 1, baseDef: 5, ability: "なし" }
+    { name: "なし：布のシャツ", grade: 1, baseDef: 5, ability: "なし" },
+    { name: "防具なし", grade: 0, baseDef: 0, ability: "なし" }
 ];
 
 // 武器アビリティリスト
