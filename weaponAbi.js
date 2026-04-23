@@ -18,6 +18,97 @@ const ABILITY_SPECS = {
             attacker.damageTakenModifier = 0.7;
         }
     },
+
+    "突風": {
+        baseRate: 0.28,
+        execute: (attacker, enemy) => {
+            attacker.tempAtkModifier = 1.0;
+            attacker.damageTakenModifier = 0.5;
+        }
+    },
+
+    "凍結": {
+        baseRate: 0.28,
+        execute: (attacker, enemy) => {
+            attacker.tempAtkModifier = 1.0;
+            attacker.damageTakenModifier = 0.7;
+        }
+    },
+
+    "紅舞": {
+        baseRate: 0.17,
+        execute: (attacker, enemy, field) => {
+            attacker.tempAtkModifier = 2.0;
+            field.allies.forEach(ally => {
+            if (ally.isAlive) {
+                ally.currentAtk = Math.ceil(ally.currentAtk * 1.08);
+            }
+        });
+        }
+    },
+
+    "高揚": {
+        baseRate: 0.37,
+        execute: (attacker, enemy) => {
+            attacker.currentAtk = Math.ceil(attacker.currentAtk * 1.1);
+        }
+    },
+
+    "盟旗": {
+        baseRate: 0.28,
+        execute: (attacker, enemy, field) => {
+            attacker.tempAtkModifier = 0;
+            field.allies.forEach(ally => {
+            if (ally.isAlive) {
+                ally.currentAtk = Math.ceil(ally.currentAtk * 1.1);
+            }
+        });
+        }
+    },
+
+    "不乱": {
+        baseRate: 0.17,
+        execute: (attacker, enemy) => {
+            const hpRate = attacker.currentSta / attacker.maxSta;
+            if (hpRate > 0.6) {
+                attacker.tempAtkModifier = 2.0;
+              } else if (hpRate <= 0.1) {
+                attacker.tempAtkModifier = 3.0;
+              } else {
+                const modifier = 3.0 - ((hpRate - 0.1) * 2);
+                attacker.tempAtkModifier = Math.round(modifier * 10) / 10;
+              }
+         }
+    },
+
+    "渾身": {
+        baseRate: 0.3,
+        execute: (attacker, enemy) => {
+            const hpPercent = Math.floor((attacker.currentSta / attacker.maxSta) * 100);
+            if (hpPercent >= 100) {
+                attacker.tempAtkModifier = 2.5;
+            } else if (hpPercent <= 50) {
+                attacker.tempAtkModifier = 2.0;
+            } else {
+            const modifier = 2.0 + (hpPercent - 50) * 0.01;
+                attacker.tempAtkModifier = Math.round(modifier * 100) / 100;
+            }
+        }
+    },
+
+    "大撃": {
+        baseRate: 0.17,
+        execute: (attacker, enemy) => {
+            attacker.tempAtkModifier = 2.0;
+        }
+    },
+
+    "五月雨": {
+        baseRate: 0.28,
+        execute: (attacker, enemy) => {
+            attacker.tempAtkModifier = 1.6;
+        }
+    },
     
     "強打": {
         baseRate: 0.37,
@@ -33,11 +124,107 @@ const ABILITY_SPECS = {
             enemy.currentDef = Math.ceil(enemy.currentDef * 0.8);
         }
     },
-    
-    "高揚": {
-        baseRate: 0.37,
-        execute: (attacker, enemy) => {
-            attacker.currentAtk = Math.ceil(attacker.currentAtk * 1.1);
+
+    "一斉": {
+        baseRate: 0.17,
+        execute: (attacker) => {
+            attacker.isIsseiActivated = true;
+        }
+    },
+
+    "破茶": {
+        baseRate: 0.17,
+        execute: (attacker, enemy, field) => {
+            const ignoreList = ["破茶"];
+            const availableAbis = Object.keys(ABILITY_SPECS).filter(name => !ignoreList.includes(name));
+            const randomAbiName = availableAbis[Math.floor(Math.random() * availableAbis.length)];
+            if (ABILITY_SPECS[randomAbiName]) {
+                ABILITY_SPECS[randomAbiName].execute(attacker, enemy, field);
+                attacker.lastRandomAbi = randomAbiName;
+            }
+        }
+    },
+
+    "福音": {
+        baseRate: 0.17,
+        execute: (attacker, enemy, field) => {
+            const grade = attacker.weaponGrade;
+            const plus = attacker.weaponPlus;
+            const key = `${grade}-${plus}`;
+            const healAmount = HUKUIN_HEAL_TABLE[key] || 0;
+
+            field.allies.forEach(ally => {
+                if (!ally.isAlive) {
+                    ally.isAlive = true;
+                    ally.currentSta = 1 + healAmount;
+                } else {
+                    ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
+                }
+            });
+        }
+    },
+
+    "爽活": {
+       baseRate: 0.17,
+        execute: (attacker, enemy, field) => {
+            field.allies.forEach(ally => {
+                if (!ally.isAlive) {
+                    ally.isAlive = true;
+                    ally.currentSta = 1;
+                } else {
+                    const healAmount = Math.floor(ally.maxSta * 0.2);
+                    ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
+                }
+            });
+        }
+    },
+
+    "癒唄": {
+       baseRate: 0.17,
+        execute: (attacker, enemy, field) => {
+            field.allies.forEach(ally => {
+                if (ally.isAlive) {
+                    const healAmount = Math.floor(ally.maxSta * 0.3);
+                    ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
+                }
+            });
+        }
+    },
+
+    "回復": {
+       baseRate: 0.37,
+        execute: (attacker, enemy, field) => {
+            field.allies.forEach(ally => {
+                if (ally.isAlive) {
+                    const healAmount = Math.floor(ally.maxSta * 0.15);
+                    ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
+                }
+            });
+        }
+    },
+
+    "和属": {
+        baseRate: 0.17,
+        execute: (attacker) => {
+            attacker.isWazokuActivated = true;
         }
     }
+};
+
+const HUKUIN_HEAL_TABLE = {
+    // grade1
+    "1-0": 400, "1-1": 410, "1-2": 420, "1-3": 440, "1-4": 470, "1-5": 520,
+    "1-6": 580, "1-7": 670, "1-8": 770, "1-9": 890, "1-10": 1040,
+    "1-11": 1210, "1-12": 1410, "1-13": 1630, "1-14": 1880,"1-15": 2160,
+    "1-16": 2470, "1-17": 2800, "1-18": 3170, "1-19": 3570, "1-20": 4000,
+    // grade5
+    "5-0": 1200, "5-1": 1210, "5-2": 1240, "5-3": 1300, "5-4": 1400, "5-5": 1540,
+    "5-6": 1740, "5-7": 1990, "5-8": 2300, "5-9": 2670, "5-10": 3110,
+    "5-11": 3630, "5-12": 4220, "5-13": 4880, "5-14": 5630, "5-15": 6470,
+    "5-16": 7390, "5-17": 8400, "5-18": 9500, "5-19": 10710, "5-20": 12000,
+    // grade10
+    "10-0": 2200, "10-1": 2220, "10-2": 2270, "10-3": 2380, "10-4": 2560, "10-5": 2820,
+    "10-6": 3180, "10-7": 3640, "10-8": 4210, "10-9": 4890, "10-10": 5710,
+    "10-11": 6650, "10-12": 7730, "10-13": 8950, "10-14": 10320, "10-15": 11850,
+    "10-16": 13540, "10-17": 15390, "10-18": 17420, "10-19": 19620, "10-20": 22000
 };
