@@ -223,6 +223,42 @@ function resolveAbilities(attacker, enemy, field) {
 }
 
 /**
+ * 与ダメージ計算
+ */
+function calculateDamage(attacker, enemy, field) {
+    // 1. 基礎ダメージ算出
+    let damage = attacker.currentAtk - enemy.def;
+    if (damage < 1) damage = 1;
+
+    // 2. 属性相性補正
+    const elementMod = ELEMENT_MODIFIERS[attacker.element]?.[enemy.element] || 1.0;
+    damage = Math.ceil(damage * elementMod);
+
+    // 3. アビリティ倍率補正
+    // resolveAbilities でセットされた倍率を掛ける
+    damage = Math.ceil(damage * attacker.tempAtkModifier);
+
+    // 4. 101パターンの乱数補正 (1.000 〜 1.100)
+    const randomMod = 1.0 + (Math.floor(Math.random() * 101) / 1000);
+    damage = Math.ceil(damage * randomMod);
+
+    // 5. 最終ダメージの適用
+    enemy.currentSta -= damage;
+    if (enemy.currentSta < 0) enemy.currentSta = 0;
+
+    // ログ記録
+    field.logs.push(`${attacker.name}の攻撃：${damage}ダメージ！`);
+
+    // 討伐判定
+    if (enemy.currentSta <= 0) {
+        enemy.isAlive = false;
+        field.logs.push(`>> ${enemy.name}を倒しました！`);
+    }
+
+    return damage;
+}
+
+/**
  * executeSingleBattle のループ内への組み込み
  */
 // ... ループ内 ...
