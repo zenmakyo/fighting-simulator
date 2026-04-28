@@ -182,8 +182,21 @@ function executeSingleBattle(context) {
             // ステップA: アビリティ発動判定
             resolveAbilities(attacker, field.enemy, field);
             
-            // ステップB: ダメージ計算
-            calculateDamage(attacker, field.enemy, field);
+            // ステップB: 行動分岐
+            if (attacker.isIsseiActivated) {
+                // 【一斉】
+                calculateIsseiDamage(field);
+                attacker.isIsseiActivated = false; // フラグ消費
+
+            } else if (attacker.isWazokuActivated) {
+                // 【和属】
+                calculateWazokuDamage(attacker, field.enemy, field);
+                attacker.isWazokuActivated = false; // フラグ消費
+
+            } else {
+                // 【通常攻撃】（一斉・和属以外のアビリティ効果、または不発時）
+                calculateDamage(attacker, field.enemy, field);
+            }
             
             // ステップC: 敵の反撃（この後実装）
 
@@ -320,6 +333,53 @@ function calculateIsseiDamage(field) {
     if (field.enemy.currentSta <= 0) {
         field.enemy.isAlive = false;
         field.logs.push(`>> ${field.enemy.name}を倒しました！`);
+    }
+
+    return finalDamage;
+}
+
+/**
+ * 和属攻撃のダメージ計算
+ */
+function calculateWazokuDamage(attacker, enemy, field) {
+    // 1. 基礎ダメージ: (自分の攻撃力 - 敵防御) ※0以下なら0
+    let base = attacker.currentAtk - enemy.def;
+    if (base < 0) base = 0;
+
+    // 2. 各属性相性の掛け算 (生存している全幻獣分)
+    let partyElementMultiplier = 1.0;
+    field.allies.forEach(ally => {
+        if (ally.isAlive) {
+            const mod = ELEMENT_MODIFIERS[ally.element]?.[enemy.element] || 1.0;
+            partyElementMultiplier *= mod;
+        }
+    });
+
+    // 3. 和属発動幻獣（自分）の属性相性をもう一度掛ける
+    const selfElementMod = ELEMENT_MODIFIERS[attacker.element]?.[enemy.element] || 1.0;
+
+    // 4. 武器アビリティ倍率 (1.2固定)
+    const weaponAbiMod = 1.2;
+
+    // 5. 乱数補正 (1.000 〜 1.100)
+    const randomMod = 1.0 + (Math.floor(Math.random() * 101) / 1000);
+
+    // 全要素を乗算
+    // 式：(A - D) × 1.2 × (全属性積) × 自分の属性相性 × 乱数
+    let finalDamage = base * weaponAbiMod * partyElementMultiplier * selfElementMod * randomMod;
+    
+    // 小数点切り上げ
+    finalDamage = Math.ceil(finalDamage);
+
+    // ダメージ適用
+    enemy.currentSta -= finalDamage;
+    if (enemy.currentSta < 0) enemy.currentSta = 0;
+
+    field.logs.push(`★和属発動！：属性の共鳴により ${finalDamage} ダメージ！`);
+
+    if (enemy.currentSta <= 0) {
+        enemy.isAlive = false;
+        field.logs.push(`>> ${enemy.name}を倒しました！`);
     }
 
     return finalDamage;
