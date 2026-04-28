@@ -199,6 +199,9 @@ function executeSingleBattle(context) {
             }
             
             // ステップC: 敵の反撃（この後実装）
+            if (field.enemy.isAlive) {
+                calculateTakenDamage(field.enemy, attacker, field);
+            }
 
             // --- 行動終了 ---
 
@@ -380,6 +383,71 @@ function calculateWazokuDamage(attacker, enemy, field) {
     if (enemy.currentSta <= 0) {
         enemy.isAlive = false;
         field.logs.push(`>> ${enemy.name}を倒しました！`);
+    }
+
+    return finalDamage;
+}
+
+const ENEMY_ABILITY_SPECS = {
+    "強打": (enemy, attacker) => {
+        enemy.tempAtkModifier = 1.3; // そのターンのダメージ倍率
+    },
+    "高揚": (enemy) => {
+        enemy.atk = Math.ceil(enemy.atk * 1.1); // 基礎攻撃力を永続アップ
+    },
+    "粉砕": (enemy, attacker) => {
+        // ここがポイント！attacker（味方）の防御力を直接書き換える
+        attacker.currentDef = Math.floor(attacker.currentDef * 0.8);
+    }
+};
+
+/**
+ * 被ダメージ計算（敵から味方への攻撃）
+ */
+function calculateTakenDamage(enemy, attacker, field) {
+    // --- 敵のアビリティ判定 ---
+    // 敵にアビリティが設定されている場合、一定確率（ここでは仮に25%）で発動
+    enemy.tempAtkModifier = 1.0; 
+    if (enemy.ability && enemy.ability !== "なし" && Math.random() < 0.25) {
+        const effect = ENEMY_ABILITY_SPECS[enemy.ability];
+        if (effect) {
+            effect(enemy, attacker);
+            field.logs.push(`>> 敵の[${enemy.ability}]が発動！`);
+        }
+    }
+
+    // 1. 基礎ダメージ: (敵ATK - 味方DEF)
+    let base = enemy.atk - attacker.currentDef;
+    if (base < 1) base = 1;
+
+    // 2. 属性相性補正（敵 -> 味方）
+    const elementMod = ELEMENT_MODIFIERS[enemy.element]?.[attacker.element] || 1.0;
+
+    // 3. 101パターンの乱数補正 (1.000 〜 1.100)
+    const randomMod = 1.0 + (Math.floor(Math.random() * 101) / 1000);
+
+    // 4. 防御減衰補正: (1 - 味方DEF / 100,000)
+    const defMitigation = 1 - (attacker.currentDef / 100000);
+
+    // 全要素を乗算
+    // 式：(基礎) × 敵アビ倍率 × 属性相性 × 乱数 × 防御減衰 × 味方の被ダメ軽減
+    let damage = base * enemy.tempAtkModifier * elementMod * randomMod * defMitigation;
+    
+    // 味方側のアビリティによる軽減（猛突、突風など）
+    damage *= attacker.damageTakenModifier;
+
+    const finalDamage = Math.ceil(damage);
+
+    // ダメージ適用
+    attacker.currentSta -= finalDamage;
+    if (attacker.currentSta < 0) attacker.currentSta = 0;
+
+    field.logs.push(`${enemy.name}の反撃：${attacker.name}に ${finalDamage} ダメージ！`);
+
+    // 生存判定
+    if (attacker.currentSta <= 0) {
+        attacker.isAlive = false;
+        field.logs.push(`>> ${attacker.name}は力尽きた...`);
     }
 
     return finalDamage;
