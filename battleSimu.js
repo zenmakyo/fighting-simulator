@@ -70,13 +70,8 @@ function startSimulation(count) {
             logContainer.innerHTML = ""; 
         }
 
-        // 複数回実行時も、毎回ランダム性を出したい場合はここでも再計算が必要
-        // 1000回中、毎回「浪漫」の数値を変えたいならループ内でupdateTotalStats()とfetchBattleContext()を回す
-        let currentContext = context;
-        if (count > 1) {
-            updateTotalStats();
-            currentContext = fetchBattleContext();
-        }
+        const currentContext = fetchBattleContext();
+        if (!currentContext) return;
 
         const result = executeSingleBattle(currentContext, isLastRun); 
         
