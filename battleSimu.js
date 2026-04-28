@@ -278,21 +278,6 @@ function calculateDamage(attacker, enemy, field) {
     return damage;
 }
 
-/**
- * executeSingleBattle のループ内への組み込み
- */
-// ... ループ内 ...
-for (let i = 0; i < field.allies.length; i++) {
-    const attacker = field.allies[i];
-    if (!attacker.isAlive) continue;
-
-    // ステップA: アビリティ発動判定
-    resolveAbilities(attacker, field.enemy, field);
-
-    // ステップB: ダメージ計算（次ここで実装！）
-    // calculateDamage(attacker, field.enemy, field);
-// ...
-
 const ELEMENT_MODIFIERS = {
     "獣": { "獣": 1.0, "霊": 0.7, "魔": 1.4, "無": 1.0, "龍": 1.0, "地": 1.0 },
     "霊": { "獣": 1.4, "霊": 1.0, "魔": 0.7, "無": 1.0, "龍": 1.0, "地": 1.0 },
@@ -390,13 +375,15 @@ function calculateWazokuDamage(attacker, enemy, field) {
 
 const ENEMY_ABILITY_SPECS = {
     "強打": (enemy, attacker) => {
+        rate: 0.38,
         enemy.tempAtkModifier = 1.3; // そのターンのダメージ倍率
     },
     "高揚": (enemy) => {
+        rate: 0.38,
         enemy.atk = Math.ceil(enemy.atk * 1.1); // 基礎攻撃力を永続アップ
     },
     "粉砕": (enemy, attacker) => {
-        // ここがポイント！attacker（味方）の防御力を直接書き換える
+        rate: 0.18,
         attacker.currentDef = Math.floor(attacker.currentDef * 0.8);
     }
 };
@@ -406,12 +393,13 @@ const ENEMY_ABILITY_SPECS = {
  */
 function calculateTakenDamage(enemy, attacker, field) {
     // --- 敵のアビリティ判定 ---
-    // 敵にアビリティが設定されている場合、一定確率（ここでは仮に25%）で発動
-    enemy.tempAtkModifier = 1.0; 
-    if (enemy.ability && enemy.ability !== "なし" && Math.random() < 0.25) {
-        const effect = ENEMY_ABILITY_SPECS[enemy.ability];
-        if (effect) {
-            effect(enemy, attacker);
+    // 敵のアビリティ設定があるか確認
+    const abiSpec = ENEMY_ABILITY_SPECS[enemy.ability];
+    
+    if (abiSpec) {
+        // 設定された発動率(rate)で判定
+        if (Math.random() < abiSpec.rate) {
+            abiSpec.execute(enemy, attacker);
             field.logs.push(`>> 敵の[${enemy.ability}]が発動！`);
         }
     }
