@@ -179,8 +179,12 @@ function executeSingleBattle(context) {
 
             // --- ここから 1ユニットの行動ステップ ---
             
-            // ステップA: アビリティ発動判定（この後実装）
-            // ステップB: ダメージ計算（この後実装）
+            // ステップA: アビリティ発動判定
+            resolveAbilities(attacker, field.enemy, field);
+            
+            // ステップB: ダメージ計算
+            calculateDamage(attacker, field.enemy, field);
+            
             // ステップC: 敵の反撃（この後実装）
 
             // --- 行動終了 ---
