@@ -241,8 +241,8 @@ const ABILITY_SPECS = {
     "獣属": {
         baseRate: 0.37,
         execute: (attacker, enemy) => {
-            const isMatch = (attacker.element === "獣属");
-            const isAdv = (enemy.element === "魔属");
+            const isMatch = (attacker.element === "獣");
+            const isAdv = (enemy.element === "魔");
 
             if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
             else if (isMatch) attacker.tempAtkModifier = 1.44;
@@ -253,8 +253,8 @@ const ABILITY_SPECS = {
     "魔属": {
         baseRate: 0.37,
         execute: (attacker, enemy) => {
-            const isMatch = (attacker.element === "魔属");
-            const isAdv = (enemy.element === "霊属");
+            const isMatch = (attacker.element === "魔");
+            const isAdv = (enemy.element === "霊");
 
             if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
             else if (isMatch) attacker.tempAtkModifier = 1.44;
@@ -265,8 +265,8 @@ const ABILITY_SPECS = {
     "霊属": {
         baseRate: 0.37,
         execute: (attacker, enemy) => {
-            const isMatch = (attacker.element === "霊属");
-            const isAdv = (enemy.element === "獣属");
+            const isMatch = (attacker.element === "霊");
+            const isAdv = (enemy.element === "獣");
 
             if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
             else if (isMatch) attacker.tempAtkModifier = 1.44;
@@ -277,8 +277,8 @@ const ABILITY_SPECS = {
     "無属": {
         baseRate: 0.37,
         execute: (attacker, enemy) => {
-            const isMatch = (attacker.element === "無属");
-            const isAdv = (enemy.element === "地属");
+            const isMatch = (attacker.element === "無");
+            const isAdv = (enemy.element === "地");
 
             if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
             else if (isMatch) attacker.tempAtkModifier = 1.44;
@@ -289,8 +289,8 @@ const ABILITY_SPECS = {
     "地属": {
         baseRate: 0.37,
         execute: (attacker, enemy) => {
-            const isMatch = (attacker.element === "地属");
-            const isAdv = (enemy.element === "龍属");
+            const isMatch = (attacker.element === "地");
+            const isAdv = (enemy.element === "龍");
 
             if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
             else if (isMatch) attacker.tempAtkModifier = 1.44;
@@ -301,8 +301,8 @@ const ABILITY_SPECS = {
     "龍属": {
         baseRate: 0.37,
         execute: (attacker, enemy) => {
-            const isMatch = (attacker.element === "龍属");
-            const isAdv = (enemy.element === "無属");
+            const isMatch = (attacker.element === "龍");
+            const isAdv = (enemy.element === "無");
 
             if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
             else if (isMatch) attacker.tempAtkModifier = 1.44;
