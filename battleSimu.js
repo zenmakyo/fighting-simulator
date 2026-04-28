@@ -629,5 +629,3 @@ document.getElementById("reset-stats-btn").onclick = function() {
     document.getElementById("battle-result").style.color = ""; // 色もリセット
     document.getElementById("battle-log").innerHTML = "";      // ログも消去
 };
-
-順番はこうなってる
