@@ -510,6 +510,7 @@ function startSimulation(count) {
 
         if (typeof updateTotalStats === "function") {
             updateTotalStats();   // ←毎回再計算
+        }
 
         const currentContext = fetchBattleContext();
         if (!currentContext) return;
