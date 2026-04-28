@@ -206,10 +206,17 @@ function executeSingleBattle(context) {
                 logData.damageToEnemy = calculateDamage(attacker, field.enemy, field);
             }
             
-            // ステップC: 敵の反撃
+            // ステップC: 敵の攻撃
             if (field.enemy.isAlive) {
-                calculateTakenDamage(field.enemy, attacker, field);
+            // 敵アビリティ判定
+            const abiSpec = ENEMY_ABILITY_SPECS[field.enemy.ability];
+            if (abiSpec && Math.random() < abiSpec.rate) {
+                logData.enemyAbi = field.enemy.ability; // 発動したアビ名を保存
             }
+    
+            // 判定結果（logData.enemyAbi）を渡して計算
+            logData.damageToAlly = calculateTakenDamage(field.enemy, attacker, field, logData.enemyAbi);
+        }
 
             // --- 行動終了 ---
 
@@ -242,7 +249,6 @@ function resolveAbilities(attacker, enemy, field) {
         if (Math.random() < finalRate) {
             // 発動！
             abi.execute(attacker, enemy, field);
-            field.logs.push(`${attacker.name}の[${abi.name}]が発動！`);
             
             return abi.name; // 1つ発動したら終了
         }
@@ -274,13 +280,9 @@ function calculateDamage(attacker, enemy, field) {
     enemy.currentSta -= damage;
     if (enemy.currentSta < 0) enemy.currentSta = 0;
 
-    // ログ記録
-    field.logs.push(`${attacker.name}の攻撃：${damage}ダメージ！`);
-
     // 討伐判定
     if (enemy.currentSta <= 0) {
         enemy.isAlive = false;
-        field.logs.push(`>> ${enemy.name}を倒しました！`);
     }
 
     return damage;
@@ -324,11 +326,8 @@ function calculateIsseiDamage(field) {
     field.enemy.currentSta -= finalDamage;
     if (field.enemy.currentSta < 0) field.enemy.currentSta = 0;
 
-    field.logs.push(`★一斉攻撃！：全員で合計 ${finalDamage} ダメージ！`);
-
     if (field.enemy.currentSta <= 0) {
         field.enemy.isAlive = false;
-        field.logs.push(`>> ${field.enemy.name}を倒しました！`);
     }
 
     return finalDamage;
@@ -371,44 +370,46 @@ function calculateWazokuDamage(attacker, enemy, field) {
     enemy.currentSta -= finalDamage;
     if (enemy.currentSta < 0) enemy.currentSta = 0;
 
-    field.logs.push(`★和属発動！：属性の共鳴により ${finalDamage} ダメージ！`);
-
     if (enemy.currentSta <= 0) {
         enemy.isAlive = false;
-        field.logs.push(`>> ${enemy.name}を倒しました！`);
     }
 
     return finalDamage;
 }
 
 const ENEMY_ABILITY_SPECS = {
-    "強打": (enemy, attacker) => {
+    "強打": {
         rate: 0.38,
-        enemy.tempAtkModifier = 1.3; // そのターンのダメージ倍率
+        execute: (enemy, attacker) => {
+            enemy.tempAtkModifier = 1.3;
+        }
     },
-    "高揚": (enemy) => {
+    "高揚": {
         rate: 0.38,
-        enemy.atk = Math.ceil(enemy.atk * 1.1); // 基礎攻撃力を永続アップ
+        execute: (enemy) => {
+            enemy.atk = Math.ceil(enemy.atk * 1.1);
+        }
     },
-    "粉砕": (enemy, attacker) => {
+    "粉砕": {
         rate: 0.18,
-        attacker.currentDef = Math.floor(attacker.currentDef * 0.8);
+        execute: (enemy, attacker) => {
+            attacker.currentDef = Math.floor(attacker.currentDef * 0.8);
+        }
     }
 };
 
 /**
  * 被ダメージ計算（敵から味方への攻撃）
  */
-function calculateTakenDamage(enemy, attacker, field) {
-    // --- 敵のアビリティ判定 ---
-    // 敵のアビリティ設定があるか確認
-    const abiSpec = ENEMY_ABILITY_SPECS[enemy.ability];
-    
-    if (abiSpec) {
-        // 設定された発動率(rate)で判定
-        if (Math.random() < abiSpec.rate) {
+function calculateTakenDamage(enemy, attacker, field, activatedAbiName) {
+    // 敵の補正をリセット
+    enemy.tempAtkModifier = 1.0; 
+
+    // メインループで判定されたアビリティがあれば実行
+    if (activatedAbiName) {
+        const abiSpec = ENEMY_ABILITY_SPECS[activatedAbiName];
+        if (abiSpec && abiSpec.execute) {
             abiSpec.execute(enemy, attacker);
-            field.logs.push(`>> 敵の[${enemy.ability}]が発動！`);
         }
     }
 
@@ -438,12 +439,9 @@ function calculateTakenDamage(enemy, attacker, field) {
     attacker.currentSta -= finalDamage;
     if (attacker.currentSta < 0) attacker.currentSta = 0;
 
-    field.logs.push(`${enemy.name}の反撃：${attacker.name}に ${finalDamage} ダメージ！`);
-
     // 生存判定
     if (attacker.currentSta <= 0) {
         attacker.isAlive = false;
-        field.logs.push(`>> ${attacker.name}は力尽きた...`);
     }
 
     return finalDamage;
@@ -509,3 +507,84 @@ function appendDeathLog(message) {
     deathDiv.textContent = message;
     logContainer.appendChild(deathDiv);
 }
+
+// 累計データを保持する変数（リセットボタンを押すまで維持）
+let totalWins = 0;
+let totalLosses = 0;
+let totalTurns = 0;
+let allTurnHistory = [];
+
+function startSimulation(count) {
+    const logContainer = document.getElementById("battle-log");
+    let lastBattleWin = false; // 最後の1回の勝敗を保持
+
+    for (let i = 0; i < count; i++) {
+        // ログ出力を制御：1回討伐、または複数回討伐の「最後の1回」だけログを表示
+        const isLastRun = (i === count - 1);
+        
+        if (isLastRun) {
+            logContainer.innerHTML = ""; // ログをクリアして上書き準備
+        }
+
+        // バトル実行（isLastRunがtrueの時だけappendActionLogが動くように設計）
+        const result = executeSingleBattle(isLastRun); 
+        
+        // データの蓄積
+        if (result.win) {
+            totalWins++;
+        } else {
+            totalLosses++;
+        }
+        totalTurns += result.turns;
+        allTurnHistory.push(result.turns);
+        
+        lastBattleWin = result.win; // 最後の回の勝敗を記録
+    }
+
+    // 画面表示を更新
+    updateStatsUI(lastBattleWin);
+}
+
+function updateStatsUI(lastWin) {
+    const totalCount = totalWins + totalLosses;
+    const winRate = ((totalWins / totalCount) * 100).toFixed(1);
+    
+    const maxTurns = Math.max(...allTurnHistory);
+    const minTurns = Math.min(...allTurnHistory);
+    const avgTurns = (totalTurns / totalCount).toFixed(1);
+
+    // 1. 戦績と統計の更新
+    document.getElementById("win-loss-count").textContent = `${totalWins} 勝 - ${totalLosses} 敗`;
+    document.getElementById("win-rate").textContent = winRate;
+    document.getElementById("max-turns").textContent = maxTurns;
+    document.getElementById("min-turns").textContent = minTurns;
+    document.getElementById("avg-turns").textContent = avgTurns;
+
+    // 2. 「結果」欄の更新（最後のバトルの勝敗を表示）
+    const resultCell = document.getElementById("battle-result");
+    if (lastWin) {
+        resultCell.textContent = "勝利";
+        resultCell.style.color = "#ff4d4d"; // 勝利っぽい色に（CSSに合わせて調整してください）
+    } else {
+        resultCell.textContent = "敗北";
+        resultCell.style.color = "#4d94ff"; // 敗北っぽい色に
+    }
+}
+
+// リセットボタンの処理
+document.getElementById("reset-stats-btn").onclick = function() {
+    totalWins = 0;
+    totalLosses = 0;
+    totalTurns = 0;
+    allTurnHistory = [];
+    
+    // 表示を初期状態に戻す
+    document.getElementById("win-loss-count").textContent = "- 勝 - 敗";
+    document.getElementById("win-rate").textContent = "-";
+    document.getElementById("max-turns").textContent = "-";
+    document.getElementById("min-turns").textContent = "-";
+    document.getElementById("avg-turns").textContent = "-";
+    document.getElementById("battle-result").textContent = "-";
+    document.getElementById("battle-result").style.color = ""; // 色もリセット
+    document.getElementById("battle-log").innerHTML = "";      // ログも消去
+};
