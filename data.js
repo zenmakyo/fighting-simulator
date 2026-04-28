@@ -632,9 +632,9 @@ const ABILITY_MASTER = {
 
     "博打": {
         logic: (s, p) => {
-            const staRand = Math.random() * (24.0 - 4.0) + 1.0;
-            const atkRand = Math.random() * (11.0 - 2.0) + 1.0;
-            const defRand = Math.random() * (10.5 - 0.5) + 1.0;
+            const staRand = Math.random() * (24.0 - 4.0) + 4.0;
+            const atkRand = Math.random() * (11.0 - 2.0) + 2.0;
+            const defRand = Math.random() * (10.5 - 0.5) + 0.5;
 
             return {
                 sta: Math.ceil(s.luck * staRand),
