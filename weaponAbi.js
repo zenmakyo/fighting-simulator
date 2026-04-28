@@ -244,9 +244,9 @@ const ABILITY_SPECS = {
             const isMatch = (attacker.element === "獣属");
             const isAdv = (enemy.element === "魔属");
 
-            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
-            else if (isMatch) attacker.tempAtkModifier = 1.2;
-            else attacker.tempAtkModifier = 1.0;
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
+            else if (isMatch) attacker.tempAtkModifier = 1.44;
+            else attacker.tempAtkModifier = 1.2;
         }
     },
 
@@ -256,9 +256,9 @@ const ABILITY_SPECS = {
             const isMatch = (attacker.element === "魔属");
             const isAdv = (enemy.element === "霊属");
 
-            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
-            else if (isMatch) attacker.tempAtkModifier = 1.2;
-            else attacker.tempAtkModifier = 1.0;
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
+            else if (isMatch) attacker.tempAtkModifier = 1.44;
+            else attacker.tempAtkModifier = 1.2;
         }
     },
 
@@ -268,9 +268,9 @@ const ABILITY_SPECS = {
             const isMatch = (attacker.element === "霊属");
             const isAdv = (enemy.element === "獣属");
 
-            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
-            else if (isMatch) attacker.tempAtkModifier = 1.2;
-            else attacker.tempAtkModifier = 1.0;
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
+            else if (isMatch) attacker.tempAtkModifier = 1.44;
+            else attacker.tempAtkModifier = 1.2;
         }
     },
 
@@ -280,9 +280,9 @@ const ABILITY_SPECS = {
             const isMatch = (attacker.element === "無属");
             const isAdv = (enemy.element === "地属");
 
-            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
-            else if (isMatch) attacker.tempAtkModifier = 1.2;
-            else attacker.tempAtkModifier = 1.0;
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
+            else if (isMatch) attacker.tempAtkModifier = 1.44;
+            else attacker.tempAtkModifier = 1.2;
         }
     },
 
@@ -292,9 +292,9 @@ const ABILITY_SPECS = {
             const isMatch = (attacker.element === "地属");
             const isAdv = (enemy.element === "龍属");
 
-            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
-            else if (isMatch) attacker.tempAtkModifier = 1.2;
-            else attacker.tempAtkModifier = 1.0;
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
+            else if (isMatch) attacker.tempAtkModifier = 1.44;
+            else attacker.tempAtkModifier = 1.2;
         }
     },
 
@@ -304,9 +304,9 @@ const ABILITY_SPECS = {
             const isMatch = (attacker.element === "龍属");
             const isAdv = (enemy.element === "無属");
 
-            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
-            else if (isMatch) attacker.tempAtkModifier = 1.2;
-            else attacker.tempAtkModifier = 1.0;
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.68;
+            else if (isMatch) attacker.tempAtkModifier = 1.44;
+            else attacker.tempAtkModifier = 1.2;
         }
     }
 };
