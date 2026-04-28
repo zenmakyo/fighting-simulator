@@ -568,3 +568,30 @@ function closeDropdown() {
         activeCloseHandler = null;
     }
 }
+
+function updateTotalStats() {
+    for (let i = 1; i <= 4; i++) {
+
+        // 基礎ステータス取得
+        const baseSta = parseInt(document.getElementById(`base-sta-${i}`).value) || 0;
+        const baseAtk = parseInt(document.getElementById(`base-atk-${i}`).value) || 0;
+        const baseDef = parseInt(document.getElementById(`base-def-${i}`).value) || 0;
+        const baseLuck = parseInt(document.getElementById(`base-luck-${i}`).value) || 0;
+
+        let stats = {
+            sta: baseSta,
+            atk: baseAtk,
+            def: baseDef,
+            luck: baseLuck
+        };
+
+        // 防具アビ適用（ここで博打が再抽選）
+        applyArmorAbilities(stats, i);
+
+        // 結果を画面に反映
+        document.getElementById(`res-sta-${i}`).textContent = stats.sta;
+        document.getElementById(`res-atk-${i}`).textContent = stats.atk;
+        document.getElementById(`res-def-${i}`).textContent = stats.def;
+        document.getElementById(`res-luck-${i}`).textContent = stats.luck;
+    }
+}
