@@ -615,7 +615,7 @@ h1 {
 }
 
 /* ログ表示エリア */
-#battle-log {
+.battle-log {
     background: transparent;
     color: #333;
     text-align: left;
