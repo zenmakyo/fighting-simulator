@@ -177,28 +177,36 @@ function executeSingleBattle(context) {
             // 生きていない場合はスキップ
             if (!attacker.isAlive) continue;
 
+            // このアクションの情報を一時保存するオブジェクト
+            let logData = {
+                allyAbi: null,
+                enemyAbi: null,
+                damageToEnemy: 0,
+                damageToAlly: 0
+            };
+
             // --- ここから 1ユニットの行動ステップ ---
             
             // ステップA: アビリティ発動判定
-            resolveAbilities(attacker, field.enemy, field);
+            logData.allyAbi = resolveAbilities(attacker, field.enemy, field);
             
             // ステップB: 行動分岐
             if (attacker.isIsseiActivated) {
                 // 【一斉】
-                calculateIsseiDamage(field);
+                logData.damageToEnemy = calculateIsseiDamage(field);
                 attacker.isIsseiActivated = false; // フラグ消費
 
             } else if (attacker.isWazokuActivated) {
                 // 【和属】
-                calculateWazokuDamage(attacker, field.enemy, field);
+                logData.damageToEnemy = calculateWazokuDamage(attacker, field.enemy, field);
                 attacker.isWazokuActivated = false; // フラグ消費
 
             } else {
                 // 【通常攻撃】（一斉・和属以外のアビリティ効果、または不発時）
-                calculateDamage(attacker, field.enemy, field);
+                logData.damageToEnemy = calculateDamage(attacker, field.enemy, field);
             }
             
-            // ステップC: 敵の反撃（この後実装）
+            // ステップC: 敵の反撃
             if (field.enemy.isAlive) {
                 calculateTakenDamage(field.enemy, attacker, field);
             }
@@ -439,4 +447,65 @@ function calculateTakenDamage(enemy, attacker, field) {
     }
 
     return finalDamage;
+}
+
+/**
+ * 1アクション分のログカードを生成して画面に追加
+ */
+function appendActionLog(turn, attacker, enemy, logData) {
+    const logContainer = document.getElementById("battle-log");
+
+    // 箱全体の枠組み
+    const actionBox = document.createElement("div");
+    actionBox.className = "action-box";
+    actionBox.style = "display: flex; border-bottom: 1px solid #444; margin-bottom: 10px;";
+
+    // 左側：ターン数
+    const turnCol = document.createElement("div");
+    turnCol.style = "width: 40px; border-right: 1px solid #444; padding: 5px; text-align: center; font-weight: bold;";
+    turnCol.textContent = turn;
+
+    // 右側：ログ詳細
+    const contentCol = document.createElement("div");
+    contentCol.style = "flex: 1; padding: 5px;";
+
+    // --- 味方の攻撃セクション ---
+    let offenseHtml = "";
+    if (logData.allyAbi) offenseHtml += `<div>${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
+    offenseHtml += `<div>${attacker.name} の攻撃！</div>`;
+    offenseHtml += `<div>${enemy.name} に ${logData.damageToEnemy} のダメージ！</div>`;
+    offenseHtml += `<div style="text-align: right;">${enemy.name} の Stamina [ ${enemy.currentSta} / ${enemy.maxSta} ]</div>`;
+    
+    // --- 区切り線 ---
+    const separator = `<div style="border-top: 1px dashed #666; margin: 5px 0;"></div>`;
+
+    // --- 敵の反撃セクション ---
+    let defenseHtml = "";
+    if (enemy.isAlive) {
+        if (logData.enemyAbi) defenseHtml += `<div>${enemy.name} の [${logData.enemyAbi}] が発動！</div>`;
+        defenseHtml += `<div>${enemy.name} の攻撃！</div>`;
+        defenseHtml += `<div>${attacker.name} に ${logData.damageToAlly} のダメージ！</div>`;
+        defenseHtml += `<div style="text-align: right;">${attacker.name} の Stamina [ ${attacker.currentSta} / ${attacker.maxSta} ]</div>`;
+    }
+
+    contentCol.innerHTML = offenseHtml + separator + defenseHtml;
+    
+    actionBox.appendChild(turnCol);
+    actionBox.appendChild(contentCol);
+    logContainer.appendChild(actionBox);
+
+    // 倒れた場合のログ（箱の外に出す）
+    if (!enemy.isAlive) {
+        appendDeathLog(`${enemy.name} は倒れた！`);
+    } else if (!attacker.isAlive) {
+        appendDeathLog(`${attacker.name} は倒れた！`);
+    }
+}
+
+function appendDeathLog(message) {
+    const logContainer = document.getElementById("battle-log");
+    const deathDiv = document.createElement("div");
+    deathDiv.style = "padding: 5px; color: #ff4444; border-bottom: 2px solid #800; font-weight: bold;";
+    deathDiv.textContent = message;
+    logContainer.appendChild(deathDiv);
 }
