@@ -4,7 +4,7 @@
  */
 const ABILITY_SPECS = {
     "疾風": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker, enemy) => {
             attacker.tempAtkModifier = 1.7;
             enemy.tempAtkModifier = 0.5;
@@ -36,7 +36,7 @@ const ABILITY_SPECS = {
     },
 
     "紅舞": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker, enemy, field) => {
             attacker.tempAtkModifier = 2.0;
             field.allies.forEach(ally => {
@@ -48,7 +48,7 @@ const ABILITY_SPECS = {
     },
 
     "高揚": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             attacker.currentAtk = Math.ceil(attacker.currentAtk * 1.1);
         }
@@ -67,7 +67,7 @@ const ABILITY_SPECS = {
     },
 
     "不乱": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker, enemy) => {
             const hpRate = attacker.currentSta / attacker.maxSta;
             if (hpRate > 0.6) {
@@ -97,7 +97,7 @@ const ABILITY_SPECS = {
     },
 
     "大撃": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker, enemy) => {
             attacker.tempAtkModifier = 2.0;
         }
@@ -111,14 +111,14 @@ const ABILITY_SPECS = {
     },
     
     "強打": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             attacker.tempAtkModifier = 1.3;
         }
     },
     
     "粉砕": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker, enemy) => {
             attacker.tempAtkModifier = 1.4;
             enemy.currentDef = Math.ceil(enemy.currentDef * 0.8);
@@ -126,14 +126,14 @@ const ABILITY_SPECS = {
     },
 
     "一斉": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker) => {
             attacker.isIsseiActivated = true;
         }
     },
 
     "破茶": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker, enemy, field) => {
             const ignoreList = ["破茶"];
             const availableAbis = Object.keys(ABILITY_SPECS).filter(name => !ignoreList.includes(name));
@@ -174,7 +174,7 @@ const ABILITY_SPECS = {
     },
 
     "福音": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker, enemy, field) => {
             const grade = attacker.weaponGrade;
             const plus = attacker.weaponPlus;
@@ -193,7 +193,7 @@ const ABILITY_SPECS = {
     },
 
     "爽活": {
-       baseRate: 0.17,
+       baseRate: 0.18,
         execute: (attacker, enemy, field) => {
             field.allies.forEach(ally => {
                 if (!ally.isAlive) {
@@ -208,7 +208,7 @@ const ABILITY_SPECS = {
     },
 
     "癒唄": {
-       baseRate: 0.17,
+       baseRate: 0.18,
         execute: (attacker, enemy, field) => {
             field.allies.forEach(ally => {
                 if (ally.isAlive) {
@@ -220,7 +220,7 @@ const ABILITY_SPECS = {
     },
 
     "回復": {
-       baseRate: 0.37,
+       baseRate: 0.38,
         execute: (attacker, enemy, field) => {
             field.allies.forEach(ally => {
                 if (ally.isAlive) {
@@ -232,14 +232,14 @@ const ABILITY_SPECS = {
     },
 
     "和属": {
-        baseRate: 0.17,
+        baseRate: 0.18,
         execute: (attacker) => {
             attacker.isWazokuActivated = true;
         }
     },
 
     "獣属": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             const isMatch = (attacker.element === "獣");
             const isAdv = (enemy.element === "魔");
@@ -251,7 +251,7 @@ const ABILITY_SPECS = {
     },
 
     "魔属": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             const isMatch = (attacker.element === "魔");
             const isAdv = (enemy.element === "霊");
@@ -263,7 +263,7 @@ const ABILITY_SPECS = {
     },
 
     "霊属": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             const isMatch = (attacker.element === "霊");
             const isAdv = (enemy.element === "獣");
@@ -275,7 +275,7 @@ const ABILITY_SPECS = {
     },
 
     "無属": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             const isMatch = (attacker.element === "無");
             const isAdv = (enemy.element === "地");
@@ -287,7 +287,7 @@ const ABILITY_SPECS = {
     },
 
     "地属": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             const isMatch = (attacker.element === "地");
             const isAdv = (enemy.element === "龍");
@@ -299,7 +299,7 @@ const ABILITY_SPECS = {
     },
 
     "龍属": {
-        baseRate: 0.37,
+        baseRate: 0.38,
         execute: (attacker, enemy) => {
             const isMatch = (attacker.element === "龍");
             const isAdv = (enemy.element === "無");
