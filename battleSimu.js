@@ -511,13 +511,6 @@ function startSimulation(count) {
         if (typeof updateTotalStats === "function") {
             updateTotalStats();   // ←毎回再計算
 
-const atk = document.getElementById("res-atk-0").textContent;
-console.log("HTML ATK", atk);
-
-const currentContext = fetchBattleContext();
-console.log("Context ATK", currentContext.players[0].stats.atk);
-        } // 追加した
-
         const currentContext = fetchBattleContext();
         if (!currentContext) return;
 
