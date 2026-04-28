@@ -52,16 +52,46 @@ function fetchBattleContext() {
  * シミュレーション実行メイン（1回 / 100回 / 1000回 共通）
  */
 function startSimulation(count) {
+    if (typeof updateTotalStats === "function") {
+        updateTotalStats(); 
+    } else {
+        console.warn("updateTotalStats関数が見つかりません。ステータス計算ロジックを確認してください。");
+    }
+    
     const context = fetchBattleContext();
     if (!context) return;
 
-    if (count === 1) {
-        // 1回討伐ロジック（ログ詳細表示）
-        executeSingleBattle(context);
-    } else {
-        // 複数回討伐ロジック（統計のみ）
-        executeMultiBattle(context, count);
+    const logContainer = document.getElementById("battle-log");
+    let lastBattleWin = false; 
+
+    for (let i = 0; i < count; i++) {
+        const isLastRun = (i === count - 1);
+        if (isLastRun) {
+            logContainer.innerHTML = ""; 
+        }
+
+        // 複数回実行時も、毎回ランダム性を出したい場合はここでも再計算が必要
+        // 1000回中、毎回「浪漫」の数値を変えたいならループ内でupdateTotalStats()とfetchBattleContext()を回す
+        let currentContext = context;
+        if (count > 1) {
+            updateTotalStats();
+            currentContext = fetchBattleContext();
+        }
+
+        const result = executeSingleBattle(currentContext, isLastRun); 
+        
+        if (result.win) {
+            totalWins++;
+        } else {
+            totalLosses++;
+        }
+        totalTurns += result.turns;
+        allTurnHistory.push(result.turns);
+        
+        lastBattleWin = result.win;
     }
+
+    updateStatsUI(lastBattleWin);
 }
 
 
@@ -218,17 +248,21 @@ function executeSingleBattle(context) {
             logData.damageToAlly = calculateTakenDamage(field.enemy, attacker, field, logData.enemyAbi);
         }
 
-            // --- 行動終了 ---
+            // ログ出力が有効な場合のみDOM操作を行う
+            if (isLogEnabled) {
+                appendActionLog(field.turn, attacker, field.enemy, logData);
+            }
 
-            // 敵を倒したら即終了
             if (!field.enemy.isAlive) break;
         }
-
-        // 全員の攻撃が終わったらターン経過
+        if (!field.enemy.isAlive) break;
         field.turn++;
     }
 
-    // 最終結果の判定（勝利/敗北）をここで行う
+    return {
+        win: !field.enemy.isAlive,
+        turns: Math.min(field.turn, maxTurn)
+    };
 }
 
 /**
