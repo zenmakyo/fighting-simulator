@@ -236,6 +236,78 @@ const ABILITY_SPECS = {
         execute: (attacker) => {
             attacker.isWazokuActivated = true;
         }
+    },
+
+    "獣属": {
+        baseRate: 0.37,
+        execute: (attacker, enemy) => {
+            const isMatch = (attacker.element === "獣属");
+            const isAdv = (enemy.element === "魔属");
+
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
+            else if (isMatch) attacker.tempAtkModifier = 1.2;
+            else attacker.tempAtkModifier = 1.0;
+        }
+    },
+
+    "魔属": {
+        baseRate: 0.37,
+        execute: (attacker, enemy) => {
+            const isMatch = (attacker.element === "魔属");
+            const isAdv = (enemy.element === "霊属");
+
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
+            else if (isMatch) attacker.tempAtkModifier = 1.2;
+            else attacker.tempAtkModifier = 1.0;
+        }
+    },
+
+    "霊属": {
+        baseRate: 0.37,
+        execute: (attacker, enemy) => {
+            const isMatch = (attacker.element === "霊属");
+            const isAdv = (enemy.element === "獣属");
+
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
+            else if (isMatch) attacker.tempAtkModifier = 1.2;
+            else attacker.tempAtkModifier = 1.0;
+        }
+    },
+
+    "無属": {
+        baseRate: 0.37,
+        execute: (attacker, enemy) => {
+            const isMatch = (attacker.element === "無属");
+            const isAdv = (enemy.element === "地属");
+
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
+            else if (isMatch) attacker.tempAtkModifier = 1.2;
+            else attacker.tempAtkModifier = 1.0;
+        }
+    },
+
+    "地属": {
+        baseRate: 0.37,
+        execute: (attacker, enemy) => {
+            const isMatch = (attacker.element === "地属");
+            const isAdv = (enemy.element === "龍属");
+
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
+            else if (isMatch) attacker.tempAtkModifier = 1.2;
+            else attacker.tempAtkModifier = 1.0;
+        }
+    },
+
+    "龍属": {
+        baseRate: 0.37,
+        execute: (attacker, enemy) => {
+            const isMatch = (attacker.element === "龍属");
+            const isAdv = (enemy.element === "無属");
+
+            if (isMatch && isAdv) attacker.tempAtkModifier = 1.4;
+            else if (isMatch) attacker.tempAtkModifier = 1.2;
+            else attacker.tempAtkModifier = 1.0;
+        }
     }
 };
 
