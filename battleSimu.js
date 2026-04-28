@@ -18,6 +18,9 @@ function fetchBattleContext() {
         const isJoined = document.getElementById(`join-${i}`).checked;
         if (!isJoined) continue;
 
+        const wName = document.getElementById(`select-weapon-${i}`).textContent.trim();
+        const wData = weaponList.find(w => w.name === wName) || { grade: 0, ability: "なし" };
+
         // 計算済みステータス(res-系)をテキストから取得
         participants.push({
             id: i,
@@ -29,7 +32,9 @@ function fetchBattleContext() {
             luck: parseInt(document.getElementById(`res-luck-${i}`).textContent) || 0,
             
             // 武器情報（アビリティ判定用）
-            weaponName: document.getElementById(`select-weapon-${i}`).textContent.trim(),
+            weaponName: wName,
+            weaponGrade: wData.grade,
+            weaponBaseAbi: wData.ability,
             weaponPlus: parseInt(document.getElementById(`plus-weapon-${i}`).value) || 0,
             weaponAbi: document.getElementById(`select-w-abi-${i}`).textContent.trim()
         });
@@ -59,10 +64,6 @@ function startSimulation(count) {
     }
 }
 
-function executeSingleBattle(context) {
-    console.log("戦闘開始データ:", context);
-    // ここにこの後「ダメージ計算」「アビリティ発動」のロジックを書いていきます
-}
 
 /**
  * 戦闘用のフィールド（状態）を作成する
@@ -73,8 +74,16 @@ function createBattleField(context) {
         allies: context.participants.map(p => {
             
             //  アビリティ定義の紐付け
-            const abiDef = WEAPON_ABILITY_DEFS[p.weaponAbi] || WEAPON_ABILITY_DEFS["なし"];
-            
+            const abiList = [p.weaponBaseAbi, p.weaponAbi]
+                .filter(name => name && name !== "なし") // "なし"を除外
+                .map(name => {
+                    const spec = ABILITY_SPECS[name] || { baseRate: 0, execute: () => {} };
+                    return {
+                        name: name,
+                        baseRate: spec.baseRate,
+                        execute: spec.execute
+            };
+        });
             return {
                 id: p.id,
                 name: p.name,
@@ -93,14 +102,16 @@ function createBattleField(context) {
                 weaponGrade: p.weaponGrade,
 
                 // ④ アビリティ情報のパッケージ化
-                ability: {
-                    name: p.weaponAbi,
-                    power: abiDef.power,
-                    type: abiDef.type
-                },
+                abilities: abiList,
 
                 // ⑤ 生存フラグ
-                isAlive: true
+                isAlive: true,
+
+                // 攻撃ごとにリセットする補正用プロパティ
+                tempAtkModifier: 1.0,
+                damageTakenModifier: 1.0,
+                isIsseiActivated: false, // 一斉などのフラグ用
+                isWazokuActivated: false // 和属などのフラグ用
             };
         }),
 
@@ -145,3 +156,92 @@ function calcFinalRate(baseRate, attacker) {
     // 合計
     return baseRate + luckAdd + plusAdd + gradeAdd;
 }
+
+/**
+ * 1回分の戦闘シミュレーションを実行
+ */
+function executeSingleBattle(context) {
+    const field = createBattleField(context);
+    
+    // 1. 最大ターンの決定
+    let maxTurn = 16;
+    if (field.allies.length === 3) maxTurn = 18;
+    if (field.allies.length === 4) maxTurn = 20;
+
+    // 2. メインループ（ターン進行）
+    while (field.turn <= maxTurn && field.enemy.isAlive) {
+        // 各幻獣が順番に攻撃
+        for (let i = 0; i < field.allies.length; i++) {
+            const attacker = field.allies[i];
+
+            // 生きていない場合はスキップ
+            if (!attacker.isAlive) continue;
+
+            // --- ここから 1ユニットの行動ステップ ---
+            
+            // ステップA: アビリティ発動判定（この後実装）
+            // ステップB: ダメージ計算（この後実装）
+            // ステップC: 敵の反撃（この後実装）
+
+            // --- 行動終了 ---
+
+            // 敵を倒したら即終了
+            if (!field.enemy.isAlive) break;
+        }
+
+        // 全員の攻撃が終わったらターン経過
+        field.turn++;
+    }
+
+    // 最終結果の判定（勝利/敗北）をここで行う
+}
+
+/**
+ * アビリティの発動判定と実行
+ */
+function resolveAbilities(attacker, enemy, field) {
+    // 1. 初期化：毎攻撃ごとにリセット
+    attacker.tempAtkModifier = 1.0; 
+    attacker.damageTakenModifier = 1.0; 
+    enemy.tempAtkModifier = 1.0; 
+
+    // 2. フィールド作成時に用意した abiList をループ
+    for (const abi of attacker.abilities) {
+        // 発動率を計算（abi.baseRate を使用）
+        const finalRate = calcFinalRate(abi.baseRate, attacker);
+
+        // 判定
+        if (Math.random() < finalRate) {
+            // 発動！
+            abi.execute(attacker, enemy, field);
+            field.logs.push(`${attacker.name}の[${abi.name}]が発動！`);
+            
+            return abi.name; // 1つ発動したら終了
+        }
+    }
+    return null;
+}
+
+/**
+ * executeSingleBattle のループ内への組み込み
+ */
+// ... ループ内 ...
+for (let i = 0; i < field.allies.length; i++) {
+    const attacker = field.allies[i];
+    if (!attacker.isAlive) continue;
+
+    // ステップA: アビリティ発動判定
+    resolveAbilities(attacker, field.enemy, field);
+
+    // ステップB: ダメージ計算（次ここで実装！）
+    // calculateDamage(attacker, field.enemy, field);
+// ...
+
+const ELEMENT_MODIFIERS = {
+    "獣": { "獣": 1.0, "霊": 0.7, "魔": 1.4, "無": 1.0, "龍": 1.0, "地": 1.0 },
+    "霊": { "獣": 1.4, "霊": 1.0, "魔": 0.7, "無": 1.0, "龍": 1.0, "地": 1.0 },
+    "魔": { "獣": 0.7, "霊": 1.4, "魔": 1.0, "無": 1.0, "龍": 1.0, "地": 1.0 },
+    "無": { "獣": 1.0, "霊": 1.0, "魔": 1.0, "無": 1.0, "龍": 0.7, "地": 1.4 },
+    "龍": { "獣": 1.0, "霊": 1.0, "魔": 1.0, "無": 1.4, "龍": 1.0, "地": 0.7 },
+    "地": { "獣": 1.0, "霊": 1.0, "魔": 1.0, "無": 0.7, "龍": 1.4, "地": 1.0 }
+};
