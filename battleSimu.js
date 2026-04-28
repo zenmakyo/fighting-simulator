@@ -563,10 +563,15 @@ function startSimulation(count) {
         }
 
         // 浪漫などのランダム要素を毎回計算したい場合
-        let currentContext = context;
         if (count > 1) {
-            updateTotalStats();
-            currentContext = fetchBattleContext();
+            // 参加している全幻獣(1~4)のステータス計算関数を直接叩く
+            for (let num = 1; num <= 4; num++) {
+                const joinCheck = document.getElementById(`join-${num}`);
+                if (joinCheck && joinCheck.checked) {
+                    // script.jsにある「HTMLを書き換える関数」を呼ぶ
+                    updatePhantomStats(num); 
+                }
+            }
         }
 
         // 第二引数に「ログを出すかどうか（isLastRun）」を渡す
