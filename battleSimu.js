@@ -285,3 +285,42 @@ const ELEMENT_MODIFIERS = {
     "龍": { "獣": 1.0, "霊": 1.0, "魔": 1.0, "無": 1.4, "龍": 1.0, "地": 0.7 },
     "地": { "獣": 1.0, "霊": 1.0, "魔": 1.0, "無": 0.7, "龍": 1.4, "地": 1.0 }
 };
+
+/**
+ * 一斉攻撃のダメージ計算
+ */
+function calculateIsseiDamage(field) {
+    let totalBaseDamage = 0;
+
+    // 生存している味方全員の基礎ダメージを合算
+    field.allies.forEach(ally => {
+        if (!ally.isAlive) return;
+
+        // (攻撃力 - 敵防御) ※0以下なら0
+        let base = ally.currentAtk - field.enemy.def;
+        if (base < 0) base = 0;
+
+        // 属性相性補正
+        const elementMod = ELEMENT_MODIFIERS[ally.element]?.[field.enemy.element] || 1.0;
+        
+        // 各幻獣の項で属性補正を掛けて合算
+        totalBaseDamage += Math.ceil(base * elementMod);
+    });
+
+    // 最後に一括で乱数補正 (1.000 〜 1.100)
+    const randomMod = 1.0 + (Math.floor(Math.random() * 101) / 1000);
+    const finalDamage = Math.ceil(totalBaseDamage * randomMod);
+
+    // ダメージ適用
+    field.enemy.currentSta -= finalDamage;
+    if (field.enemy.currentSta < 0) field.enemy.currentSta = 0;
+
+    field.logs.push(`★一斉攻撃！：全員で合計 ${finalDamage} ダメージ！`);
+
+    if (field.enemy.currentSta <= 0) {
+        field.enemy.isAlive = false;
+        field.logs.push(`>> ${field.enemy.name}を倒しました！`);
+    }
+
+    return finalDamage;
+}
