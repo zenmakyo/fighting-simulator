@@ -613,3 +613,16 @@ h1 {
 .sim-btn:hover {
     background-color: #d35400;
 }
+
+/* ログ表示エリア */
+#battle-log {
+    background: transparent;
+    color: #333;
+    text-align: left;
+    padding: 10px;
+    margin-top: 20px;
+    height: 300px;
+    overflow-y: auto;
+    font-family: monospace;
+    border: none; /* 枠線を消去 */
+}
