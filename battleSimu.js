@@ -190,7 +190,7 @@ function calcFinalRate(baseRate, attacker) {
 /**
  * 1回分の戦闘シミュレーションを実行
  */
-function executeSingleBattle(context) {
+function executeSingleBattle(context, isLogEnabled) {
     const field = createBattleField(context);
     
     // 1. 最大ターンの決定
@@ -549,21 +549,34 @@ let totalTurns = 0;
 let allTurnHistory = [];
 
 function startSimulation(count) {
+    if (typeof updateTotalStats === "function") {
+        updateTotalStats(); 
+    }
+    
+    const context = fetchBattleContext();
+    if (!context) return;
+
     const logContainer = document.getElementById("battle-log");
-    let lastBattleWin = false; // 最後の1回の勝敗を保持
+    let lastBattleWin = false; 
 
     for (let i = 0; i < count; i++) {
-        // ログ出力を制御：1回討伐、または複数回討伐の「最後の1回」だけログを表示
         const isLastRun = (i === count - 1);
         
+        // ログエリアの初期化（最後の1回だけ表示する場合）
         if (isLastRun) {
-            logContainer.innerHTML = ""; // ログをクリアして上書き準備
+            logContainer.innerHTML = ""; 
         }
 
-        // バトル実行（isLastRunがtrueの時だけappendActionLogが動くように設計）
-        const result = executeSingleBattle(isLastRun); 
+        // 浪漫などのランダム要素を毎回計算したい場合
+        let currentContext = context;
+        if (count > 1) {
+            updateTotalStats();
+            currentContext = fetchBattleContext();
+        }
+
+        // 第二引数に「ログを出すかどうか（isLastRun）」を渡す
+        const result = executeSingleBattle(currentContext, isLastRun); 
         
-        // データの蓄積
         if (result.win) {
             totalWins++;
         } else {
@@ -572,10 +585,9 @@ function startSimulation(count) {
         totalTurns += result.turns;
         allTurnHistory.push(result.turns);
         
-        lastBattleWin = result.win; // 最後の回の勝敗を記録
+        lastBattleWin = result.win;
     }
 
-    // 画面表示を更新
     updateStatsUI(lastBattleWin);
 }
 
