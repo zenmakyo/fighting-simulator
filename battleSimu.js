@@ -49,55 +49,6 @@ function fetchBattleContext() {
 }
 
 /**
- * シミュレーション実行メイン（1回 / 100回 / 1000回 共通）
- */
-function startSimulation(count) {
-    if (typeof updateTotalStats === "function") {
-        updateTotalStats(); 
-    }
-    
-    // 初回の読み込み
-    const context = fetchBattleContext();
-    if (!context) return;
-
-    const logContainer = document.getElementById("battle-log");
-    let lastBattleWin = false; 
-
-    for (let i = 0; i < count; i++) {
-        const isLastRun = (i === count - 1);
-        
-        if (isLastRun) {
-            logContainer.innerHTML = ""; 
-        }
-
-        // --- 修正箇所 ---
-        // currentContext をループごとに用意する
-        let currentContext; 
-
-        if (count > 1) {
-            updateTotalStats(); // ここで乱数を振り直し
-            currentContext = fetchBattleContext(); // 振り直した値を読み直す
-        } else {
-            currentContext = context; // 1回だけの場合は最初の値を使う
-        }
-
-        const result = executeSingleBattle(currentContext, isLastRun); 
-        
-        if (result.win) {
-            totalWins++;
-        } else {
-            totalLosses++;
-        }
-        totalTurns += result.turns;
-        allTurnHistory.push(result.turns);
-        
-        lastBattleWin = result.win;
-    }
-
-    updateStatsUI(lastBattleWin);
-}
-
-/**
  * 戦闘用のフィールド（状態）を作成する
  */
 function createBattleField(context) {
@@ -551,46 +502,37 @@ let totalTurns = 0;
 let allTurnHistory = [];
 
 function startSimulation(count) {
-    if (typeof updateTotalStats === "function") {
-        updateTotalStats(); 
-    }
-    
-    const context = fetchBattleContext();
-    if (!context) return;
 
-    const logContainer = document.getElementById("battle-log");
-    let lastBattleWin = false; 
+    const logContainer = document.getElementById("battle-log");
+    let lastBattleWin = false;
 
-    for (let i = 0; i < count; i++) {
-        const isLastRun = (i === count - 1);
-        
-        // ログエリアの初期化（最後の1回だけ表示する場合）
-        if (isLastRun) {
-            logContainer.innerHTML = ""; 
-        }
+    for (let i = 0; i < count; i++) {
 
-        // 浪漫などのランダム要素を毎回計算したい場合
-        let currentContext = context;
-        if (count > 1) {
-            updateTotalStats();
-            currentContext = fetchBattleContext();
-        }
+        if (typeof updateTotalStats === "function") {
+            updateTotalStats();   // ←毎回再計算
+        }
 
-        // 第二引数に「ログを出すかどうか（isLastRun）」を渡す
-        const result = executeSingleBattle(currentContext, isLastRun); 
-        
-        if (result.win) {
-            totalWins++;
-        } else {
-            totalLosses++;
-        }
-        totalTurns += result.turns;
-        allTurnHistory.push(result.turns);
-        
-        lastBattleWin = result.win;
-    }
+        const currentContext = fetchBattleContext();
+        if (!currentContext) return;
 
-    updateStatsUI(lastBattleWin);
+        const isLastRun = (i === count - 1);
+
+        if (isLastRun) {
+            logContainer.innerHTML = "";
+        }
+
+        const result = executeSingleBattle(currentContext, isLastRun);
+
+        if (result.win) totalWins++;
+        else totalLosses++;
+
+        totalTurns += result.turns;
+        allTurnHistory.push(result.turns);
+
+        lastBattleWin = result.win;
+    }
+
+    updateStatsUI(lastBattleWin);
 }
 
 function updateStatsUI(lastWin) {
