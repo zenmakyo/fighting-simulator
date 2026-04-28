@@ -52,43 +52,50 @@ function fetchBattleContext() {
  * シミュレーション実行メイン（1回 / 100回 / 1000回 共通）
  */
 function startSimulation(count) {
-    if (typeof updateTotalStats === "function") {
-        updateTotalStats(); 
-    } else {
-        console.warn("updateTotalStats関数が見つかりません。ステータス計算ロジックを確認してください。");
-    }
-    
-    const context = fetchBattleContext();
-    if (!context) return;
+    if (typeof updateTotalStats === "function") {
+        updateTotalStats(); 
+    }
+    
+    // 初回の読み込み
+    const context = fetchBattleContext();
+    if (!context) return;
 
-    const logContainer = document.getElementById("battle-log");
-    let lastBattleWin = false; 
+    const logContainer = document.getElementById("battle-log");
+    let lastBattleWin = false; 
 
-    for (let i = 0; i < count; i++) {
-        const isLastRun = (i === count - 1);
-        if (isLastRun) {
-            logContainer.innerHTML = ""; 
-        }
+    for (let i = 0; i < count; i++) {
+        const isLastRun = (i === count - 1);
+        
+        if (isLastRun) {
+            logContainer.innerHTML = ""; 
+        }
 
-        const currentContext = fetchBattleContext();
-        if (!currentContext) return;
+        // --- 修正箇所 ---
+        // currentContext をループごとに用意する
+        let currentContext; 
 
-        const result = executeSingleBattle(currentContext, isLastRun); 
-        
-        if (result.win) {
-            totalWins++;
-        } else {
-            totalLosses++;
-        }
-        totalTurns += result.turns;
-        allTurnHistory.push(result.turns);
-        
-        lastBattleWin = result.win;
-    }
+        if (count > 1) {
+            updateTotalStats(); // ここで乱数を振り直し
+            currentContext = fetchBattleContext(); // 振り直した値を読み直す
+        } else {
+            currentContext = context; // 1回だけの場合は最初の値を使う
+        }
 
-    updateStatsUI(lastBattleWin);
+        const result = executeSingleBattle(currentContext, isLastRun); 
+        
+        if (result.win) {
+            totalWins++;
+        } else {
+            totalLosses++;
+        }
+        totalTurns += result.turns;
+        allTurnHistory.push(result.turns);
+        
+        lastBattleWin = result.win;
+    }
+
+    updateStatsUI(lastBattleWin);
 }
-
 
 /**
  * 戦闘用のフィールド（状態）を作成する
