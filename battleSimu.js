@@ -52,10 +52,10 @@ function fetchBattleContext() {
  * シミュレーション実行メイン（1回 / 100回 / 1000回 共通）
  */
 function startSimulation(count) {
-    if (typeof updateTotalStats === "function") {
-        updateTotalStats(); 
+    if (typeof updatePhantomStats === "function") {
+        updatePhantomStats(); 
     } else {
-        console.warn("updateTotalStats関数が見つかりません。ステータス計算ロジックを確認してください。");
+        console.warn("updatePhantomStats関数が見つかりません。ステータス計算ロジックを確認してください。");
     }
     
     const context = fetchBattleContext();
@@ -544,8 +544,8 @@ let totalTurns = 0;
 let allTurnHistory = [];
 
 function startSimulation(count) {
-    if (typeof updateTotalStats === "function") {
-        updateTotalStats(); 
+    if (typeof updatePhantomStats === "function") {
+        updatePhantomStats(); 
     }
     
     const context = fetchBattleContext();
