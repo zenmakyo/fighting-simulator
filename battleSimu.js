@@ -89,6 +89,9 @@ function createBattleField(context) {
                 baseDef: p.def,     // 元のディフェンス
                 luck: p.luck,
 
+                weaponPlus: p.weaponPlus,
+                weaponGrade: p.weaponGrade,
+
                 // ④ アビリティ情報のパッケージ化
                 ability: {
                     name: p.weaponAbi,
