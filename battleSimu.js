@@ -249,7 +249,7 @@ function resolveAbilities(attacker, enemy, field) {
             return {
               name: abi.name,
               noAttack: abi.noAttack || false,
-              healLog: result?.healLog ?? null
+              healLog: result?.healLog || null
             };
         }
     }
