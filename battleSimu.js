@@ -157,6 +157,9 @@ function executeSingleBattle(context, isLogEnabled) {
 
     // 2. メインループ（ターン進行）
     while (field.turn <= maxTurn && field.enemy.isAlive) {
+        const allDead = field.allies.every(a => !a.isAlive);
+        if (allDead) break;
+      
         // 各幻獣が順番に攻撃
         for (let i = 0; i < field.allies.length; i++) {
             const attacker = field.allies[i];
@@ -224,7 +227,7 @@ function executeSingleBattle(context, isLogEnabled) {
 
     return {
         win: !field.enemy.isAlive,
-        turns: Math.min(field.turn, maxTurn)
+        turns: field.turn
     };
 }
 
