@@ -394,9 +394,7 @@ const ENEMY_ABILITY_SPECS = {
 /**
  * 被ダメージ計算（敵から味方への攻撃）
  */
-function calculateTakenDamage(enemy, attacker, field, activatedAbiName) {
-    // 敵の補正をリセット
-    enemy.tempAtkModifier = 1.0; 
+function calculateTakenDamage(enemy, attacker, field, activatedAbiName) { 
 
     // メインループで判定されたアビリティがあれば実行
     if (activatedAbiName) {
