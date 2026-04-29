@@ -463,9 +463,9 @@ function appendActionLog(turn, attacker, enemy, logData) {
 
     // --- 味方の攻撃セクション ---
     let offenseHtml = "";
-    if (logData.allyAbi) offenseHtml += `<div　style="text-align: left;">${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
-    offenseHtml += `<div　style="text-align: left;">${attacker.name} の攻撃！</div>`;
-    offenseHtml += `<div　style="text-align: left;">${enemy.name} に ${logData.damageToEnemy} のダメージ！</div>`;
+    if (logData.allyAbi) offenseHtml += `<div style="text-align: left;">${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
+    offenseHtml += `<div style="text-align: left;">${attacker.name} の攻撃！</div>`;
+    offenseHtml += `<div style="text-align: left;">${enemy.name} に ${logData.damageToEnemy} のダメージ！</div>`;
     offenseHtml += `<div style="text-align: right; font-size: 8px;">${enemy.name} の Stamina [ ${enemy.currentSta} / ${enemy.maxSta} ]</div>`;
     
     // --- 区切り線 ---
@@ -474,10 +474,10 @@ function appendActionLog(turn, attacker, enemy, logData) {
     // --- 敵の反撃セクション ---
     let defenseHtml = "";
     if (enemy.isAlive) {
-        if (logData.enemyAbi) defenseHtml += `<div　style="text-align: left;">${enemy.name} の [${logData.enemyAbi}] が発動！</div>`;
-        defenseHtml += `<div　style="text-align: left;">${enemy.name} の攻撃！</div>`;
-        defenseHtml += `<div　style="text-align: left;">${attacker.name} に ${logData.damageToAlly} のダメージ！</div>`;
-        defenseHtml += `<div style="text-align: right; font-size: 8px;">${attacker.name} の Stamina [ ${attacker.currentSta} / ${attacker.maxSta} ]</div>`;
+        if (logData.enemyAbi) defenseHtml += `<div style="text-align: left;">${enemy.name} の [${logData.enemyAbi}] が発動！</div>`;
+        defenseHtml += `<div style="text-align: left;">${enemy.name} の攻撃！</div>`;
+        defenseHtml += `<div style="text-align: left;">${attacker.name} に ${logData.damageToAlly} のダメージ！</div>`;
+        defenseHtml += `<div style="text-align: right; font-size: 10px;">${attacker.name} の Stamina [ ${attacker.currentSta} / ${attacker.maxSta} ]</div>`;
     }
 
     contentCol.innerHTML = offenseHtml + separator + defenseHtml;
