@@ -1,6 +1,5 @@
 // 武器リスト
 const weaponList = [
-    { name: "未選択", grade: 0, baseAtk: 0, ability: "なし" },
     { name: "疾風：颶風連鎖刃", grade: 10, baseAtk: 520, ability: "疾風" },
     { name: "猛突：インペリアルランス", grade: 9, baseAtk: 265, ability: "猛突" },
     { name: "猛突：思い出の管楽器", grade: 7, baseAtk: 120, ability: "猛突" },
@@ -259,7 +258,6 @@ const armorList = [
 
 // 武器アビリティリスト
 const weaponAbilityList = [
-    { name: "未選択" },
     { name: "疾風" },
     { name: "猛突" },
     { name: "突風" },
