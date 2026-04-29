@@ -247,7 +247,7 @@ function resolveAbilities(attacker, enemy, field) {
 
     // 2. フィールド作成時に用意した abiList をループ
     for (const abi of attacker.abilities) {
-        if (!abi || !abi.name || abi.name === "未選択") continue;
+        if (!abi || !abi.name || abi.name === "未選択" || abi.name === "なし") continue;
         // 発動率を計算（abi.baseRate を使用）
         const finalRate = calcFinalRate(abi.baseRate, attacker);
 
