@@ -232,7 +232,7 @@ function executeSingleBattle(context, isLogEnabled) {
 
     return {
         win: !field.enemy.isAlive,
-        turns: field.turn
+        turns: field.turn - 1
     };
 }
 
