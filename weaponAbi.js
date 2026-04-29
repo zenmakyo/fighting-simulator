@@ -56,8 +56,8 @@ const ABILITY_SPECS = {
 
     "盟旗": {
         baseRate: 0.28,
+        noAttack: true,
         execute: (attacker, enemy, field) => {
-            attacker.tempAtkModifier = 0;
             field.allies.forEach(ally => {
             if (ally.isAlive) {
                 ally.currentAtk = Math.ceil(ally.currentAtk * 1.1);
@@ -81,8 +81,8 @@ const ABILITY_SPECS = {
          }
     },
 
-    "渾身": {
-        baseRate: 0.3,
+    "壮健": {
+        baseRate: 0.18,
         execute: (attacker, enemy) => {
             const hpPercent = Math.floor((attacker.currentSta / attacker.maxSta) * 100);
             if (hpPercent >= 100) {
@@ -147,6 +147,7 @@ const ABILITY_SPECS = {
 
     "天晴": {
         baseRate: 0.12,
+        noAttack: true,
         execute: (attacker, enemy, field) => {
             const plus = attacker.weaponPlus;
             // データが揃うまではグレードを10として扱う
@@ -175,6 +176,7 @@ const ABILITY_SPECS = {
 
     "福音": {
         baseRate: 0.18,
+        noAttack: true,
         execute: (attacker, enemy, field) => {
             const grade = attacker.weaponGrade;
             const plus = attacker.weaponPlus;
@@ -194,6 +196,7 @@ const ABILITY_SPECS = {
 
     "爽活": {
        baseRate: 0.18,
+        noAttack: true,
         execute: (attacker, enemy, field) => {
             field.allies.forEach(ally => {
                 if (!ally.isAlive) {
@@ -209,6 +212,7 @@ const ABILITY_SPECS = {
 
     "癒唄": {
        baseRate: 0.18,
+        noAttack: true,
         execute: (attacker, enemy, field) => {
             field.allies.forEach(ally => {
                 if (ally.isAlive) {
@@ -221,6 +225,7 @@ const ABILITY_SPECS = {
 
     "回復": {
        baseRate: 0.38,
+        noAttack: true,
         execute: (attacker, enemy, field) => {
             field.allies.forEach(ally => {
                 if (ally.isAlive) {
