@@ -178,6 +178,7 @@ function executeSingleBattle(context, isLogEnabled) {
             // ステップA: アビリティ発動判定
             const activatedAbi = resolveAbilities(attacker, field.enemy, field);
             logData.allyAbi = activatedAbi?.name;
+            logData.healLog = activatedAbi?.healLog || null;
             
             // ステップB: 行動分岐
             if (activatedAbi?.noAttack) {
