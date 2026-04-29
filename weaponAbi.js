@@ -172,7 +172,7 @@ const ABILITY_SPECS = {
                 }
             });
             const healLog = field.allies.map(a =>
-                `${a.name}：${a.currentSta}/${a.maxSta}`
+                `${a.name}：<span style="color:#7CFC00; font-weight:bold;">${a.currentSta}/${a.maxSta}</span>`
             );
 
             return {
@@ -199,7 +199,7 @@ const ABILITY_SPECS = {
                 }
             });
             const healLog = field.allies.map(a =>
-                `${a.name}：${a.currentSta}/${a.maxSta}`
+                `${a.name}：<span style="color:#7CFC00; font-weight:bold;">${a.currentSta}/${a.maxSta}</span>`
             );
 
             return {
@@ -222,7 +222,7 @@ const ABILITY_SPECS = {
                 }
             });
             const healLog = field.allies.map(a =>
-                `${a.name}：${a.currentSta}/${a.maxSta}`
+                `${a.name}：<span style="color:#7CFC00; font-weight:bold;">${a.currentSta}/${a.maxSta}</span>`
             );
 
             return {
@@ -242,7 +242,7 @@ const ABILITY_SPECS = {
                 }
             });
             const healLog = field.allies.map(a =>
-                `${a.name}：${a.currentSta}/${a.maxSta}`
+                `${a.name}：<span style="color:#7CFC00; font-weight:bold;">${a.currentSta}/${a.maxSta}</span>`
             );
 
             return {
@@ -262,7 +262,7 @@ const ABILITY_SPECS = {
                 }
             });
             const healLog = field.allies.map(a =>
-                `${a.name}：${a.currentSta}/${a.maxSta}`
+                `${a.name}：<span style="color:#7CFC00; font-weight:bold;">${a.currentSta}/${a.maxSta}</span>`
             );
 
             return {
