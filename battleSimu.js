@@ -148,87 +148,92 @@ function calcFinalRate(baseRate, attacker) {
  * 1回分の戦闘シミュレーションを実行
  */
 function executeSingleBattle(context, isLogEnabled) {
-    const field = createBattleField(context);
-    
-    // 1. 最大ターンの決定
-    let maxTurn = 16;
-    if (field.allies.length === 3) maxTurn = 18;
-    if (field.allies.length === 4) maxTurn = 20;
+    const field = createBattleField(context);
 
-    // 2. メインループ（ターン進行）
-    while (field.turn <= maxTurn && field.enemy.isAlive) {
+    let maxTurn = 16;
+    if (field.allies.length === 3) maxTurn = 18;
+    if (field.allies.length === 4) maxTurn = 20;
+
+    // ★ 行動順管理用
+    let actionIndex = 0;
+
+    while (field.turn <= maxTurn && field.enemy.isAlive) {
+
         const allDead = field.allies.every(a => !a.isAlive);
         if (allDead) break;
-      
-        // 各幻獣が順番に攻撃
-        for (let i = 0; i < field.allies.length; i++) {
-            const attacker = field.allies[i];
 
-            // 生きていない場合はスキップ
-            if (!attacker.isAlive) continue;
+        // ★ 次に動く1体だけ取得
+        const attacker = field.allies[actionIndex];
 
-            // このアクションの情報を一時保存するオブジェクト
-            let logData = {
-                allyAbi: null,
-                enemyAbi: null,
-                damageToEnemy: 0,
-                damageToAlly: 0,
-                skipAttackLog: false
-            };
+        // 死んでたら次へ
+        if (!attacker || !attacker.isAlive) {
+            actionIndex++;
+            if (actionIndex >= field.allies.length) actionIndex = 0;
+            continue;
+        }
 
-            // --- ここから 1ユニットの行動ステップ ---
-            
-            // ステップA: アビリティ発動判定
-            const activatedAbi = resolveAbilities(attacker, field.enemy, field);
-            logData.allyAbi = activatedAbi?.name;
-            logData.healLog = activatedAbi?.healLog || null;
-            
-            // ステップB: 行動分岐
-            if (activatedAbi?.noAttack) {
-                logData.damageToEnemy = 0;
-                logData.skipAttackLog = true;
-            } else if (attacker.isIsseiActivated) {
-                // 【一斉】
-                logData.damageToEnemy = calculateIsseiDamage(field);
-                attacker.isIsseiActivated = false; // フラグ消費
+        let logData = {
+            allyAbi: null,
+            enemyAbi: null,
+            damageToEnemy: 0,
+            damageToAlly: 0,
+            skipAttackLog: false
+        };
 
-            } else if (attacker.isWazokuActivated) {
-                // 【和属】
-                logData.damageToEnemy = calculateWazokuDamage(attacker, field.enemy, field);
-                attacker.isWazokuActivated = false; // フラグ消費
+        // --- ステップA ---
+        const activatedAbi = resolveAbilities(attacker, field.enemy, field);
+        logData.allyAbi = activatedAbi?.name;
+        logData.healLog = activatedAbi?.healLog || null;
 
-            } else {
-                // 【通常攻撃】（一斉・和属以外のアビリティ効果、または不発時）
-                logData.damageToEnemy = calculateDamage(attacker, field.enemy, field);
-            }
-            
-            // ステップC: 敵の攻撃
-            if (field.enemy.isAlive) {
-            // 敵アビリティ判定
-            const abiSpec = ENEMY_ABILITY_SPECS[field.enemy.ability];
-            if (abiSpec && Math.random() < abiSpec.rate) {
-                logData.enemyAbi = field.enemy.ability; // 発動したアビ名を保存
-            }
-    
-            // 判定結果（logData.enemyAbi）を渡して計算
-            logData.damageToAlly = calculateTakenDamage(field.enemy, attacker, field, logData.enemyAbi);
-        }
+        // --- ステップB ---
+        if (activatedAbi?.noAttack) {
+            logData.damageToEnemy = 0;
+            logData.skipAttackLog = true;
 
-            // ログ出力が有効な場合のみDOM操作を行う
-            if (isLogEnabled) {
-                appendActionLog(field.turn, attacker, field.enemy, logData);
-            }
+        } else if (attacker.isIsseiActivated) {
+            logData.damageToEnemy = calculateIsseiDamage(field);
+            attacker.isIsseiActivated = false;
 
-            if (!field.enemy.isAlive) break;
-        }
-        if (!field.enemy.isAlive) break;
-        field.turn++;
-    }
+        } else if (attacker.isWazokuActivated) {
+            logData.damageToEnemy = calculateWazokuDamage(attacker, field.enemy, field);
+            attacker.isWazokuActivated = false;
 
-    return {
-        win: !field.enemy.isAlive,
-        turns: field.turn
-    };
+        } else {
+            logData.damageToEnemy = calculateDamage(attacker, field.enemy, field);
+        }
+
+        // --- ステップC（敵反撃＝ターン消費） ---
+        if (field.enemy.isAlive) {
+
+            const abiSpec = ENEMY_ABILITY_SPECS[field.enemy.ability];
+            if (abiSpec && Math.random() < abiSpec.rate) {
+                logData.enemyAbi = field.enemy.ability;
+            }
+
+            logData.damageToAlly =
+                calculateTakenDamage(field.enemy, attacker, field, logData.enemyAbi);
+        }
+
+        if (isLogEnabled) {
+            appendActionLog(field.turn, attacker, field.enemy, logData);
+        }
+
+        // ★ ここが超重要：1行動＝1ターン
+        field.turn++;
+
+        // 次の幻獣へ
+        actionIndex++;
+        if (actionIndex >= field.allies.length) {
+            actionIndex = 0;
+        }
+
+        if (!field.enemy.isAlive) break;
+    }
+
+    return {
+        win: !field.enemy.isAlive,
+        turns: field.turn
+    };
 }
 
 /**
