@@ -247,8 +247,9 @@ function resolveAbilities(attacker, enemy, field) {
             // 発動！
             const result = abi.execute(attacker, enemy, field);
             return {
-              ...abi,
-              healLog: result?.healLog || null
+              name: abi.name,
+              noAttack: abi.noAttack || false,
+              healLog: result?.healLog ?? null
             };
         }
     }
@@ -472,9 +473,12 @@ let offenseHtml = "";
 
 if (logData.allyAbi) {
     offenseHtml += `<div style="text-align: left;">${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
-    logData.healLog.forEach(line => {
-        offenseHtml += `<div style="text-align: left">${line}</div>`;
-    });
+
+    if (Array.isArray(logData.healLog)) {
+        logData.healLog.forEach(line => {
+            offenseHtml += `<div style="text-align: left;">${line}</div>`;
+        });
+    }
 }
 
 // 攻撃・ダメージを出すかどうか
