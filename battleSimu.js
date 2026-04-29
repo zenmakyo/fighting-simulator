@@ -466,7 +466,7 @@ function appendActionLog(turn, attacker, enemy, logData) {
     if (logData.allyAbi) offenseHtml += `<div style="text-align: left;">${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
     offenseHtml += `<div style="text-align: left;">${attacker.name} の攻撃！</div>`;
     offenseHtml += `<div style="text-align: left;">${enemy.name} に ${logData.damageToEnemy} のダメージ！</div>`;
-    offenseHtml += `<div style="text-align: right; font-size: 8px;">${enemy.name} の Stamina [ ${enemy.currentSta} / ${enemy.maxSta} ]</div>`;
+    offenseHtml += `<div style="text-align: right; font-size: 10px;">${enemy.name} の Stamina [ ${enemy.currentSta} / ${enemy.maxSta} ]</div>`;
     
     // --- 区切り線 ---
     const separator = `<div style="border-top: 1px dashed #666; margin: 5px 0;"></div>`;
