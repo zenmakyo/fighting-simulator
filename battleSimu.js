@@ -58,7 +58,7 @@ function createBattleField(context) {
             
             //  アビリティ定義の紐付け
             const abiList = [p.weaponBaseAbi, p.weaponAbi]
-                .filter(name => name && name !== "なし" && name !== "未設定") // "なし"を除外
+                .filter(name => name && name !== "なし" && name !== "未設定" && name !== "undefined") // "なし"を除外
                 .map(name => {
                     const spec = ABILITY_SPECS[name] || { baseRate: 0, execute: () => {} };
                     return {
@@ -245,9 +245,11 @@ function resolveAbilities(attacker, enemy, field) {
         // 判定
         if (Math.random() < finalRate) {
             // 発動！
-            abi.execute(attacker, enemy, field);
-            
-            return abi; // 1つ発動したら終了
+            const result = abi.execute(attacker, enemy, field);
+            return {
+              ...abi,
+              healLog: result?.healLog || null
+            };
         }
     }
     return null;
@@ -470,6 +472,9 @@ let offenseHtml = "";
 
 if (logData.allyAbi) {
     offenseHtml += `<div style="text-align: left;">${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
+    logData.healLog.forEach(line => {
+        offenseHtml += `<div style="text-align: left">${line}</div>`;
+    });
 }
 
 // 攻撃・ダメージを出すかどうか
