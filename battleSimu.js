@@ -442,6 +442,9 @@ function calculateTakenDamage(enemy, attacker, field, activatedAbiName) { 
  * 1アクション分のログカードを生成して画面に追加
  */
 function appendActionLog(turn, attacker, enemy, logData) {
+    const container = document.getElementById("battle-log-container");
+    container.style.display = "block";
+  
     const logContainer = document.getElementById("battle-log");
 
     // 箱全体の枠組み
@@ -581,4 +584,5 @@ document.getElementById("reset-stats-btn").onclick = function() {
     document.getElementById("battle-result").textContent = "-";
     document.getElementById("battle-result").style.color = ""; // 色もリセット
     document.getElementById("battle-log").innerHTML = "";      // ログも消去
+    document.getElementById("battle-log-container").style.display = "none";
 };
