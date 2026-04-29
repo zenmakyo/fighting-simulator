@@ -106,6 +106,8 @@ function createBattleField(context) {
             maxSta: context.enemy.sta,
             atk: context.enemy.atk,
             def: context.enemy.def,
+            ability: context.enemy.ability,
+            tempAtkModifier: 1.0,
             isAlive: true
         },
 
