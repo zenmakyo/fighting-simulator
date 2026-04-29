@@ -534,6 +534,7 @@ function openDropdown(type, num, event) {
     searchInput.oninput = (e) => render(e.target.value); // 「今」のリストに対して検索をかける
 
     render(); // 初期表示
+    list.scrollTop = 0;
     if (showSearch) setTimeout(() => searchInput.focus(), 10);
 
     // 外側クリックで閉じる
