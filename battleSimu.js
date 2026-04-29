@@ -58,7 +58,7 @@ function createBattleField(context) {
             
             //  アビリティ定義の紐付け
             const abiList = [p.weaponBaseAbi, p.weaponAbi]
-                .filter(name => name && name !== "なし") // "なし"を除外
+                .filter(name => name && name !== "なし" && name !== "未設定") // "なし"を除外
                 .map(name => {
                     const spec = ABILITY_SPECS[name] || { baseRate: 0, execute: () => {} };
                     return {
@@ -140,7 +140,8 @@ function calcFinalRate(baseRate, attacker) {
     const gradeAdd = (attacker.weaponGrade * 1.2) / 100;
 
     // 合計
-    return baseRate + luckAdd + plusAdd + gradeAdd;
+    let rate = baseRate + luckAdd + plusAdd + gradeAdd;
+    return Math.min(rate, 1.0);
 }
 
 /**
@@ -237,6 +238,7 @@ function resolveAbilities(attacker, enemy, field) {
 
     // 2. フィールド作成時に用意した abiList をループ
     for (const abi of attacker.abilities) {
+        if (!abi || !abi.name || abi.name === "未設定") continue;
         // 発動率を計算（abi.baseRate を使用）
         const finalRate = calcFinalRate(abi.baseRate, attacker);
 
