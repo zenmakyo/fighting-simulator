@@ -589,13 +589,13 @@ function updateStatsUI(lastWin) {
 
     // 2. 「結果」欄の更新（最後のバトルの勝敗を表示）
     const resultCell = document.getElementById("battle-result");
-    if (lastWin) {
-        resultCell.textContent = "勝利";
-        resultCell.style.color = "#ff4d4d"; // 勝利っぽい色に（CSSに合わせて調整してください）
-    } else {
-        resultCell.textContent = "敗北";
-        resultCell.style.color = "#4d94ff"; // 敗北っぽい色に
-    }
+        if (lastWin) {
+            resultCell.innerHTML = `勝利 <span style="font-size: 12px; color:#000">（${allTurnHistory[allTurnHistory.length - 1]}ターン）</span>`;
+            resultCell.style.color = "#ff4d4d";
+        } else {
+            resultCell.innerHTML = `敗北 <span style="font-size: 12px; color:#000">（${allTurnHistory[allTurnHistory.length - 1]}ターン）</span>`;
+            resultCell.style.color = "#4d94ff";
+        }
 }
 
 // リセットボタンの処理
