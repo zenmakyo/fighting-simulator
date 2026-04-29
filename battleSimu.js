@@ -464,16 +464,19 @@ function appendActionLog(turn, attacker, enemy, logData) {
     contentCol.style = "flex: 1; padding: 5px;";
 
     // --- 味方の攻撃セクション ---
-    let offenseHtml = "";
-    if (logData.allyAbi) {
-        offenseHtml += `<div style="text-align: left;">${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
-    }
-    if (!activatedAbi?.noAttack) {
-        offenseHtml += `<div style="text-align: left;">${attacker.name} の攻撃！</div>`;
-        offenseHtml += `<div style="text-align: left;">${enemy.name} に ${logData.damageToEnemy} のダメージ！</div>`;
-    }
+let offenseHtml = "";
 
-    offenseHtml += `<div style="text-align: right; font-size: 10px;">${enemy.name} の Stamina [ ${enemy.currentSta} / ${enemy.maxSta} ]</div>`;
+if (logData.allyAbi) {
+    offenseHtml += `<div style="text-align: left;">${attacker.name} の [${logData.allyAbi}] が発動！</div>`;
+}
+
+// 攻撃・ダメージを出すかどうか
+if (!logData.skipAttackLog) {
+    offenseHtml += `<div style="text-align: left;">${attacker.name} の攻撃！</div>`;
+    offenseHtml += `<div style="text-align: left;">${enemy.name} に ${logData.damageToEnemy} のダメージ！</div>`;
+}
+
+offenseHtml += `<div style="text-align: right; font-size: 10px;">${enemy.name} の Stamina [ ${enemy.currentSta} / ${enemy.maxSta} ]</div>`;
     
     // --- 区切り線 ---
     const separator = `<div style="border-top: 1px dashed #666; margin: 5px 0;"></div>`;
