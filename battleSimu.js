@@ -64,7 +64,8 @@ function createBattleField(context) {
                     return {
                         name: name,
                         baseRate: spec.baseRate,
-                        execute: spec.execute
+                        execute: spec.execute,
+                        noAttack: spec.noAttack || false
             };
         });
             return {
@@ -173,10 +174,13 @@ function executeSingleBattle(context, isLogEnabled) {
             // --- ここから 1ユニットの行動ステップ ---
             
             // ステップA: アビリティ発動判定
-            logData.allyAbi = resolveAbilities(attacker, field.enemy, field);
+            const activatedAbi = resolveAbilities(attacker, field.enemy, field);
+            logData.allyAbi = activatedAbi?.name;
             
             // ステップB: 行動分岐
-            if (attacker.isIsseiActivated) {
+            if (activatedAbi?.noAttack) {
+                logData.damageToEnemy = 0;
+            } else if (attacker.isIsseiActivated) {
                 // 【一斉】
                 logData.damageToEnemy = calculateIsseiDamage(field);
                 attacker.isIsseiActivated = false; // フラグ消費
@@ -239,7 +243,7 @@ function resolveAbilities(attacker, enemy, field) {
             // 発動！
             abi.execute(attacker, enemy, field);
             
-            return abi.name; // 1つ発動したら終了
+            return abi; // 1つ発動したら終了
         }
     }
     return null;
