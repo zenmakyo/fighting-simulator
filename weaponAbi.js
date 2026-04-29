@@ -171,6 +171,13 @@ const ABILITY_SPECS = {
                     ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
                 }
             });
+            const healLog = field.allies.map(a =>
+                `${a.name}：${a.currentSta}/${a.maxSta}`
+            );
+
+            return {
+                healLog
+            };
         }
     },
 
@@ -191,6 +198,13 @@ const ABILITY_SPECS = {
                     ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
                 }
             });
+            const healLog = field.allies.map(a =>
+                `${a.name}：${a.currentSta}/${a.maxSta}`
+            );
+
+            return {
+                healLog
+            };
         }
     },
 
@@ -207,6 +221,13 @@ const ABILITY_SPECS = {
                     ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
                 }
             });
+            const healLog = field.allies.map(a =>
+                `${a.name}：${a.currentSta}/${a.maxSta}`
+            );
+
+            return {
+                healLog
+            };
         }
     },
 
@@ -220,6 +241,13 @@ const ABILITY_SPECS = {
                     ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
                 }
             });
+            const healLog = field.allies.map(a =>
+                `${a.name}：${a.currentSta}/${a.maxSta}`
+            );
+
+            return {
+                healLog
+            };
         }
     },
 
@@ -233,6 +261,13 @@ const ABILITY_SPECS = {
                     ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
                 }
             });
+            const healLog = field.allies.map(a =>
+                `${a.name}：${a.currentSta}/${a.maxSta}`
+            );
+
+            return {
+                healLog
+            };
         }
     },
 
