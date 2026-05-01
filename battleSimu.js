@@ -230,9 +230,13 @@ function executeSingleBattle(context, isLogEnabled) {
         if (!field.enemy.isAlive) break;
     }
 
+    const allDead = field.allies.every(a => !a.isAlive);
+    const turnLimitReached = field.turn > maxTurn && field.enemy.isAlive;
+
     return {
         win: !field.enemy.isAlive,
-        turns: field.turn - 1
+        turns: field.turn - 1,
+        loseType: allDead ? "allDead" : (turnLimitReached ? "turnLimit" : null)
     };
 }
 
@@ -537,6 +541,8 @@ let totalWins = 0;
 let totalLosses = 0;
 let totalTurns = 0;
 let allTurnHistory = [];
+let totalAllDead = 0;
+let totalTurnLimit = 0;
 
 function startSimulation(count) {
 
@@ -560,8 +566,14 @@ function startSimulation(count) {
 
         const result = executeSingleBattle(currentContext, isLastRun);
 
-        if (result.win) totalWins++;
-        else totalLosses++;
+        if (result.win) {
+            totalWins++;
+        } else {
+            totalLosses++;
+
+            if (result.loseType === "allDead") totalAllDead++;
+            if (result.loseType === "turnLimit") totalTurnLimit++;
+        }
 
         totalTurns += result.turns;
         allTurnHistory.push(result.turns);
@@ -581,7 +593,10 @@ function updateStatsUI(lastWin) {
     const avgTurns = (totalTurns / totalCount).toFixed(1);
 
     // 1. 戦績と統計の更新
-    document.getElementById("win-loss-count").textContent = `${totalWins} 勝 ${totalLosses} 敗`;
+    document.getElementById("win-loss-count").textContent = `${totalWins} 勝 ${totalLosses} 敗
+    <br>
+    <sapn style="font-size:12px; color:#666;">全滅 ${totalAllDead}回 / ターン切れ ${totalTurnLimit}回
+    </span>`;
     document.getElementById("win-rate").textContent = winRate;
     document.getElementById("max-turns").textContent = maxTurns;
     document.getElementById("min-turns").textContent = minTurns;
@@ -604,6 +619,8 @@ document.getElementById("reset-stats-btn").onclick = function() {
     totalLosses = 0;
     totalTurns = 0;
     allTurnHistory = [];
+    totalAllDead = 0;
+    totalTurnLimit = 0;
     
     // 表示を初期状態に戻す
     document.getElementById("win-loss-count").textContent = "- 勝 - 敗";
