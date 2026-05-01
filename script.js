@@ -535,7 +535,7 @@ function openDropdown(type, num, event) {
 
     render(); // 初期表示
     list.scrollTop = 0;
-    if (showSearch) setTimeout(() => searchInput.focus(), 10);
+    // if (showSearch) setTimeout(() => searchInput.focus(), 10);
 
     // 外側クリックで閉じる
     // 1. まず、今押したボタンを変数「currentBtn」にしっかり覚えさせる
