@@ -106,7 +106,7 @@ function createBattleField(context) {
             currentSta: context.enemy.sta,
             maxSta: context.enemy.sta,
             atk: context.enemy.atk,
-            def: context.enemy.def,
+            currentDef: context.enemy.def,
             ability: context.enemy.ability,
             tempAtkModifier: 1.0,
             isAlive: true
@@ -270,7 +270,7 @@ function resolveAbilities(attacker, enemy, field) {
  */
 function calculateDamage(attacker, enemy, field) {
     // 1. 基礎ダメージ算出
-    let damage = attacker.currentAtk - enemy.def;
+    let damage = attacker.currentAtk - enemy.currentDef;
     if (damage < 1) damage = 1;
 
     // 2. 属性相性補正
@@ -317,7 +317,7 @@ function calculateIsseiDamage(field) {
         if (!ally.isAlive) return;
 
         // (攻撃力 - 敵防御) ※0以下なら0
-        let base = ally.currentAtk - field.enemy.def;
+        let base = ally.currentAtk - field.enemy.currentDef;
         if (base < 0) base = 0;
 
         // 属性相性補正
@@ -347,7 +347,7 @@ function calculateIsseiDamage(field) {
  */
 function calculateWazokuDamage(attacker, enemy, field) {
     // 1. 基礎ダメージ: (自分の攻撃力 - 敵防御) ※0以下なら0
-    let base = attacker.currentAtk - enemy.def;
+    let base = attacker.currentAtk - enemy.currentDef;
     if (base < 0) base = 0;
 
     // 2. 各属性相性の掛け算 (生存している全幻獣分)
