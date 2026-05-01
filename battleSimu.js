@@ -593,10 +593,8 @@ function updateStatsUI(lastWin) {
     const avgTurns = (totalTurns / totalCount).toFixed(1);
 
     // 1. 戦績と統計の更新
-    document.getElementById("win-loss-count").innerHTML = `${totalWins} 勝 ${totalLosses} 敗
-    <br>
-    <span style="font-size:12px; color:#666;">全滅 ${totalAllDead}回 / ターン切れ ${totalTurnLimit}回
-    </span>`;
+    document.getElementById("win-loss-count").innerHTML = `<div>${totalWins} 勝 ${totalLosses} 敗</div>
+    <div style="font-size:10px; color:#666;">全滅 ${totalAllDead}回 / ターン切れ ${totalTurnLimit}回</div>`;
     document.getElementById("win-rate").textContent = winRate;
     document.getElementById("max-turns").textContent = maxTurns;
     document.getElementById("min-turns").textContent = minTurns;
