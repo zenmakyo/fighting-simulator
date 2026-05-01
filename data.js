@@ -296,6 +296,7 @@ const armorAbilityList = [
     { name: "威風" },
     { name: "戦略" },
     { name: "遊戯" },
+    { name: "慈恵" },
     { name: "護鶴" },
     { name: "防衛" },
     { name: "鉄壁" },
