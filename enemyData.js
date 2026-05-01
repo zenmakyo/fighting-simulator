@@ -1,6 +1,6 @@
 //  敵幻獣ステータス（ここを自由に追加・編集してください）
 const enemyData = [
-    { name: "Lv77.:スロットルン【JP】", attr: "魔", sta: 17600, atk: 680, def: 2000, ability: "高揚"},
+    { name: "Lv.77:スロットルン【JP】", attr: "魔", sta: 17600, atk: 680, def: 2000, ability: "高揚"},
     { name: "Lv.77:スロットルン【橙】", attr: "魔", sta: 18300, atk: 7560, def: 7000, ability: "高揚"},
     { name: "Lv.77:スロットルン【紫】", attr: "魔", sta: 15000, atk: 300, def: 4000, ability: "高揚"},
     { name: "Lv.77:スロットルン【赤】", attr: "魔", sta: 12100, atk: 180, def: 3500, ability: "高揚"},
