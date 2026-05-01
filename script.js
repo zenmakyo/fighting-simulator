@@ -10,7 +10,7 @@ function toggleSearchMenu() {
         menu.style.display = 'block';
         input.value = ''; // テキストボックスを空にする
         filterList();     // 全リストを表示する
-        input.focus();    // すぐに入力できる状態にする
+        // input.focus();    // すぐに入力できる状態にする
     }
 }
 
