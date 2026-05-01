@@ -318,7 +318,7 @@ function calculateIsseiDamage(field) {
 
         // (攻撃力 - 敵防御) ※0以下なら0
         let base = ally.currentAtk - field.enemy.currentDef;
-        if (base < 0) base = 0;
+        if (base < 1) base = 1;
 
         // 属性相性補正
         const elementMod = ELEMENT_MODIFIERS[ally.element]?.[field.enemy.element] || 1.0;
