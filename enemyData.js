@@ -16,6 +16,7 @@ const enemyData = [
     { name: "Lv.52:ウッピィ", attr: "獣", sta: 5100, atk: 510, def: 280, ability: "なし"},
     { name: "Lv.46:スキュラ", attr: "魔", sta: 4580, atk: 525, def: 240, ability: "なし"},
     { name: "Lv.235:黒魔女レイちゃん", attr: "魔", sta: 280299, atk: 19000, def: 12165, ability: "高揚"},
+    { name: "Lv.220:壊星神コスモ", attr: "魔", sta: 236677, atk: 22000, def: 3500, ability: "高揚"},
     { name: "Lv.220:メデューサ（ネクタル）", attr: "魔", sta: 406253, atk: 9100, def: 3400, ability: "高揚"},
     { name: "Lv.220:エウリュアレ（ネクタル）", attr: "魔", sta: 198686, atk: 23500, def: 2700, ability: "高揚"},
     { name: "Lv.220:ステンノ（ネクタル）", attr: "魔", sta: 142897, atk: 7100, def: 24700, ability: "高揚"},
