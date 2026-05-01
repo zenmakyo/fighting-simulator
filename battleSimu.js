@@ -421,8 +421,8 @@ function calculateTakenDamage(enemy, attacker, field, activatedAbiName) { 
     }
 
     // 1. 基礎ダメージ: (敵ATK - 味方DEF)
-    let base = enemy.atk - attacker.currentDef;
-    if (base < 1) base = 1;
+    let base = enemy.atk * enemy.tempAtkModifier - attacker.currentDef;
+    if (base < 0) base = 0;
 
     // 2. 属性相性補正（敵 -> 味方）
     const elementMod = ELEMENT_MODIFIERS[enemy.element]?.[attacker.element] || 1.0;
@@ -435,7 +435,7 @@ function calculateTakenDamage(enemy, attacker, field, activatedAbiName) { 
 
     // 全要素を乗算
     // 式：(基礎) × 敵アビ倍率 × 属性相性 × 乱数 × 防御減衰 × 味方の被ダメ軽減
-    let damage = base * enemy.tempAtkModifier * elementMod * randomMod * defMitigation;
+    let damage = base * elementMod * randomMod * defMitigation;
     
     // 味方側のアビリティによる軽減（猛突、突風など）
     damage *= attacker.damageTakenModifier;
