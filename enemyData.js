@@ -65,7 +65,7 @@ const enemyData = [
     { name: "Lv.230:伊邪那", attr: "霊", sta: 348600, atk: 16000, def: 6200, ability: "高揚"},
     { name: "Lv.230:スセリヒメ", attr: "霊", sta: 309679, atk: 35912, def: 16656, ability: "高揚"},
     { name: "Lv.230:高闇之淤加美神", attr: "龍", sta: 177147, atk: 13462, def: 28705, ability: "高揚"},
-    { name: "Lv.230:アメノウズメ＂, attr: "地", sta: 438500, atk: 17700, def: 3400, ability: "高揚"},
+    { name: "Lv.230:アメノウズメ", attr: "地", sta: 438500, atk: 17700, def: 3400, ability: "高揚"},
     { name: "Lv.230:天叢雲剣・天羽々斬", attr: "地", sta: 255700, atk: 55000, def: 11000, ability: "高揚"},
     { name: "Lv.230:東雲之富慈神", attr: "地", sta: 162000, atk: 11550, def: 30250, ability: "高揚"},
     { name: "Lv.230:八坂瓊曲玉", attr: "龍", sta: 403700, atk: 7600, def: 11100, ability: "高揚"},
