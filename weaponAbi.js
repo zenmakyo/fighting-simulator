@@ -121,7 +121,6 @@ const ABILITY_SPECS = {
         baseRate: 0.18,
         execute: (attacker, enemy) => {
             attacker.tempAtkModifier = 1.4;
-            enemy.currentDef = Math.ceil(enemy.currentDef * 0.8);
         }
     },
 
