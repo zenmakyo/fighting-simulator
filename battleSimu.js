@@ -109,6 +109,7 @@ function createBattleField(context) {
             currentDef: context.enemy.def,
             ability: context.enemy.ability,
             tempAtkModifier: 1.0,
+            tempEnemyAtkModifier: 1.0,
             isAlive: true
         },
 
@@ -248,6 +249,7 @@ function resolveAbilities(attacker, enemy, field) {
     attacker.tempAtkModifier = 1.0; 
     attacker.damageTakenModifier = 1.0; 
     enemy.tempAtkModifier = 1.0; 
+    enemy.tempEnemyAtkModifier = 1.0;
 
     // 2. フィールド作成時に用意した abiList をループ
     for (const abi of attacker.abilities) {
@@ -394,7 +396,7 @@ const ENEMY_ABILITY_SPECS = {
     "強打": {
         rate: 0.38,
         execute: (enemy, attacker) => {
-            enemy.tempAtkModifier = 1.3;
+            enemy.tempEnemyAtkModifier = 1.3;
         }
     },
     "高揚": {
@@ -439,7 +441,7 @@ function calculateTakenDamage(enemy, attacker, field, activatedAbiName) { 
 
     // 全要素を乗算
     // 式：(基礎) × 敵アビ倍率 × 属性相性 × 乱数 × 防御減衰 × 味方の被ダメ軽減
-    let damage = base * elementMod * randomMod * defMitigation;
+    let damage = base * tempEnemyAtkModifier * elementMod * randomMod * defMitigation;
     
     // 味方側のアビリティによる軽減（猛突、突風など）
     damage *= attacker.damageTakenModifier;
