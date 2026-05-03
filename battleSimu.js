@@ -201,6 +201,10 @@ function executeSingleBattle(context, isLogEnabled) {
 
         } else {
             logData.damageToEnemy = calculateDamage(attacker, field.enemy, field);
+
+            if (activatedAbi?.name === "粉砕") {
+                field.enemy.currentDef = Math.ceil(field.enemy.currentDef * 0.8);
+                }
         }
 
         // --- ステップC（敵反撃＝ターン消費） ---
@@ -408,7 +412,7 @@ const ENEMY_ABILITY_SPECS = {
     "粉砕": {
         rate: 0.18,
         execute: (enemy, attacker) => {
-            attacker.currentDef = Math.floor(attacker.currentDef * 0.8);
+            enemy.tempEnemyAtkModifier = 1.4;
         }
     }
 };
@@ -441,7 +445,7 @@ function calculateTakenDamage(enemy, attacker, field, activatedAbiName) { 
 
     // 全要素を乗算
     // 式：(基礎) × 敵アビ倍率 × 属性相性 × 乱数 × 防御減衰 × 味方の被ダメ軽減
-    let damage = base * tempEnemyAtkModifier * elementMod * randomMod * defMitigation;
+    let damage = base * enemy.tempEnemyAtkModifier * elementMod * randomMod * defMitigation;
     
     // 味方側のアビリティによる軽減（猛突、突風など）
     damage *= attacker.damageTakenModifier;
@@ -456,6 +460,10 @@ function calculateTakenDamage(enemy, attacker, field, activatedAbiName) { 
     if (attacker.currentSta <= 0) {
         attacker.isAlive = false;
     }
+
+    if (activatedAbiName === "粉砕") {
+        attacker.currentDef = Math.floor(attacker.currentDef * 0.8);
+    }
 
     return finalDamage;
 }
