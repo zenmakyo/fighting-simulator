@@ -67,7 +67,7 @@ function applyEnemyStats(data) {
          nameInput.value = data.name;
     }
 
-    btn.textContent = nameInput.value || "討伐対象を選択してください";
+    btn.textContent = nameInput.value || "名前を入力してください";
 }
 
 // 【追加】ボタンを押した時に箱を出し入れする関数
