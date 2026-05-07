@@ -57,10 +57,17 @@ function applyEnemyStats(data) {
     document.getElementById('e-atk').value = data.atk;
     document.getElementById('e-def').value = data.def;
     document.getElementById('e-ability').value = data.ability;
+
+    const nameInput = document.getElementById("e-name");
+    const btn = document.getElementById("targetSelectBtn");
+    
     if(data.custom){
-         document.getElementById("e-name").value = "";
-         return;
-        }
+         nameInput.value = "";
+    } else {
+         nameInput.value = data.name;
+    }
+
+    btn.textContent = nameInput.value || "討伐対象を選択してください";
 }
 
 // 【追加】ボタンを押した時に箱を出し入れする関数
@@ -148,6 +155,14 @@ window.addEventListener('load', () => {
         // デフォルトを+20にしたい場合はここを20に。+0がいいなら0にする
         select.value = 20;
     });
+
+    const nameInput = document.getElementById("e-name");
+    const btn = document.getElementById("targetSelectBtn");
+    if(nameInput){
+        nameInput.addEventListener("input", function(){
+            btn.textContent = this.value || "討伐対象を選択してください";
+        });
+    }
 });
 
 // 値が変わった時の処理
