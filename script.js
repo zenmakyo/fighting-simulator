@@ -57,6 +57,10 @@ function applyEnemyStats(data) {
     document.getElementById('e-atk').value = data.atk;
     document.getElementById('e-def').value = data.def;
     document.getElementById('e-ability').value = data.ability;
+    if(enemy.custom){
+         document.getElementById("e-name").value = "";
+         return;
+        }
 }
 
 // 【追加】ボタンを押した時に箱を出し入れする関数
