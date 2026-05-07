@@ -64,7 +64,8 @@ function applyEnemyStats(data) {
     if(data.custom){
          nameInput.value = "";
     } else {
-         nameInput.value = data.name;
+         const cleanName = data.name.replace(/^Lv\.\d+:/, "");
+         nameInput.value = cleanName;
     }
 
     btn.textContent = nameInput.value || "名前を入力してください";
