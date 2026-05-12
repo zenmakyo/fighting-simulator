@@ -1,3 +1,5 @@
+let currentEnemy = null;
+
 // 1. 討伐幻獣名の箱
 // A. メニューの開閉（ボタンを押したとき）
 function toggleSearchMenu() {
@@ -85,9 +87,7 @@ function applyEnemyStats(data) {
 
     // --- レベル入力欄の表示制御 ---
     if (data.levUp) {
-        levelBox.style.display = "block";
-        levelInput.value = data.defaultLevel || 1;
-        applyEnemyStats(data);
+        levelBox.style.display = "flex";   // ← CSSのstatus-itemと揃える
     } else {
         levelBox.style.display = "none";
     }
