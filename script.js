@@ -32,6 +32,7 @@ function filterList() {
         div.onclick = function() {
             // 選択した名前をボタンに反映
             document.getElementById('targetSelectBtn').textContent = enemy.name;
+            currentEnemy = enemy;
             // 属性ボックス等にステータスを反映（既存の関数）
             applyEnemyStats(enemy);
             // メニューを閉じる
@@ -52,8 +53,15 @@ document.addEventListener('mousedown', function(e) {
 
 // D. 選択したモンスターのステータスを各入力欄に反映
 function applyEnemyStats(data) {
-    const levelBox = document.getElementById("enemy-level-box");
+    const levelBox = document.getElementById("level-box");
     const levelInput = document.getElementById("e-level");
+    // レベル可変か判定
+    if (data.levUp) {
+        levelBox.style.display = "block";
+    } else {
+        levelBox.style.display = "none";
+    }
+    let lev = parseInt(levelInput.value) || 1;
     
     document.getElementById('e-attribute').value = data.attr;
     let sta = data.sta;
@@ -92,10 +100,8 @@ function applyEnemyStats(data) {
 }
 
 document.getElementById("e-level").addEventListener("input", function(){
-    const name = document.getElementById("targetSelectBtn").textContent;
-    const enemy = enemyData.find(e => name.includes(e.name.replace(/^Lv\.\?\?\?:/, "")));
-    if(enemy){
-        applyEnemyStats(enemy);
+    if(currentEnemy){
+        applyEnemyStats(currentEnemy);
     }
 });
 
