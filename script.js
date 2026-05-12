@@ -86,7 +86,8 @@ function applyEnemyStats(data) {
     // --- レベル入力欄の表示制御 ---
     if (data.levUp) {
         levelBox.style.display = "block";
-        levelInput.value = data.defaultLevel || "";
+        levelInput.value = data.defaultLevel || 1;
+        applyEnemyStats(data);
     } else {
         levelBox.style.display = "none";
     }
