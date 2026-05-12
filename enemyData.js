@@ -6,7 +6,7 @@ const enemyData = [
  // { name: "Lv.77:スロットルン【赤】", attr: "魔", sta: 12100, atk: 180, def: 3500, ability: "高揚"},
  // { name: "Lv.77:スロットルン", attr: "魔", sta: 10000, atk: 100, def: 3000, ability: "高揚"},
     { name: "カスタム敵", custom: true },
-    { name: "Lv.???:穢心の業・レイラク", attr: "魔", sta: lev => lev * 1080, atk: lev => lev * 64, def: lev => lev * 36, ability: "強打", LevUp: true}
+    { name: "Lv.???:穢心の業・レイラク", attr: "魔", sta: lev => lev * 1080, atk: lev => lev * 64, def: lev => lev * 36, ability: "強打", LevUp: true},
     { name: "Lv.200:闇黒龍", attr: "龍", sta: 202100, atk: 9000, def: 5000, ability: "高揚"},
     { name: "Lv.150:叛逆の断罪者", attr: "魔", sta: 87000, atk: 7500, def: 3200, ability: "強打"},
     { name: "Lv.135:盲鬼ト浮鬼", attr: "獣", sta: 69000, atk: 7360, def: 3000, ability: "強打"},
