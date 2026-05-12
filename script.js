@@ -79,7 +79,7 @@ function applyEnemyStats(data) {
     if(data.custom){
          nameInput.value = "";
     } else {
-         const cleanName = data.name.replace(/^Lv\.\d+:/, "");
+         const cleanName = data.name.replace(/^Lv\.[^:]+:/, "");
          nameInput.value = cleanName;
     }
 
