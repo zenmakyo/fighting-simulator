@@ -23,9 +23,9 @@ function filterList() {
     suggestions.innerHTML = '';
 
     // enemyDataから部分一致で抽出
-    const filtered = enemyData.filter(enemy => 
-        enemy.name.toLowerCase().includes(query)
-    );
+    const filtered = enemyData.filter(enemy => 
+        (enemy.name + " " + (enemy.search || "")).toLowerCase().includes(query)
+    );
 
     filtered.forEach(enemy => {
         const div = document.createElement('div');
