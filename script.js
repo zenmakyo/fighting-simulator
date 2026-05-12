@@ -55,13 +55,6 @@ document.addEventListener('mousedown', function(e) {
 function applyEnemyStats(data) {
     const levelBox = document.getElementById("level-box");
     const levelInput = document.getElementById("e-level");
-    // レベル可変か判定
-    if (data.levUp) {
-        levelBox.style.display = "block";
-    } else {
-        levelBox.style.display = "none";
-    }
-    let lev = parseInt(levelInput.value) || 1;
     
     document.getElementById('e-attribute').value = data.attr;
     let sta = data.sta;
