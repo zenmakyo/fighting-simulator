@@ -52,10 +52,22 @@ document.addEventListener('mousedown', function(e) {
 
 // D. 選択したモンスターのステータスを各入力欄に反映
 function applyEnemyStats(data) {
+    const levelBox = document.getElementById("enemy-level-box");
+    const levelInput = document.getElementById("e-level");
+    
     document.getElementById('e-attribute').value = data.attr;
-    document.getElementById('e-sta').value = data.sta;
-    document.getElementById('e-atk').value = data.atk;
-    document.getElementById('e-def').value = data.def;
+    let sta = data.sta;
+    let atk = data.atk;
+    let def = data.def;
+    if (data.levUp) {
+        const lev = parseInt(document.getElementById("e-level").value) || 1;
+        if (typeof sta === "function") sta = sta(lev);
+        if (typeof atk === "function") atk = atk(lev);
+        if (typeof def === "function") def = def(lev);
+    }
+    document.getElementById('e-sta').value = sta;
+    document.getElementById('e-atk').value = atk;
+    document.getElementById('e-def').value = def;
     document.getElementById('e-ability').value = data.ability;
 
     const nameInput = document.getElementById("e-name");
@@ -69,7 +81,23 @@ function applyEnemyStats(data) {
     }
 
     btn.textContent = nameInput.value || "名前を入力してください";
+
+    // --- レベル入力欄の表示制御 ---
+    if (data.levUp) {
+        levelBox.style.display = "block";
+        levelInput.value = data.defaultLevel || "";
+    } else {
+        levelBox.style.display = "none";
+    }
 }
+
+document.getElementById("e-level").addEventListener("input", function(){
+    const name = document.getElementById("targetSelectBtn").textContent;
+    const enemy = enemyData.find(e => name.includes(e.name.replace(/^Lv\.\?\?\?:/, "")));
+    if(enemy){
+        applyEnemyStats(enemy);
+    }
+});
 
 // 【追加】ボタンを押した時に箱を出し入れする関数
 function toggleEnemyBox() {
