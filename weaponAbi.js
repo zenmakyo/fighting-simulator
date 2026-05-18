@@ -192,7 +192,7 @@ const ABILITY_SPECS = {
             field.allies.forEach(ally => {
                 if (!ally.isAlive) {
                     ally.isAlive = true;
-                    ally.currentSta = 1 + healAmount;
+                    ally.currentSta = 1;
                 } else {
                     ally.currentSta = Math.min(ally.maxSta, ally.currentSta + healAmount);
                 }
