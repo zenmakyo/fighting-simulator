@@ -621,7 +621,7 @@ const ABILITY_MASTER = {
         logic: (s, p) => {
             const loss = Math.ceil(s.sta * 0.2)
             return {
-                sta: loss,
+                sta: -loss,
                 atk: loss,
                 def: 0,
                 luck: 0
