@@ -6,7 +6,7 @@ function toggleSearchMenu() {
     const menu = document.getElementById('targetMenu');
     const input = document.getElementById('targetInput');
     
-    if (menu.style.display === 'block') {
+    if (menu.style.display === 'block') {a
         menu.style.display = 'none';
     } else {
         menu.style.display = 'block';
@@ -653,10 +653,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 🔄 ここで種類（type）に応じてデータと対象のハコを切り替える
         if (type === 'custom-weapon') {
-            clickedBox = document.getElementById(`select-custom-weapon-${id}`);
+            clickedBox = id;
             targetSlots = weaponSlots;
         } else if (type === 'custom-armor') {
-            clickedBox = document.getElementById(`select-custom-armor-${id}`);
+            clickedBox = id;
             targetSlots = armorSlots;
         } 
         /* 💡【ここに元の通常リストをドッキングさせます】
@@ -683,6 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 clickedBox.firstChild.textContent = slotName + " ";
                 // メニューを閉じる
                 dropdownMenu.style.display = 'none';
+                dropdownMenu.style.width = "";
             });
 
             dropdownItems.appendChild(li);
@@ -705,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
         weaponBox.addEventListener('click', (e) => {
             console.log('武器リスト30枠を生成します');
             // 引数を他の行に合わせて (種類, ID, イベント) に統一
-            openCustomDropdown('custom-weapon', 1, e); 
+            openCustomDropdown('custom-weapon', e.currentTarget, e); 
         });
     }
 
@@ -715,7 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
         armorBox.addEventListener('click', (e) => {
             console.log('防具リスト30枠を生成します');
             // 引数を他の行に合わせて (種類, ID, イベント) に統一
-            openCustomDropdown('custom-armor', 1, e); 
+            openCustomDropdown('custom-armor', e.currentTarget, e); 
         });
     }
 });
