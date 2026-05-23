@@ -637,6 +637,9 @@ h1 {
     height: 36px;
     display: flex;
     align-items: stretch;
+    border: 1px solid #d3381c;
+    border-radius: 7px;
+    box-sizing: border-box;
 }
 
 .my-weapon-container .input-label,
