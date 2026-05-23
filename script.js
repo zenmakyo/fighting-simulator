@@ -623,3 +623,53 @@ function updateTotalStats() {
         updatePhantomStats(i);
     }
 }
+
+// 武器・防具リストについて
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. 武器用・防具用でそれぞれ30枠のデータ（配列）を自動で用意する
+    const weaponSlots = Array.from({ length: 30 }, (_, i) => `マイ武器スロット ${i + 1}`);
+    const armorSlots = Array.from({ length: 30 }, (_, i) => `マイ防具スロット ${i + 1}`);
+
+    // HTML上のドロップダウン内の「リストを詰め込む場所」を取得（既存のID名に合わせてね）
+    const dropdownItems = document.getElementById('dropdown-items');
+
+    // 2. リストを画面に生成して表示する共通の関数
+    function generateList(slots) {
+        // 一旦リストの中身を空っぽにする
+        dropdownItems.innerHTML = '';
+
+        // 30回ループを回して、<li>タグを生成して突っ込む
+        slots.forEach(slotName => {
+            const li = document.createElement('li');
+            li.textContent = slotName;
+            
+            // リストの項目をクリックしたときの仮の動き
+            li.addEventListener('click', () => {
+                console.log(`${slotName} が選択されました`);
+                // 【ここに、選んだ名前をボックスに反映させる処理を後で書きます】
+            });
+
+            dropdownItems.appendChild(li);
+        });
+    }
+
+    // 3. ⚔️ マイ武器ボックスをクリックしたとき
+    const weaponBox = document.querySelector('.custom-weapon-box');
+    if (weaponBox) {
+        weaponBox.addEventListener('click', () => {
+            console.log('武器リスト30枠を生成します');
+            generateList(weaponSlots); // 武器の30枠を生成
+            // 【ここに、既存のドロップダウンメニューを開く（表示する）処理を後で書きます】
+        });
+    }
+
+    // 4. 🛡️ マイ防具ボックスをクリックしたとき
+    const armorBox = document.querySelector('.custom-armor-box');
+    if (armorBox) {
+        armorBox.addEventListener('click', () => {
+            console.log('防具リスト30枠を生成します');
+            generateList(armorSlots); // 防具の30枠を生成
+            // 【ここに、既存のドロップダウンメニューを開く（表示する）処理を後で書きます】
+        });
+    }
+});
