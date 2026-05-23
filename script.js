@@ -429,7 +429,7 @@ function savePhantomData(unitNum, slotIndex) {
  * 3. 保存済みリストから呼び出しメニューを表示
  */
 function openLoadList(num) {
-    ('load', num, event);
+    openDropdown('load', num, event);
 }
 
 /**
