@@ -660,7 +660,8 @@ h1 {
 /* マイ装備のプルダウンボックス（後からデザイン変更しやすいよう個別に指定可能） */
 .custom-weapon-box,
 .custom-armor-box {
-    width: 100% !important;
+    flex: 1 !important;
+    width: auto !important;
     cursor: pointer;
     background-color: #fff;
     color: #333333;
@@ -671,6 +672,7 @@ h1 {
     justify-content: space-between;
     align-items: center;
     height: 100%;
+    border: none;
 }
 
 .custom-weapon-box::after,
