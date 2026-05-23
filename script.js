@@ -627,8 +627,8 @@ function updateTotalStats() {
 // 武器・防具リストについて
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 武器用・防具用でそれぞれ30枠のデータを用意
-    const weaponSlots = Array.from({ length: 30 }, (_, i) => `マイ武器スロット ${i + 1}`);
-    const armorSlots = Array.from({ length: 30 }, (_, i) => `マイ防具スロット ${i + 1}`);
+    const weaponSlots = Array.from({ length: 30 }, (_, i) => `${i + 1}`);
+    const armorSlots = Array.from({ length: 30 }, (_, i) => `${i + 1}`);
 
     // HTML上のドロップダウン要素を取得
     const dropdownMenu = document.querySelector('.dropdown-menu');
