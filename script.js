@@ -626,50 +626,72 @@ function updateTotalStats() {
 
 // 武器・防具リストについて
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. 武器用・防具用でそれぞれ30枠のデータ（配列）を自動で用意する
+    // 1. 武器用・防具用でそれぞれ30枠のデータを用意
     const weaponSlots = Array.from({ length: 30 }, (_, i) => `マイ武器スロット ${i + 1}`);
     const armorSlots = Array.from({ length: 30 }, (_, i) => `マイ防具スロット ${i + 1}`);
 
-    // HTML上のドロップダウン内の「リストを詰め込む場所」を取得（既存のID名に合わせてね）
+    // HTML上のドロップダウン要素を取得
+    const dropdownMenu = document.querySelector('.dropdown-menu');
     const dropdownItems = document.getElementById('dropdown-items');
 
-    // 2. リストを画面に生成して表示する共通の関数
-    function generateList(slots) {
+    // 2. リストを画面に生成して、ドロップダウンを表示する関数
+    function openDropdown(slots, clickedBox) {
         // 一旦リストの中身を空っぽにする
         dropdownItems.innerHTML = '';
 
-        // 30回ループを回して、<li>タグを生成して突っ込む
+        // 30個の<li>タグを生成して突っ込む
         slots.forEach(slotName => {
             const li = document.createElement('li');
             li.textContent = slotName;
             
-            // リストの項目をクリックしたときの仮の動き
+            // リストの項目をクリックしたとき
             li.addEventListener('click', () => {
-                console.log(`${slotName} が選択されました`);
-                // 【ここに、選んだ名前をボックスに反映させる処理を後で書きます】
+                // ボックスの文字を選んだスロット名に書き換える
+                //（中の▼を消さないように、最初のテキストノードだけを書き換えます）
+                clickedBox.firstChild.textContent = slotName + " ";
+                
+                // メニューを閉じる
+                dropdownMenu.style.display = 'none';
             });
 
             dropdownItems.appendChild(li);
         });
+
+        // 3. ドロップダウンの位置をクリックしたボックスのすぐ下に合わせる
+        const rect = clickedBox.getBoundingClientRect();
+        dropdownMenu.style.position = 'absolute';
+        dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
+        dropdownMenu.style.left = `${window.scrollX + rect.left}px`;
+        dropdownMenu.style.width = `${rect.width}px`; // 幅もボックスとぴったり合わせる
+        
+        // パッと表示する
+        dropdownMenu.style.display = 'block';
     }
 
-    // 3. ⚔️ マイ武器ボックスをクリックしたとき
+    // 4. ⚔️ マイ武器ボックスをクリックしたとき
     const weaponBox = document.querySelector('.custom-weapon-box');
     if (weaponBox) {
-        weaponBox.addEventListener('click', () => {
+        weaponBox.addEventListener('click', (e) => {
+            e.stopPropagation(); // クリックが外側に突き抜けるのを防ぐ
             console.log('武器リスト30枠を生成します');
-            generateList(weaponSlots); // 武器の30枠を生成
-            // 【ここに、既存のドロップダウンメニューを開く（表示する）処理を後で書きます】
+            openDropdown(weaponSlots, weaponBox);
         });
     }
 
-    // 4. 🛡️ マイ防具ボックスをクリックしたとき
+    // 5. 🛡️ マイ防具ボックスをクリックしたとき
     const armorBox = document.querySelector('.custom-armor-box');
     if (armorBox) {
-        armorBox.addEventListener('click', () => {
+        armorBox.addEventListener('click', (e) => {
+            e.stopPropagation(); // クリックが外側に突き抜けるのを防ぐ
             console.log('防具リスト30枠を生成します');
-            generateList(armorSlots); // 防具の30枠を生成
-            // 【ここに、既存のドロップダウンメニューを開く（表示する）処理を後で書きます】
+            openDropdown(armorSlots, armorBox);
         });
     }
+
+    // 6. メニューの外側をクリックしたら自動で閉じる設定
+    document.addEventListener('click', (e) => {
+        if (dropdownMenu && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
 });
