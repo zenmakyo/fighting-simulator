@@ -429,7 +429,7 @@ function savePhantomData(unitNum, slotIndex) {
  * 3. 保存済みリストから呼び出しメニューを表示
  */
 function openLoadList(num) {
-    openDropdown('load', num, event);
+    ('load', num, event);
 }
 
 /**
@@ -503,16 +503,21 @@ function handleOverwrite(unitNum) {
 }
 
 /**
- * すべてのリスト表示（武器・防具・保存・読込）を一括管理する
+ * すべてのリスト表示（通常装備・アビリティ・保存・読込・マイカスタム装備）を一括管理する
  */
 function openDropdown(type, num, event) {
     const menu = document.getElementById('dropdown-menu');
     const list = document.getElementById('dropdown-items');
     const searchInput = document.getElementById('dropdown-search');
 
-    // 【重要】これまでの検索命令を一旦リセット（これが混線の解決策）
+    if (!menu || !list || !searchInput) return;
+
+    // 【重要】これまでの検索命令やイベントを一旦リセットして混線を防ぐ
     if (activeCloseHandler) document.removeEventListener('click', activeCloseHandler);
     searchInput.oninput = null; 
+
+    // 前回の実行で残ったインラインの幅指定を完全にクリア（引き伸ばし・潰れバグの特効薬）
+    menu.style.width = "";
 
     // --- A. 表示するデータの仕分け ---
     let listData = [];
@@ -524,7 +529,6 @@ function openDropdown(type, num, event) {
     else if (type === 'w-ability') listData = weaponAbilityList;
     else if (type === 'a-ability') listData = armorAbilityList;
     else if (type === 'save' || type === 'load') {
-        // 保存・読込用のデータ作成
         isSaveModal = (type === 'save');
         showSearch = (type === 'load'); // 保存時は検索不要、読込時は検索あり
         for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
@@ -536,21 +540,35 @@ function openDropdown(type, num, event) {
             });
         }
     }
+    // 【統合ポイント】カスタム武器・防具の30枠データもここで美しく仕分ける
+    else if (type === 'custom-weapon' || type === 'custom-armor') {
+        showSearch = false; // 1〜30の数値だけなので検索窓は不要
+        for (let i = 1; i <= 30; i++) {
+            listData.push({ name: `${i}` });
+        }
+    }
 
-    // --- B. CSS表示の切り替え ---
+    // --- B. CSS表示・位置・幅の切り替え ---
     if (isSaveModal) {
-        menu.classList.add('save-modal-mode'); // 中央表示
+        menu.classList.add('save-modal-mode'); // 中央ポップアップ表示
         menu.style.display = 'flex';
         menu.style.top = ""; menu.style.left = "";
     } else {
-        menu.classList.remove('save-modal-mode'); // ボタンの横に表示
+        menu.classList.remove('save-modal-mode'); // ボタンの直下に浮かせる
         menu.style.display = 'block';
+        
+        // クリックされたボタンの位置を正確に捕捉
         const rect = event.currentTarget.getBoundingClientRect();
         menu.style.top = `${rect.bottom + window.scrollY}px`;
         menu.style.left = `${rect.left + window.scrollX}px`;
+
+        // カスタム装備の時は、コンテナの幅にぴったり合わせる（はみ出し防止）
+        if (type === 'custom-weapon' || type === 'custom-armor') {
+            menu.style.width = `${rect.width}px`;
+        }
     }
 
-    // --- C. リスト描画（検索するたびにここが動く） ---
+    // --- C. リスト描画（クリックイベントの統合） ---
     const render = (query = "") => {
         list.innerHTML = '';
         listData.filter(item => 
@@ -560,13 +578,22 @@ function openDropdown(type, num, event) {
             li.textContent = item.name;
             li.onclick = (e) => {
                 e.stopPropagation();
-                // typeによってクリック時の動作を変える
+                
                 if (type === 'save') {
                     savePhantomData(num, item.slot);
                 } else if (type === 'load') {
                     loadPhantomData(num, item.slot);
+                } else if (type === 'custom-weapon' || type === 'custom-armor') {
+                    // カスタム選択時の反映処理（末尾の半角スペース維持）
+                    const clickedBox = event.currentTarget;
+                    clickedBox.firstChild.textContent = item.name + " ";
                 } else {
-                    const idMap = { 'weapon':`select-weapon-${num}`, 'armor':`select-armor-${num}`, 'w-ability':`select-w-abi-${num}`, 'a-ability':`select-a-abi-${num}` };
+                    const idMap = { 
+                        'weapon': `select-weapon-${num}`, 
+                        'armor': `select-armor-${num}`, 
+                        'w-ability': `select-w-abi-${num}`, 
+                        'a-ability': `select-a-abi-${num}` 
+                    };
                     document.getElementById(idMap[type]).textContent = item.name;
                     updatePhantomStats(num);
                 }
@@ -579,28 +606,19 @@ function openDropdown(type, num, event) {
     // --- D. 検索窓の再設定 ---
     searchInput.style.display = showSearch ? 'block' : 'none';
     searchInput.value = '';
-    searchInput.oninput = (e) => render(e.target.value); // 「今」のリストに対して検索をかける
+    searchInput.oninput = (e) => render(e.target.value);
 
-    render(); // 初期表示
+    render(); // リストを初期描画
     list.scrollTop = 0;
-    // if (showSearch) setTimeout(() => searchInput.focus(), 10);
 
-    // 外側クリックで閉じる
-    // 1. まず、今押したボタンを変数「currentBtn」にしっかり覚えさせる
+    // --- E. 欄外クリックで安全に閉じる処理（共通化） ---
     const currentBtn = event.currentTarget;
-
-    // 2. 外側クリックを判定する関数
     activeCloseHandler = (e) => {
-        // メニューの中をクリックしたなら閉じない
         if (menu.contains(e.target)) return;
-        // 今押したボタン自体をクリックしたなら閉じない
         if (currentBtn && currentBtn.contains(e.target)) return;
-
-        // それ以外（外側）なら閉じる！
         closeDropdown();
     };
 
-    // 3. 0.1秒後に監視を開始
     setTimeout(() => {
         document.addEventListener('click', activeCloseHandler);
     }, 100);
@@ -611,6 +629,7 @@ function closeDropdown() {
     const menu = document.getElementById('dropdown-menu');
     if (menu) {
         menu.style.display = 'none';
+        menu.style.width = ""; // 閉じる時にも幅指定を安全にリセット
     }
     if (activeCloseHandler) {
         document.removeEventListener('click', activeCloseHandler);
@@ -624,99 +643,24 @@ function updateTotalStats() {
     }
 }
 
-// 武器・防具リストについて
+// ページ読み込み完了時：マイ武器・マイ防具ボックスへのイベントリスナー紐付け
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. 武器用・防具用でそれぞれ30枠のデータを用意
-    const weaponSlots = Array.from({ length: 30 }, (_, i) => `${i + 1}`);
-    const armorSlots = Array.from({ length: 30 }, (_, i) => `${i + 1}`);
-
-    // HTML上のドロップダウン要素を取得
-    const dropdownMenu = document.querySelector('.dropdown-menu');
-    const dropdownItems = document.getElementById('dropdown-items');
-
-    // 2. リストを画面に生成して、ドロップダウンを表示する関数（共通化・条件分岐）
-    function openCustomDropdown(type, id, event) {
-        // HTMLの onclick="event.stopPropagation()" と同じ役割をここで確実に果たす
-        if (event) event.stopPropagation();
-
-        // 共通要素の取得
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-        const dropdownItems = document.getElementById('dropdown-items');
-        if (!dropdownMenu || !dropdownItems) return;
-
-        // 一旦リストの中身を空っぽにする
-        dropdownItems.innerHTML = '';
-
-        // ターゲットになるボックス（クリックされた要素）を特定する
-        let clickedBox = null;
-        let targetSlots = [];
-
-        // 🔄 ここで種類（type）に応じてデータと対象のハコを切り替える
-        if (type === 'custom-weapon') {
-            clickedBox = id;
-            targetSlots = weaponSlots;
-        } else if (type === 'custom-armor') {
-            clickedBox = id;
-            targetSlots = armorSlots;
-        } 
-        /* 💡【ここに元の通常リストをドッキングさせます】
-        else if (type === 'weapon') {
-            clickedBox = document.getElementById(`select-weapon-${id}`);
-            targetSlots = 通常の武器データ配列; 
-        } else if (type === 'armor') {
-            clickedBox = document.getElementById(`select-armor-${id}`);
-            targetSlots = 通常の防具データ配列;
-        } else if (type === 'w-ability' || type === 'a-ability') {
-            ...
-        }
-        */
-
-        if (!clickedBox) return;
-
-        // 30個（または通常データ分）の<li>タグを生成して突っ込む
-        targetSlots.forEach(slotName => {
-            const li = document.createElement('li');
-            li.textContent = slotName;
-            
-            li.addEventListener('click', () => {
-                // ボックスの文字を選んだスロット名に書き換える
-                clickedBox.firstChild.textContent = slotName + " ";
-                // メニューを閉じる
-                dropdownMenu.style.display = 'none';
-                dropdownMenu.style.width = "";
-            });
-
-            dropdownItems.appendChild(li);
-        });
-
-        // 3. ドロップダウンの位置をクリックしたボックスのすぐ下に合わせる
-        const rect = clickedBox.getBoundingClientRect();
-        dropdownMenu.style.position = 'absolute';
-        dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
-        dropdownMenu.style.left = `${window.scrollX + rect.left}px`;
-        dropdownMenu.style.width = `${rect.width}px`;
-        
-        // パッと表示する
-        dropdownMenu.style.display = 'block';
-    }
-
-    // 4 ⚔️🛡️ 幻獣1〜4のマイ武器・マイ防具ボックスをクリックしたとき（自動ループ設定）
     for (let i = 1; i <= 4; i++) {
-        // ⚔️ 武器ボタンの設定（iが1〜4に自動で変わります）
+        // ⚔️ マイ武器ボタンへのバインド
         const weaponBox = document.getElementById(`select-custom-weapon-${i}`);
         if (weaponBox) {
             weaponBox.addEventListener('click', (e) => {
-                console.log(`幻獣${i}の武器リスト30枠を生成します`);
-                openCustomDropdown('custom-weapon', e.currentTarget, e); 
+                console.log(`幻獣${i}のマイ武器リスト30枠を開きます`);
+                openDropdown('custom-weapon', i, e); 
             });
         }
 
-        // 🛡️ 防具ボタンの設定（iが1〜4に自動で変わります）
+        // 🛡️ マイ防具ボタンへのバインド
         const armorBox = document.getElementById(`select-custom-armor-${i}`);
         if (armorBox) {
             armorBox.addEventListener('click', (e) => {
-                console.log(`幻獣${i}の防具リスト30枠を生成します`);
-                openCustomDropdown('custom-armor', e.currentTarget, e); 
+                console.log(`幻獣${i}のマイ防具リスト30枠を開きます`);
+                openDropdown('custom-armor', i, e); 
             });
         }
     }
