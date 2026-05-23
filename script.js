@@ -687,6 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const rect = clickedBox.getBoundingClientRect();
         dropdownMenu.style.position = 'absolute';
         dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
+        dropdownMenu.style.width = "auto";
         dropdownMenu.style.left = `${window.scrollX + rect.left}px`;
         const windowWidth = document.documentElement.clientWidth;
         dropdownMenu.style.right = `${windowWidth - (window.scrollX + rect.right)}px`;
