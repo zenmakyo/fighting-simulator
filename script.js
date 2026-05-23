@@ -634,22 +634,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownMenu = document.querySelector('.dropdown-menu');
     const dropdownItems = document.getElementById('dropdown-items');
 
-    // 2. リストを画面に生成して、ドロップダウンを表示する関数
-    function openDropdown(slots, clickedBox) {
+    // 2. リストを画面に生成して、ドロップダウンを表示する関数（共通化・条件分岐）
+    function openDropdown(type, id, event) {
+        // HTMLの onclick="event.stopPropagation()" と同じ役割をここで確実に果たす
+        if (event) event.stopPropagation();
+
+        // 共通要素の取得
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        const dropdownItems = document.getElementById('dropdown-items');
+        if (!dropdownMenu || !dropdownItems) return;
+
         // 一旦リストの中身を空っぽにする
         dropdownItems.innerHTML = '';
 
-        // 30個の<li>タグを生成して突っ込む
-        slots.forEach(slotName => {
+        // ターゲットになるボックス（クリックされた要素）を特定する
+        let clickedBox = null;
+        let targetSlots = [];
+
+        // 🔄 ここで種類（type）に応じてデータと対象のハコを切り替える
+        if (type === 'custom-weapon') {
+            clickedBox = document.getElementById(`select-custom-weapon-${id}`);
+            targetSlots = weaponSlots;
+        } else if (type === 'custom-armor') {
+            clickedBox = document.getElementById(`select-custom-armor-${id}`);
+            targetSlots = armorSlots;
+        } 
+        /* 💡【ここに元の通常リストをドッキングさせます】
+        else if (type === 'weapon') {
+            clickedBox = document.getElementById(`select-weapon-${id}`);
+            targetSlots = 通常の武器データ配列; 
+        } else if (type === 'armor') {
+            clickedBox = document.getElementById(`select-armor-${id}`);
+            targetSlots = 通常の防具データ配列;
+        } else if (type === 'w-ability' || type === 'a-ability') {
+            ...
+        }
+        */
+
+        if (!clickedBox) return;
+
+        // 30個（または通常データ分）の<li>タグを生成して突っ込む
+        targetSlots.forEach(slotName => {
             const li = document.createElement('li');
             li.textContent = slotName;
             
-            // リストの項目をクリックしたとき
             li.addEventListener('click', () => {
                 // ボックスの文字を選んだスロット名に書き換える
-                //（中の▼を消さないように、最初のテキストノードだけを書き換えます）
                 clickedBox.firstChild.textContent = slotName + " ";
-                
                 // メニューを閉じる
                 dropdownMenu.style.display = 'none';
             });
@@ -662,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownMenu.style.position = 'absolute';
         dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
         dropdownMenu.style.left = `${window.scrollX + rect.left}px`;
-        dropdownMenu.style.width = `${rect.width}px`; // 幅もボックスとぴったり合わせる
+        dropdownMenu.style.width = `${rect.width}px`;
         
         // パッと表示する
         dropdownMenu.style.display = 'block';
@@ -672,9 +703,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const weaponBox = document.querySelector('.custom-weapon-box');
     if (weaponBox) {
         weaponBox.addEventListener('click', (e) => {
-            e.stopPropagation(); // クリックが外側に突き抜けるのを防ぐ
             console.log('武器リスト30枠を生成します');
-            openDropdown(weaponSlots, weaponBox);
+            // 引数を他の行に合わせて (種類, ID, イベント) に統一
+            openDropdown('custom-weapon', 1, e); 
         });
     }
 
@@ -682,9 +713,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const armorBox = document.querySelector('.custom-armor-box');
     if (armorBox) {
         armorBox.addEventListener('click', (e) => {
-            e.stopPropagation(); // クリックが外側に突き抜けるのを防ぐ
             console.log('防具リスト30枠を生成します');
-            openDropdown(armorSlots, armorBox);
+            // 引数を他の行に合わせて (種類, ID, イベント) に統一
+            openDropdown('custom-armor', 1, e); 
         });
     }
 
