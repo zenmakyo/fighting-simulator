@@ -651,7 +651,7 @@ h1 {
 }
 
 .my-weapon-container .input-label {
-    background-color: #444444;
+    background-color: #d3381c;
     color: #ffffff;
     border-right: 2px solid #d3381c;
     font-weight: bold;
@@ -667,7 +667,7 @@ h1 {
 .my-armor-container .input-label {
     background-color: #5a79ba;
     color: #ffffff;
-    border-right: 2px solid #333333;
+    border-right: 2px solid #5a79ba;
     font-weight: bold;
     font-size: 14px;
     display: flex;
