@@ -626,3 +626,78 @@ h1 {
     font-family: monospace;
     border: none; /* 枠線を消去 */
 }
+
+/* ==========================================================================
+   追加：マイ武器・マイ防具 カスタム装備機能の専用スタイル
+   ========================================================================== */
+
+/* --- 1. マイ武器・マイ防具の選択行 --- */
+.my-weapon-container,
+.my-armor-container {
+    /* 必要に応じて既存のsub-rowと見た目を変えたい場合はここに記述 */
+}
+
+/* マイ装備のプルダウンボックス（後からデザイン変更しやすいよう個別に指定可能） */
+.custom-weapon-box,
+.custom-armor-box {
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+/* --- 2. 管理ボタン行（保存・上書き） --- */
+/* 左側のラベル文字を無くしたため、横幅いっぱいに広げる */
+.weapon-management-row,
+.my-armor-manage-container {
+    width: 100%;
+    display: block; /* 確実に横幅一杯に使う */
+}
+
+/* ボタンを2つ均等に横並びにするためのコンテナ */
+.weapon-save-box,
+.my-armor-save-row {
+    display: flex;
+    gap: 8px;       /* ボタンとボタンの間の隙間 */
+    width: 100%;    /* 行全体の幅いっぱいに広げる */
+    box-sizing: border-box;
+}
+
+/* 保存・上書きボタン自体のデザイン */
+.weapon-save-btn,
+.weapon-overwrite-btn,
+.my-armor-btn {
+    flex: 1;            /* 2つのボタンを50%ずつ、均等な幅にする */
+    width: 100%;        /* 親要素に対して一杯に広げる */
+    padding: 8px 0;     /* ボタンの上下の押しやすさ（高さ）の調整 */
+    font-size: 14px;    /* 文字サイズ */
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px; /* 角丸の調整 */
+    white-space: nowrap;/* ボタン内の文字を改行させない */
+}
+
+/* 武器用のボタン色（後から個別で変えられるように分離） */
+.weapon-save-btn {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #444;
+}
+.weapon-overwrite-btn {
+    background-color: #666;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+/* 防具用のボタン色（後から個別で変えられるように分離） */
+.my-armor-btn {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+/* ボタンにマウスを乗せた時（ホバー時）の色の変化 */
+.weapon-save-btn:hover,
+.weapon-overwrite-btn:hover,
+.my-armor-btn:hover {
+    filter: brightness(0.8); /* 少し暗くする（全ボタン共通） */
+}
