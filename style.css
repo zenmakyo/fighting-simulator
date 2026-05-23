@@ -673,6 +673,7 @@ h1 {
     align-items: center;
     height: 100%;
     border: none;
+    margin-right: 0 !important;
 }
 
 .custom-weapon-box::after,
