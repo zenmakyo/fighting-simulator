@@ -733,7 +733,7 @@ h1 {
     font-size: 14px;    /* 文字サイズ */
     font-weight: bold;
     cursor: pointer;
-    border-radius: 6px; /* 角丸の調整 */
+    border-radius: 24px; /* 角丸の調整 */
     white-space: nowrap;/* ボタン内の文字を改行させない */
 }
 
