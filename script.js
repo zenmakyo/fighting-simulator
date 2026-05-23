@@ -700,23 +700,24 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownMenu.style.display = 'block';
     }
 
-    // 4. ⚔️ マイ武器ボックスをクリックしたとき
-    const weaponBox = document.querySelector('.custom-weapon-box');
-    if (weaponBox) {
-        weaponBox.addEventListener('click', (e) => {
-            console.log('武器リスト30枠を生成します');
-            // 引数を他の行に合わせて (種類, ID, イベント) に統一
-            openCustomDropdown('custom-weapon', e.currentTarget, e); 
-        });
-    }
+    // 4 ⚔️🛡️ 幻獣1〜4のマイ武器・マイ防具ボックスをクリックしたとき（自動ループ設定）
+    for (let i = 1; i <= 4; i++) {
+        // ⚔️ 武器ボタンの設定（iが1〜4に自動で変わります）
+        const weaponBox = document.getElementById(`select-custom-weapon-${i}`);
+        if (weaponBox) {
+            weaponBox.addEventListener('click', (e) => {
+                console.log(`幻獣${i}の武器リスト30枠を生成します`);
+                openCustomDropdown('custom-weapon', e.currentTarget, e); 
+            });
+        }
 
-    // 5. 🛡️ マイ防具ボックスをクリックしたとき
-    const armorBox = document.querySelector('.custom-armor-box');
-    if (armorBox) {
-        armorBox.addEventListener('click', (e) => {
-            console.log('防具リスト30枠を生成します');
-            // 引数を他の行に合わせて (種類, ID, イベント) に統一
-            openCustomDropdown('custom-armor', e.currentTarget, e); 
-        });
+        // 🛡️ 防具ボタンの設定（iが1〜4に自動で変わります）
+        const armorBox = document.getElementById(`select-custom-armor-${i}`);
+        if (armorBox) {
+            armorBox.addEventListener('click', (e) => {
+                console.log(`幻獣${i}の防具リスト30枠を生成します`);
+                openCustomDropdown('custom-armor', e.currentTarget, e); 
+            });
+        }
     }
 });
