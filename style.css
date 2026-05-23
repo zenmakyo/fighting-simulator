@@ -632,8 +632,7 @@ h1 {
    ========================================================================== */
 
 /* --- 1. マイ武器・マイ防具の選択行 --- */
-.my-weapon-container,
-.my-armor-container {
+.my-weapon-container {
     height: 36px;
     display: flex;
     align-items: stretch;
@@ -642,9 +641,31 @@ h1 {
     box-sizing: border-box;
 }
 
-.my-weapon-container .input-label,
-.my-armor-container .input-label {
+.my-armor-container {
+    height: 36px;
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #5a79ba;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+
+.my-weapon-container .input-label {
     background-color: #444444;
+    color: #ffffff;
+    border-right: 2px solid #d3381c;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.my-armor-container .input-label {
+    background-color: #5a79ba;
     color: #ffffff;
     border-right: 2px solid #333333;
     font-weight: bold;
