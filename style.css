@@ -632,6 +632,13 @@ h1 {
    ========================================================================== */
 
 /* --- 1. マイ武器・マイ防具の選択行 --- */
+.my-weapon-container,
+.my-armor-container {
+    height: 36px;
+    display: flex;
+    align-items: stretch;
+}
+
 .my-weapon-container .input-label,
 .my-armor-container .input-label {
     background-color: #444444;
@@ -644,7 +651,7 @@ h1 {
     justify-content: center;
     box-sizing: border-box;
     border-top-left-radius: 6px;
-    border-botom-left-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 
 /* マイ装備のプルダウンボックス（後からデザイン変更しやすいよう個別に指定可能） */
@@ -658,12 +665,15 @@ h1 {
     padding: 0 12px 0 18px;
     border: 1px solid #ccc;
     border-left: none;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
 }
 
 .custom-weapon-box::after,
@@ -678,6 +688,7 @@ h1 {
 .weapon-management-row,
 .armor-management-row {
     width: 80%;
+    margin: 0 auto;
     display: block; /* 確実に横幅一杯に使う */
 }
 
@@ -727,12 +738,4 @@ h1 {
     background-color: #555;
     color: #fff;
     border: 1px solid #444;
-}
-
-/* ボタンにマウスを乗せた時（ホバー時）の色の変化 */
-.weapon-save-btn:hover,
-.weapon-overwrite-btn:hover,
-.armor-save-btn:hover,
-.armor-overwrite-btn:hover {
-    filter: brightness(0.8); /* 少し暗くする（全ボタン共通） */
 }
