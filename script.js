@@ -688,9 +688,8 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownMenu.style.position = 'absolute';
         dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
         dropdownMenu.style.left = `${window.scrollX + rect.left}px`;
-        
-        // 🔄【修正】画面端まで伸びるのを防ぐため、開く瞬間にボタンの幅にカチッと固定
-        dropdownMenu.style.width = `${rect.width}px`;
+        const windowWidth = document.documentElement.clientWidth;
+        dropdownMenu.style.right = `${windowWidth - (window.scrollX + rect.right)}px`;
         
         // パッと表示する
         dropdownMenu.style.display = 'block';
