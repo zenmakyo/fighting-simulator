@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownItems = document.getElementById('dropdown-items');
 
     // 2. リストを画面に生成して、ドロップダウンを表示する関数（共通化・条件分岐）
-    function openDropdown(type, id, event) {
+    function openCustomDropdown(type, id, event) {
         // HTMLの onclick="event.stopPropagation()" と同じ役割をここで確実に果たす
         if (event) event.stopPropagation();
 
@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
         weaponBox.addEventListener('click', (e) => {
             console.log('武器リスト30枠を生成します');
             // 引数を他の行に合わせて (種類, ID, イベント) に統一
-            openDropdown('custom-weapon', 1, e); 
+            openCustomDropdown('custom-weapon', 1, e); 
         });
     }
 
@@ -715,14 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
         armorBox.addEventListener('click', (e) => {
             console.log('防具リスト30枠を生成します');
             // 引数を他の行に合わせて (種類, ID, イベント) に統一
-            openDropdown('custom-armor', 1, e); 
+            openCustomDropdown('custom-armor', 1, e); 
         });
     }
-
-    // 6. メニューの外側をクリックしたら自動で閉じる設定
-    document.addEventListener('click', (e) => {
-        if (dropdownMenu && !dropdownMenu.contains(e.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
 });
