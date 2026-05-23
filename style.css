@@ -632,32 +632,60 @@ h1 {
    ========================================================================== */
 
 /* --- 1. マイ武器・マイ防具の選択行 --- */
-.my-weapon-container,
-.my-armor-container {
-    /* 必要に応じて既存のsub-rowと見た目を変えたい場合はここに記述 */
+.my-weapon-container .input-label,
+.my-armor-container .input-label {
+    background-color: #444444;
+    color: #ffffff;
+    border-right: 2px solid #333333;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-top-left-radius: 6px;
+    border-botom-left-radius: 6px;
 }
 
 /* マイ装備のプルダウンボックス（後からデザイン変更しやすいよう個別に指定可能） */
 .custom-weapon-box,
 .custom-armor-box {
+    flex: 1;
     cursor: pointer;
     background-color: #fff;
+    color: #333333;
+    font-weight: bold;
+    padding: 0 12px 0 18px;
     border: 1px solid #ccc;
+    border-left: none;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-weapon-box::after,
+.custom-armor-box::after {
+    content: "▼";
+    font-size: 10px;
+    color: #888888;
 }
 
 /* --- 2. 管理ボタン行（保存・上書き） --- */
 /* 左側のラベル文字を無くしたため、横幅いっぱいに広げる */
 .weapon-management-row,
-.my-armor-manage-container {
-    width: 100%;
+.armor-management-row {
+    width: 80%;
     display: block; /* 確実に横幅一杯に使う */
 }
 
 /* ボタンを2つ均等に横並びにするためのコンテナ */
 .weapon-save-box,
-.my-armor-save-row {
+.armor-save-row {
     display: flex;
-    gap: 8px;       /* ボタンとボタンの間の隙間 */
+    gap: 10px;       /* ボタンとボタンの間の隙間 */
     width: 100%;    /* 行全体の幅いっぱいに広げる */
     box-sizing: border-box;
 }
@@ -665,7 +693,8 @@ h1 {
 /* 保存・上書きボタン自体のデザイン */
 .weapon-save-btn,
 .weapon-overwrite-btn,
-.my-armor-btn {
+.armor-save-btn,
+.armor-overwrite-btn {
     flex: 1;            /* 2つのボタンを50%ずつ、均等な幅にする */
     width: 100%;        /* 親要素に対して一杯に広げる */
     padding: 8px 0;     /* ボタンの上下の押しやすさ（高さ）の調整 */
@@ -689,7 +718,12 @@ h1 {
 }
 
 /* 防具用のボタン色（後から個別で変えられるように分離） */
-.my-armor-btn {
+.armor-save-btn {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #444;
+}
+.armor-overwrite-btn {
     background-color: #555;
     color: #fff;
     border: 1px solid #444;
@@ -698,6 +732,7 @@ h1 {
 /* ボタンにマウスを乗せた時（ホバー時）の色の変化 */
 .weapon-save-btn:hover,
 .weapon-overwrite-btn:hover,
-.my-armor-btn:hover {
+.armor-save-btn:hover,
+.armor-overwrite-btn:hover {
     filter: brightness(0.8); /* 少し暗くする（全ボタン共通） */
 }
