@@ -6,7 +6,7 @@ function toggleSearchMenu() {
     const menu = document.getElementById('targetMenu');
     const input = document.getElementById('targetInput');
     
-    if (menu.style.display === 'block') {a
+    if (menu.style.display === 'block') {
         menu.style.display = 'none';
     } else {
         menu.style.display = 'block';
