@@ -630,28 +630,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const weaponSlots = Array.from({ length: 30 }, (_, i) => `${i + 1}`);
     const armorSlots = Array.from({ length: 30 }, (_, i) => `${i + 1}`);
 
-    // HTML上のドロップダウン要素を取得
-    const dropdownMenu = document.querySelector('.dropdown-menu');
-    const dropdownItems = document.getElementById('dropdown-items');
+    // マイ装備専用の外側クリック監視役
+    let customCloseHandler = null;
 
-    // 2. リストを画面に生成して、ドロップダウンを表示する関数（共通化・条件分岐）
+    // 2. リストを画面に生成して、ドロップダウンを表示する関数
     function openCustomDropdown(type, id, event) {
-        // HTMLの onclick="event.stopPropagation()" と同じ役割をここで確実に果たす
         if (event) event.stopPropagation();
 
-        // 共通要素の取得
-        const dropdownMenu = document.querySelector('.dropdown-menu');
+        // 🔄【修正】クラス名ではなく、確実なIDでメニューを取得
+        const dropdownMenu = document.getElementById('dropdown-menu');
         const dropdownItems = document.getElementById('dropdown-items');
         if (!dropdownMenu || !dropdownItems) return;
+
+        // 古いカスタム用の監視役がいれば、一旦解除（重複防止）
+        if (customCloseHandler) {
+            document.removeEventListener('click', customCloseHandler);
+        }
 
         // 一旦リストの中身を空っぽにする
         dropdownItems.innerHTML = '';
 
-        // ターゲットになるボックス（クリックされた要素）を特定する
         let clickedBox = null;
         let targetSlots = [];
 
-        // 🔄 ここで種類（type）に応じてデータと対象のハコを切り替える
         if (type === 'custom-weapon') {
             clickedBox = id;
             targetSlots = weaponSlots;
@@ -659,65 +660,75 @@ document.addEventListener('DOMContentLoaded', () => {
             clickedBox = id;
             targetSlots = armorSlots;
         } 
-        /* 💡【ここに元の通常リストをドッキングさせます】
-        else if (type === 'weapon') {
-            clickedBox = document.getElementById(`select-weapon-${id}`);
-            targetSlots = 通常の武器データ配列; 
-        } else if (type === 'armor') {
-            clickedBox = document.getElementById(`select-armor-${id}`);
-            targetSlots = 通常の防具データ配列;
-        } else if (type === 'w-ability' || type === 'a-ability') {
-            ...
-        }
-        */
 
         if (!clickedBox) return;
 
-        // 30個（または通常データ分）の<li>タグを生成して突っ込む
+        // 30個の<li>タグを生成して突っ込む
         targetSlots.forEach(slotName => {
             const li = document.createElement('li');
             li.textContent = slotName;
             
             li.addEventListener('click', () => {
-                // ボックスの文字を選んだスロット名に書き換える
                 clickedBox.firstChild.textContent = slotName + " ";
-                // メニューを閉じる
+                
+                // 閉じる時に幅をしっかりリセット
                 dropdownMenu.style.display = 'none';
                 dropdownMenu.style.width = "";
+                
+                // 選択して閉じたので、監視役を解除
+                document.removeEventListener('click', customCloseHandler);
+                customCloseHandler = null;
             });
 
             dropdownItems.appendChild(li);
         });
 
-        // 3. ドロップダウンの位置をクリックしたボックスのすぐ下に合わせる
+        // 3. ドロップダウンの位置と「横幅」の制御
         const rect = clickedBox.getBoundingClientRect();
         dropdownMenu.style.position = 'absolute';
         dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
         dropdownMenu.style.left = `${window.scrollX + rect.left}px`;
+        
+        // 🔄【修正】画面端まで伸びるのを防ぐため、開く瞬間にボタンの幅にカチッと固定
         dropdownMenu.style.width = `${rect.width}px`;
         
         // パッと表示する
         dropdownMenu.style.display = 'block';
+
+        // 🔄【修正】マイ装備専用の「外側クリック監視役」をここでセット
+        customCloseHandler = (e) => {
+            // メニュー自体、またはクリックしたボタン以外を押した場合（外側クリック）
+            if (!dropdownMenu.contains(e.target) && !clickedBox.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+                dropdownMenu.style.width = ""; // ★ここで確実に幅を消し去る！
+                
+                // 用が済んだので自分（監視役）を消す
+                document.removeEventListener('click', customCloseHandler);
+                customCloseHandler = null;
+            }
+        };
+
+        // 誤作動防止のため、ほんの少しだけ遅らせて外側クリックの監視を開始
+        setTimeout(() => {
+            document.addEventListener('click', customCloseHandler);
+        }, 50);
     }
 
     // 4 ⚔️🛡️ 幻獣1〜4のマイ武器・マイ防具ボックスをクリックしたとき（自動ループ設定）
     for (let i = 1; i <= 4; i++) {
-        // ⚔️ 武器ボタンの設定（iが1〜4に自動で変わります）
         const weaponBox = document.getElementById(`select-custom-weapon-${i}`);
         if (weaponBox) {
             weaponBox.addEventListener('click', (e) => {
-                console.log(`幻獣${i}の武器リスト30枠を生成します`);
                 openCustomDropdown('custom-weapon', e.currentTarget, e); 
             });
         }
 
-        // 🛡️ 防具ボタンの設定（iが1〜4に自動で変わります）
         const armorBox = document.getElementById(`select-custom-armor-${i}`);
         if (armorBox) {
             armorBox.addEventListener('click', (e) => {
-                console.log(`幻獣${i}の防具リスト30枠を生成します`);
                 openCustomDropdown('custom-armor', e.currentTarget, e); 
             });
         }
     }
+});
 });
