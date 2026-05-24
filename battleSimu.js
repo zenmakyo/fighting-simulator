@@ -2,7 +2,10 @@
  * 画面から戦闘に必要な全データを読み取る
  */
 function fetchBattleContext() {
-    if (!document.getElementById("targetSelectBtn")) {
+    const targetBtn = document.getElementById("targetSelectBtn");
+
+    // 🚨 ボタンがない、またはボタンの文字がデフォルトのままなら即終了
+    if (!targetBtn || targetBtn.textContent.trim() === "討伐対象を選択してください") {
         alert("討伐対象を選択してください！");
         return null;
     }
