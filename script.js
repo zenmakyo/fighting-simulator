@@ -473,30 +473,40 @@ function handleOverwrite(unitNum) {
 }
 
 /**
- * すべてのリスト表示（武器・防具・保存・読込）を一括管理する
+ * 幻獣の読み込み（ロード）画面を開く関数
+ * HTMLの onclick="openLoadList(1)" から呼び出され、共通ドロップダウンへ繋ぎます
+ */
+function openLoadList(num) {
+    const targetElement = document.getElementById(`display-name-${num}`).parentElement;
+    const mockEvent = {
+        currentTarget: targetElement
+    };
+    openDropdown('load', num, mockEvent);
+}
+
+/**
+ * すべてのリスト表示（武器・防具・読込）を一括管理する
  */
 function openDropdown(type, num, event) {
     const menu = document.getElementById('dropdown-menu');
     const list = document.getElementById('dropdown-items');
     const searchInput = document.getElementById('dropdown-search');
 
-    // 【重要】これまでの検索命令を一旦リセット（これが混線の解決策）
+    // 【重要】これまでの検索命令を一旦リセット
     if (activeCloseHandler) document.removeEventListener('click', activeCloseHandler);
     searchInput.oninput = null; 
 
     // --- A. 表示するデータの仕分け ---
     let listData = [];
     let showSearch = true; 
-    let isSaveModal = false;
 
     if (type === 'weapon') listData = weaponList;
     else if (type === 'armor') listData = armorList;
     else if (type === 'w-ability') listData = weaponAbilityList;
     else if (type === 'a-ability') listData = armorAbilityList;
-    else if (type === 'save' || type === 'load') {
-        // 保存・読込用のデータ作成
-        isSaveModal = (type === 'save');
-        showSearch = (type === 'load'); // 保存時は検索不要、読込時は検索あり
+    else if (type === 'load') {
+        // 保存（save）は専用モーダルへ移行したため、純粋に読み込み（load）のデータ作成のみを行う
+        showSearch = true; 
         for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
             const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${i}`));
             listData.push({ 
@@ -508,17 +518,11 @@ function openDropdown(type, num, event) {
     }
 
     // --- B. CSS表示の切り替え ---
-    if (isSaveModal) {
-        menu.classList.add('save-modal-mode'); // 中央表示
-        menu.style.display = 'flex';
-        menu.style.top = ""; menu.style.left = "";
-    } else {
-        menu.classList.remove('save-modal-mode'); // ボタンの横に表示
-        menu.style.display = 'block';
-        const rect = event.currentTarget.getBoundingClientRect();
-        menu.style.top = `${rect.bottom + window.scrollY}px`;
-        menu.style.left = `${rect.left + window.scrollX}px`;
-    }
+    menu.classList.remove('save-modal-mode'); // ロード画面はボタンの横に表示
+    menu.style.display = 'block';
+    const rect = event.currentTarget.getBoundingClientRect();
+    menu.style.top = `${rect.bottom + window.scrollY}px`;
+    menu.style.left = `${rect.left + window.scrollX}px`;
 
     // --- C. リスト描画（検索するたびにここが動く） ---
     const render = (query = "") => {
@@ -530,11 +534,12 @@ function openDropdown(type, num, event) {
             li.textContent = item.name;
             li.onclick = (e) => {
                 e.stopPropagation();
-                // typeによってクリック時の動作を変える
-                if (type === 'save') {
-                    savePhantomData(num, item.slot);
-                } else if (type === 'load') {
-                    loadPhantomData(num, item.slot);
+                
+                if (type === 'load') {
+                    // ロード処理（前半のJSにある既存のloadPhantomDataを呼び出す）
+                    if (typeof loadPhantomData === 'function') {
+                        loadPhantomData(num, item.slot);
+                    }
                 } else {
                     const idMap = { 'weapon':`select-weapon-${num}`, 'armor':`select-armor-${num}`, 'w-ability':`select-w-abi-${num}`, 'a-ability':`select-a-abi-${num}` };
                     document.getElementById(idMap[type]).textContent = item.name;
@@ -549,28 +554,19 @@ function openDropdown(type, num, event) {
     // --- D. 検索窓の再設定 ---
     searchInput.style.display = showSearch ? 'block' : 'none';
     searchInput.value = '';
-    searchInput.oninput = (e) => render(e.target.value); // 「今」のリストに対して検索をかける
+    searchInput.oninput = (e) => render(e.target.value); 
 
     render(); // 初期表示
     list.scrollTop = 0;
-    // if (showSearch) setTimeout(() => searchInput.focus(), 10);
 
-    // 外側クリックで閉じる
-    // 1. まず、今押したボタンを変数「currentBtn」にしっかり覚えさせる
+    // 外側クリックで閉じる処理
     const currentBtn = event.currentTarget;
-
-    // 2. 外側クリックを判定する関数
     activeCloseHandler = (e) => {
-        // メニューの中をクリックしたなら閉じない
         if (menu.contains(e.target)) return;
-        // 今押したボタン自体をクリックしたなら閉じない
         if (currentBtn && currentBtn.contains(e.target)) return;
-
-        // それ以外（外側）なら閉じる！
         closeDropdown();
     };
 
-    // 3. 0.1秒後に監視を開始
     setTimeout(() => {
         document.addEventListener('click', activeCloseHandler);
     }, 100);
