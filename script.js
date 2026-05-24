@@ -413,7 +413,7 @@ function openSaveTargetList(num) {
         li.textContent = savedData ? `${i}: ${savedData.name}` : `${i}: ---`;
         
         // マイ武器保存と同じデザインスタイルを適用
-        li.style.padding = "10px";
+        li.style.padding = "18px 10px";
         li.style.cursor = "pointer";
         li.style.borderBottom = "1px solid #eee";
         li.style.color = "#333";
