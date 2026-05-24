@@ -771,8 +771,34 @@ function openCustomWeaponSave(num) {
         li.style.borderBottom = "1px solid #eee";
 
         // リスト（番号）をクリックしたときの「実際の保存処理」は、次のステップでここに書きます
+        // リスト（番号）をクリックしたときの実際の保存処理（自動命名版）
         li.onclick = () => {
-            alert(`スロット ${i} が押されました。ここに保存する処理を次に入れます。`);
+            let typedName = nameInput.value.trim();
+
+            // 画面から保存する武器情報（武器名、付与アビ名、強化値）を取得
+            const currentWAbi = document.getElementById(`select-w-abi-${num}`).textContent.trim();
+            const currentWPlus = document.getElementById(`plus-weapon-${num}`).value;
+
+            // 1. 名前が入力されていない（空っぽ）なら、自動で「武器名 付与アビ名 強化値」にする
+            if (!typedName) {
+                // 強化値は見映えに合わせて「+20」などの表記にする（もし画面のvalueに+が付いていなければ `+${currentWPlus}` に調整してください）
+                typedName = `${currentWeapon} ${currentWAbi} +${currentWPlus}`;
+            }
+            
+            // 2. localStorageに保存するデータ構造を作成
+            const weaponData = {
+                saveName: typedName,       // 決定した保存名
+                weaponName: currentWeapon, // 武器名
+                wAbi: currentWAbi,         // 付与アビ名
+                wPlus: currentWPlus        // 強化値の数値
+            };
+
+            // 3. localStorage に「customWeapon_番号」という名前で保存
+            localStorage.setItem(`customWeapon_${i}`, JSON.stringify(weaponData));
+            
+            // 4. 保存できたことを知らせて、画面を閉じる
+            alert(`スロット ${i} に「${typedName}」を保存しました。`);
+            closeCustomWeaponSaveModal();
         };
 
         // 箱の中にリストをどんどん追加していく
