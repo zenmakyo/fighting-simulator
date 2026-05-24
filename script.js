@@ -78,6 +78,7 @@ function applyEnemyStats(data) {
     
     if(data.custom){
          nameInput.value = "";
+         document.querySelector(".target-toggle-btn").click();
     } else {
          const cleanName = data.name.replace(/^Lv\.[^:]+:/, "");
          nameInput.value = cleanName;
