@@ -547,32 +547,6 @@ h1 {
     background-color: #f0f7ff;
 }
 
-/* 保存スロット選択時（中央・暗転） */
-.save-modal-mode {
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 90% !important;
-    max-width: 500px !important;
-    height: 70vh !important; /* 箱の高さを固定 */
-    z-index: 10000 !important;
-    background-color: white !important;
-    outline: 100vmax solid rgba(0, 0, 0, 0.7) !important;
-    pointer-events: all !important;
-    /* display: flex は JS で制御するのでここでは書かない */
-}
-
-/* リストの中身：親がflexの時だけこれが効く */
-.save-modal-mode #dropdown-items {
-    flex: 1 !important;           /* 余ったスペースを全部リストにする */
-    overflow-y: auto !important;    /* はみ出た分をスクロールさせる */
-    display: block !important;
-    height: auto !important;
-    max-height: none !important;
-    border-top: 1px solid #eee;
-}
-
 /* 参加幻獣について */
 .participant-selector {
     display: flex;
