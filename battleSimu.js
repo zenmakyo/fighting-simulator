@@ -2,6 +2,10 @@
  * 画面から戦闘に必要な全データを読み取る
  */
 function fetchBattleContext() {
+    if (!document.getElementById("targetSelectBtn")) {
+        alert("討伐対象を選択してください！");
+        return null;
+    }
     // 1. 敵データの読み取り
     const enemy = {
         name: document.getElementById("targetSelectBtn").textContent.trim(),
