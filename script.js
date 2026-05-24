@@ -663,25 +663,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!clickedBox) return;
 
-        // 30個の<li>タグを生成して突っ込む
-        targetSlots.forEach(slotName => {
+        // 💡 幻獣の番号 (1〜4) を取得
+        const num = clickedBox.id.split('-').pop();
+
+        // 1〜30のスロットをループしてマイ武器リストを生成
+        for (let i = 1; i <= 30; i++) {
+            const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
             const li = document.createElement('li');
-            li.textContent = slotName;
             
+            // 保存データがあればその「登録名」、なければ「i: ---」を表示
+            li.textContent = savedData ? savedData.saveName : `${i}: ---`;
+            
+            // リスト内のアイテムがクリックされたときの処理
             li.addEventListener('click', () => {
-                clickedBox.firstChild.textContent = slotName + " ";
+                if (savedData) {
+                    // 1. マイ武器のボタンに、保存されていた「名前」を表示
+                    clickedBox.firstChild.textContent = savedData.saveName + " ";
+                    
+                    // 2. 武器名・付与アビ・強化値の各入力欄・選択肢にデータを反映
+                    document.getElementById(`select-weapon-${num}`).textContent = savedData.weaponName;
+                    document.getElementById(`select-w-abi-${num}`).textContent = savedData.wAbi;
+                    document.getElementById(`plus-weapon-${num}`).value = savedData.wPlus;
+                    
+                    // 3. データを反映した群のステータス計算関数を走らせて合計値を更新
+                    updatePhantomStats(num);
+                } else {
+                    // データがない空スロットを押した場合は、番号だけ表示
+                    clickedBox.firstChild.textContent = i + " ";
+                }
                 
-                // 閉じる時に幅をしっかりリセット
+                // 閉じる処理
                 dropdownMenu.style.display = 'none';
                 dropdownMenu.style.width = "";
-                
-                // 選択して閉じたので、監視役を解除
                 document.removeEventListener('click', customCloseHandler);
                 customCloseHandler = null;
             });
 
             dropdownItems.appendChild(li);
-        });
+        }
 
         // 3. ドロップダウンの位置と「横幅」の制御
         const rect = clickedBox.getBoundingClientRect();
