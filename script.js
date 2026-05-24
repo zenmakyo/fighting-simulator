@@ -731,3 +731,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// マイ武器保存画面を閉じる関数
+function closeCustomWeaponSaveModal() {
+    document.getElementById('custom-weapon-save-modal').style.display = 'none';
+}
+
+/**
+ * マイ武器保存ボタンを押した時に画面を開く関数
+ * @param {number} num - 幻獣の番号 (1〜4)
+ */
+function openCustomWeaponSave(num) {
+    const modal = document.getElementById('custom-weapon-save-modal');
+    const nameInput = document.getElementById('custom-weapon-save-name');
+    const listContainer = document.getElementById('custom-weapon-save-list');
+    
+    // 1. 今画面に入力されている「武器名」を引っ張ってくる
+    const currentWeapon = document.getElementById(`select-weapon-${num}`).textContent.trim();
+    
+    // 2. 名前の入力欄に、最初からその武器名を入れておく（未選択なら空っぽに）
+    nameInput.value = (currentWeapon === "未選択") ? "" : currentWeapon;
+    
+    // 3. リストの中身を一旦きれいにリセットする
+    listContainer.innerHTML = '';
+
+    // 4. ループ処理で1〜30までの保存リスト（ボタン）を画面に作り出す
+    for (let i = 1; i <= 30; i++) {
+        // すでに保存されているデータがあるか確認する（後で使います）
+        const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
+        
+        const li = document.createElement('li');
+        
+        // 【表示テキスト】保存データがあればその名前、なければ「i: ---」にする
+        li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
+        
+        // 見映えの調整（クリックしやすくする）
+        li.style.padding = "10px";
+        li.style.cursor = "pointer";
+        li.style.borderBottom = "1px solid #eee";
+
+        // リスト（番号）をクリックしたときの「実際の保存処理」は、次のステップでここに書きます
+        li.onclick = () => {
+            alert(`スロット ${i} が押されました。ここに保存する処理を次に入れます。`);
+        };
+
+        // 箱の中にリストをどんどん追加していく
+        listContainer.appendChild(li);
+    }
+
+    // 5. 最後に、背景を暗転させてこの画面（モーダル）を「flex」で表示する
+    modal.style.display = 'flex';
+}
