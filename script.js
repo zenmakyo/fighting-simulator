@@ -671,28 +671,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
             const li = document.createElement('li');
             
-            // 【修正】保存済みの場合も「i: 保存名」の形にして、頭の番号が消えないようにする
             li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
             
-            // リスト内のアイテムがクリックされたときの処理
             li.addEventListener('click', () => {
                 if (savedData) {
-                    // 1. マイ武器のボタン（右側の箱）に、保存されていた「名前」を表示（ここは番号なしの名前のみ）
-                    clickedBox.firstChild.textContent = savedData.saveName + " ";
+                    // 【修正】マイ武器のボタン（右側の箱）に、「番号: 保存名」の形で表示する
+                    clickedBox.firstChild.textContent = `${i}: ${savedData.saveName} `;
                     
-                    // 2. 武器名・付与アビ・強化値の各入力欄・選択肢にデータを反映
+                    // 武器名・付与アビ・強化値の各入力欄・選択肢にデータを反映
                     document.getElementById(`select-weapon-${num}`).textContent = savedData.weaponName;
                     document.getElementById(`select-w-abi-${num}`).textContent = savedData.wAbi;
                     document.getElementById(`plus-weapon-${num}`).value = savedData.wPlus;
                     
-                    // 3. データを反映した群のステータス計算関数を走らせて合計値を更新
                     updatePhantomStats(num);
                 } else {
-                    // データがない空スロットを押した場合は、番号だけ表示
                     clickedBox.firstChild.textContent = i + " ";
                 }
                 
-                // 閉じる処理
                 dropdownMenu.style.display = 'none';
                 dropdownMenu.style.width = "";
                 document.removeEventListener('click', customCloseHandler);
@@ -822,77 +817,64 @@ function openCustomWeaponSave(num) {
 }
 
 /**
- * マイ武器の上書きボタンを押した時の処理（名前変更対応版）
+ * マイ武器保存ボタンを押した時に画面を開く関数（アビ名カット版）
  * @param {number} num - 幻獣の番号 (1〜4)
  */
-function handleWeaponOverwrite(num) {
-    // 1. いまマイ武器のボタン（右側の箱）に表示されているテキスト（元の名前）を取得
-    const customWeaponBox = document.getElementById(`select-custom-weapon-${num}`);
-    if (!customWeaponBox) return;
+function openCustomWeaponSave(num) {
+    const modal = document.getElementById('custom-weapon-save-modal');
+    const nameInput = document.getElementById('custom-weapon-save-name');
+    const listContainer = document.getElementById('custom-weapon-save-list');
     
-    const currentDisplayName = customWeaponBox.firstChild.textContent.trim();
-
-    // 2. もし何も選択されていない状態なら上書きさせない
-    if (!currentDisplayName || currentDisplayName === "未選択" || !isNaN(currentDisplayName)) {
-        alert("マイ武器が選択されていないため、上書きできません。");
-        return;
+    // 今画面に入力されている「武器名（アビ名：武器名）」を取得
+    let currentWeapon = document.getElementById(`select-weapon-${num}`).textContent.trim();
+    
+    // 【修正】もし武器名に「:」や「：」が含まれていたら、それより後ろ（純粋な武器名）だけを抜き出す
+    if (currentWeapon.includes(':')) {
+        currentWeapon = currentWeapon.split(':').pop().trim();
+    } else if (currentWeapon.includes('：')) {
+        currentWeapon = currentWeapon.split('：').pop().trim();
     }
+    
+    // 最初はテキストボックスを完全に空っぽにする
+    nameInput.value = "";
+    listContainer.innerHTML = '';
 
-    // 3. localStorage（1〜30）の中から、表示されている「元の名前」と一致するスロットを検索
-    let targetSlotIndex = null;
     for (let i = 1; i <= 30; i++) {
         const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
-        if (savedData && savedData.saveName === currentDisplayName) {
-            targetSlotIndex = i;
-            break;
-        }
+        const li = document.createElement('li');
+        
+        li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
+        
+        li.style.padding = "10px";
+        li.style.cursor = "pointer";
+        li.style.borderBottom = "1px solid #eee";
+
+        li.onclick = () => {
+            let typedName = nameInput.value.trim();
+
+            const currentWAbi = document.getElementById(`select-w-abi-${num}`).textContent.trim();
+            const currentWPlus = document.getElementById(`plus-weapon-${num}`).value;
+
+            // 名前が空っぽのとき、アビ名を除いた「純粋な武器名」を使って自動命名
+            if (!typedName) {
+                typedName = `${currentWeapon} ${currentWAbi} +${currentWPlus}`;
+            }
+            
+            const weaponData = {
+                saveName: typedName,
+                weaponName: document.getElementById(`select-weapon-${num}`).textContent.trim(), // ここは元の「アビ名：武器名」のまま保存（反映時のため）
+                wAbi: currentWAbi,
+                wPlus: currentWPlus
+            };
+
+            localStorage.setItem(`customWeapon_${i}`, JSON.stringify(weaponData));
+            
+            alert(`スロット ${i} に「${typedName}」を保存しました。`);
+            closeCustomWeaponSaveModal();
+        };
+
+        listContainer.appendChild(li);
     }
 
-    // 一致するスロットが見つからなかった場合
-    if (targetSlotIndex === null) {
-        alert("一致する保存データが見つかりませんでした。新しく保存し直してください。");
-        return;
-    }
-
-    // 4. 【追加】画面に文字入力ポップアップを出して、名前を変更できるようにする
-    // 入力欄には最初から「元の名前」が入っています
-    let newSaveName = prompt("保存名を確認・変更してください：", currentDisplayName);
-
-    // キャンセルボタンが押された場合は、上書き処理そのものを中止する
-    if (newSaveName === null) {
-        return; 
-    }
-
-    // 前後の余計な空白をカット
-    newSaveName = newSaveName.trim();
-
-    // もし空欄にされた場合は、元の名前をそのまま使うか、自動命名にする
-    if (!newSaveName) {
-        const currentWeapon = document.getElementById(`select-weapon-${num}`).textContent.trim();
-        const currentWAbi = document.getElementById(`select-w-abi-${num}`).textContent.trim();
-        const currentWPlus = document.getElementById(`plus-weapon-${num}`).value;
-        newSaveName = `${currentWeapon} ${currentWAbi} +${currentWPlus}`; // 空欄なら自動命名
-    }
-
-    // 5. 現在画面に選択されている最新の武器情報を取得
-    const currentWeapon = document.getElementById(`select-weapon-${num}`).textContent.trim();
-    const currentWAbi = document.getElementById(`select-w-abi-${num}`).textContent.trim();
-    const currentWPlus = document.getElementById(`plus-weapon-${num}`).value;
-
-    // 6. 新しい名前と最新の武器データで上書き用データを作成
-    const updatedData = {
-        saveName: newSaveName,       // 変更された（またはそのままの）名前
-        weaponName: currentWeapon,
-        wAbi: currentWAbi,
-        wPlus: currentWPlus
-    };
-
-    // 7. localStorage の同じスロットに上書き保存
-    localStorage.setItem(`customWeapon_${targetSlotIndex}`, JSON.stringify(updatedData));
-
-    // 8. 【追加】右側の箱（マイ武器ボタン）の表示名も、新しい名前に書き換える
-    customWeaponBox.firstChild.textContent = newSaveName + " ";
-
-    // 完了通知
-    alert(`スロット ${targetSlotIndex} を「${newSaveName}」として上書き保存しました。`);
+    modal.style.display = 'flex';
 }
