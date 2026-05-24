@@ -817,7 +817,7 @@ function openCustomWeaponSave(num) {
 }
 
 /**
- * マイ武器保存ボタンを押した時に画面を開く関数（アビ名カット版）
+ * マイ武器保存ボタンを押した時に画面を開く関数（保存時にボタン名反映版）
  * @param {number} num - 幻獣の番号 (1〜4)
  */
 function openCustomWeaponSave(num) {
@@ -828,14 +828,13 @@ function openCustomWeaponSave(num) {
     // 今画面に入力されている「武器名（アビ名：武器名）」を取得
     let currentWeapon = document.getElementById(`select-weapon-${num}`).textContent.trim();
     
-    // 【修正】もし武器名に「:」や「：」が含まれていたら、それより後ろ（純粋な武器名）だけを抜き出す
+    // もし武器名に「:」や「：」が含まれていたら、それより後ろ（純粋な武器名）だけを抜き出す
     if (currentWeapon.includes(':')) {
         currentWeapon = currentWeapon.split(':').pop().trim();
     } else if (currentWeapon.includes('：')) {
         currentWeapon = currentWeapon.split('：').pop().trim();
     }
     
-    // 最初はテキストボックスを完全に空っぽにする
     nameInput.value = "";
     listContainer.innerHTML = '';
 
@@ -862,12 +861,19 @@ function openCustomWeaponSave(num) {
             
             const weaponData = {
                 saveName: typedName,
-                weaponName: document.getElementById(`select-weapon-${num}`).textContent.trim(), // ここは元の「アビ名：武器名」のまま保存（反映時のため）
+                weaponName: document.getElementById(`select-weapon-${num}`).textContent.trim(), // 反映用に元の「アビ名：武器名」で保存
                 wAbi: currentWAbi,
                 wPlus: currentWPlus
             };
 
+            // localStorage に保存
             localStorage.setItem(`customWeapon_${i}`, JSON.stringify(weaponData));
+            
+            // 💡【追加】保存した瞬間に、右側のマイ武器ボタンの表示も「i: 保存名」に書き換える
+            const customWeaponBox = document.getElementById(`select-custom-weapon-${num}`);
+            if (customWeaponBox) {
+                customWeaponBox.firstChild.textContent = `${i}: ${typedName} `;
+            }
             
             alert(`スロット ${i} に「${typedName}」を保存しました。`);
             closeCustomWeaponSaveModal();
