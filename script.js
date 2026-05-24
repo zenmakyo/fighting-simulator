@@ -599,96 +599,95 @@ document.addEventListener('DOMContentLoaded', () => {
     // マイ装備専用の外側クリック監視役
     let customCloseHandler = null;
 
-    // 2. リストを画面に生成して、ドロップダウンを表示する関数
+    // 2. リストを画面に生成して、ドロップダウンを表示する関数（部分一致検索対応版）
     function openCustomDropdown(type, id, event) {
         if (event) event.stopPropagation();
 
         const dropdownMenu = document.getElementById('dropdown-menu');
         const dropdownItems = document.getElementById('dropdown-items');
+        const searchInput = document.getElementById('dropdown-search');
         if (!dropdownMenu || !dropdownItems) return;
 
         if (customCloseHandler) {
             document.removeEventListener('click', customCloseHandler);
         }
 
-        dropdownItems.innerHTML = '';
+        // 検索窓を表示し、中身をリセット
+        if (searchInput) {
+            searchInput.style.display = 'block';
+            searchInput.value = '';
+        }
 
-        let clickedBox = null;
-        let targetSlots = [];
+        const num = id.id.split('-').pop();
 
-        if (type === 'custom-weapon') {
-            clickedBox = id;
-            targetSlots = weaponSlots;
-        } else if (type === 'custom-armor') {
-            clickedBox = id;
-            targetSlots = armorSlots;
-        } 
-
-        if (!clickedBox) return;
-
-        const num = clickedBox.id.split('-').pop();
-
-        // 1〜30のスロットをループしてリストを生成
+        // 1〜30の元データをあらかじめ配列として準備
+        const rawSlots = [];
         for (let i = 1; i <= 30; i++) {
-            const li = document.createElement('li');
-
+            let savedData = null;
             if (type === 'custom-weapon') {
-                // ⚔️ 武器のときの処理（いままで通り）
-                const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
-                li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
-                
-                li.addEventListener('click', () => {
-                    if (savedData) {
-                        clickedBox.firstChild.textContent = `${i}: ${savedData.saveName} `;
-                        document.getElementById(`select-weapon-${num}`).textContent = savedData.weaponName;
-                        document.getElementById(`select-w-abi-${num}`).textContent = savedData.wAbi;
-                        document.getElementById(`plus-weapon-${num}`).value = savedData.wPlus;
-                        updatePhantomStats(num);
-                    } else {
-                        clickedBox.firstChild.textContent = i + " ";
-                    }
-                    closeDropdownMenu();
-                });
-
+                savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
             } else if (type === 'custom-armor') {
-                // 🛡️ 防具のときの処理（新しく追加）
-                const savedData = JSON.parse(localStorage.getItem(`customArmor_${i}`));
-                li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
-                
+                savedData = JSON.parse(localStorage.getItem(`customArmor_${i}`));
+            }
+            rawSlots.push({
+                slot: i,
+                name: savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`,
+                data: savedData
+            });
+        }
+
+        // 🔍 画面にリストを描画する関数（部分一致フィルター付き）
+        const renderCustomList = (query = "") => {
+            dropdownItems.innerHTML = '';
+            
+            rawSlots.filter(item => 
+                item.name.toLowerCase().includes(query.toLowerCase())
+            ).forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
+
                 li.addEventListener('click', () => {
-                    if (savedData) {
-                        // マイ防具のボタンに「番号: 保存名」を表示
-                        clickedBox.firstChild.textContent = `${i}: ${savedData.saveName} `;
-                        
-                        // 防具名・付与アビ・強化値にデータを反映
-                        document.getElementById(`select-armor-${num}`).textContent = savedData.armorName;
-                        document.getElementById(`select-a-abi-${num}`).textContent = savedData.aAbi;
-                        document.getElementById(`plus-armor-${num}`).value = savedData.aPlus;
-                        
-                        // ステータス再計算関数（もしあれば）
+                    if (item.data) {
+                        id.firstChild.textContent = `${item.slot}: ${item.data.saveName} `;
+                        if (type === 'custom-weapon') {
+                            document.getElementById(`select-weapon-${num}`).textContent = item.data.weaponName;
+                            document.getElementById(`select-w-abi-${num}`).textContent = item.data.wAbi;
+                            document.getElementById(`plus-weapon-${num}`).value = item.data.wPlus;
+                        } else if (type === 'custom-armor') {
+                            document.getElementById(`select-armor-${num}`).textContent = item.data.armorName;
+                            document.getElementById(`select-a-abi-${num}`).textContent = item.data.aAbi;
+                            document.getElementById(`plus-armor-${num}`).value = item.data.aPlus;
+                        }
                         if (typeof updatePhantomStats === 'function') {
                             updatePhantomStats(num);
                         }
                     } else {
-                        clickedBox.firstChild.textContent = i + " ";
+                        id.firstChild.textContent = item.slot + " ";
                     }
                     closeDropdownMenu();
                 });
-            }
+                dropdownItems.appendChild(li);
+            });
+        };
 
-            dropdownItems.appendChild(li);
+        // 検索窓に文字が打ち込まれた時の連動設定
+        if (searchInput) {
+            searchInput.oninput = (e) => renderCustomList(e.target.value);
         }
 
-        // 共通のクローズ処理をスッキリさせるための補助関数
         function closeDropdownMenu() {
             dropdownMenu.style.display = 'none';
             dropdownMenu.style.width = "";
             document.removeEventListener('click', customCloseHandler);
             customCloseHandler = null;
+            if (searchInput) searchInput.oninput = null; // 命令をクリア
         }
 
-        // 3. ドロップダウンの位置と「横幅」の制御（以下、いままで通り）
-        const rect = clickedBox.getBoundingClientRect();
+        // 初期描画
+        renderCustomList();
+
+        // ドロップダウンの位置制御
+        const rect = id.getBoundingClientRect();
         dropdownMenu.style.position = 'absolute';
         dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
         dropdownMenu.style.width = "auto";
@@ -699,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownMenu.style.display = 'block';
 
         customCloseHandler = (e) => {
-            if (!dropdownMenu.contains(e.target) && !clickedBox.contains(e.target)) {
+            if (!dropdownMenu.contains(e.target) && !id.contains(e.target)) {
                 closeDropdownMenu();
             }
         };
