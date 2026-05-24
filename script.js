@@ -671,13 +671,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
             const li = document.createElement('li');
             
-            // 保存データがあればその「登録名」、なければ「i: ---」を表示
-            li.textContent = savedData ? savedData.saveName : `${i}: ---`;
+            // 【修正】保存済みの場合も「i: 保存名」の形にして、頭の番号が消えないようにする
+            li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
             
             // リスト内のアイテムがクリックされたときの処理
             li.addEventListener('click', () => {
                 if (savedData) {
-                    // 1. マイ武器のボタンに、保存されていた「名前」を表示
+                    // 1. マイ武器のボタン（右側の箱）に、保存されていた「名前」を表示（ここは番号なしの名前のみ）
                     clickedBox.firstChild.textContent = savedData.saveName + " ";
                     
                     // 2. 武器名・付与アビ・強化値の各入力欄・選択肢にデータを反映
@@ -757,7 +757,7 @@ function closeCustomWeaponSaveModal() {
 }
 
 /**
- * マイ武器保存ボタンを押した時に画面を開く関数
+ * マイ武器保存ボタンを押した時に画面を開く関数（修正版）
  * @param {number} num - 幻獣の番号 (1〜4)
  */
 function openCustomWeaponSave(num) {
@@ -765,65 +765,58 @@ function openCustomWeaponSave(num) {
     const nameInput = document.getElementById('custom-weapon-save-name');
     const listContainer = document.getElementById('custom-weapon-save-list');
     
-    // 1. 今画面に入力されている「武器名」を引っ張ってくる
+    // 今画面に入力されている「武器名」を取得
     const currentWeapon = document.getElementById(`select-weapon-${num}`).textContent.trim();
     
-    // 2. 名前の入力欄に、最初からその武器名を入れておく（未選択なら空っぽに）
-    nameInput.value = (currentWeapon === "未選択") ? "" : currentWeapon;
+    // 【修正】最初は何も自動入力せず、テキストボックスを完全に空っぽにする
+    nameInput.value = "";
     
-    // 3. リストの中身を一旦きれいにリセットする
+    // リストの中身を一旦きれいにリセット
     listContainer.innerHTML = '';
 
-    // 4. ループ処理で1〜30までの保存リスト（ボタン）を画面に作り出す
+    // ループ処理で1〜30までの保存リストを画面に作り出す
     for (let i = 1; i <= 30; i++) {
-        // すでに保存されているデータがあるか確認する（後で使います）
         const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
-        
         const li = document.createElement('li');
         
-        // 【表示テキスト】保存データがあればその名前、なければ「i: ---」にする
+        // 保存データがあればその名前、なければ「i: ---」にする
         li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
         
-        // 見映えの調整（クリックしやすくする）
         li.style.padding = "10px";
         li.style.cursor = "pointer";
         li.style.borderBottom = "1px solid #eee";
 
-        // リスト（番号）をクリックしたときの「実際の保存処理」は、次のステップでここに書きます
-        // リスト（番号）をクリックしたときの実際の保存処理（自動命名版）
+        // リスト（番号）をクリックしたときの実際の保存処理
         li.onclick = () => {
             let typedName = nameInput.value.trim();
 
-            // 画面から保存する武器情報（武器名、付与アビ名、強化値）を取得
+            // 画面から保存する武器情報を取得
             const currentWAbi = document.getElementById(`select-w-abi-${num}`).textContent.trim();
             const currentWPlus = document.getElementById(`plus-weapon-${num}`).value;
 
-            // 1. 名前が入力されていない（空っぽ）なら、自動で「武器名 付与アビ名 強化値」にする
+            // 【修正】名前が空っぽのときだけ、指定の順序（武器名 付与アビ名 +強化値）かつ全角空白で自動命名
             if (!typedName) {
-                // 強化値は見映えに合わせて「+20」などの表記にする（もし画面のvalueに+が付いていなければ `+${currentWPlus}` に調整してください）
                 typedName = `${currentWeapon} ${currentWAbi} +${currentWPlus}`;
             }
             
-            // 2. localStorageに保存するデータ構造を作成
+            // localStorageに保存するデータ構造
             const weaponData = {
-                saveName: typedName,       // 決定した保存名
-                weaponName: currentWeapon, // 武器名
-                wAbi: currentWAbi,         // 付与アビ名
-                wPlus: currentWPlus        // 強化値の数値
+                saveName: typedName,
+                weaponName: currentWeapon,
+                wAbi: currentWAbi,
+                wPlus: currentWPlus
             };
 
-            // 3. localStorage に「customWeapon_番号」という名前で保存
+            // localStorage に保存
             localStorage.setItem(`customWeapon_${i}`, JSON.stringify(weaponData));
             
-            // 4. 保存できたことを知らせて、画面を閉じる
             alert(`スロット ${i} に「${typedName}」を保存しました。`);
             closeCustomWeaponSaveModal();
         };
 
-        // 箱の中にリストをどんどん追加していく
         listContainer.appendChild(li);
     }
 
-    // 5. 最後に、背景を暗転させてこの画面（モーダル）を「flex」で表示する
+    // 背景を暗転させて表示
     modal.style.display = 'flex';
 }
