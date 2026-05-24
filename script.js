@@ -637,17 +637,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function openCustomDropdown(type, id, event) {
         if (event) event.stopPropagation();
 
-        // 🔄【修正】クラス名ではなく、確実なIDでメニューを取得
         const dropdownMenu = document.getElementById('dropdown-menu');
         const dropdownItems = document.getElementById('dropdown-items');
         if (!dropdownMenu || !dropdownItems) return;
 
-        // 古いカスタム用の監視役がいれば、一旦解除（重複防止）
         if (customCloseHandler) {
             document.removeEventListener('click', customCloseHandler);
         }
 
-        // 一旦リストの中身を空っぽにする
         dropdownItems.innerHTML = '';
 
         let clickedBox = null;
@@ -663,41 +660,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!clickedBox) return;
 
-        // 💡 幻獣の番号 (1〜4) を取得
         const num = clickedBox.id.split('-').pop();
 
-        // 1〜30のスロットをループしてマイ武器リストを生成
+        // 1〜30のスロットをループしてリストを生成
         for (let i = 1; i <= 30; i++) {
-            const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
             const li = document.createElement('li');
-            
-            li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
-            
-            li.addEventListener('click', () => {
-                if (savedData) {
-                    // 【修正】マイ武器のボタン（右側の箱）に、「番号: 保存名」の形で表示する
-                    clickedBox.firstChild.textContent = `${i}: ${savedData.saveName} `;
-                    
-                    // 武器名・付与アビ・強化値の各入力欄・選択肢にデータを反映
-                    document.getElementById(`select-weapon-${num}`).textContent = savedData.weaponName;
-                    document.getElementById(`select-w-abi-${num}`).textContent = savedData.wAbi;
-                    document.getElementById(`plus-weapon-${num}`).value = savedData.wPlus;
-                    
-                    updatePhantomStats(num);
-                } else {
-                    clickedBox.firstChild.textContent = i + " ";
-                }
+
+            if (type === 'custom-weapon') {
+                // ⚔️ 武器のときの処理（いままで通り）
+                const savedData = JSON.parse(localStorage.getItem(`customWeapon_${i}`));
+                li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
                 
-                dropdownMenu.style.display = 'none';
-                dropdownMenu.style.width = "";
-                document.removeEventListener('click', customCloseHandler);
-                customCloseHandler = null;
-            });
+                li.addEventListener('click', () => {
+                    if (savedData) {
+                        clickedBox.firstChild.textContent = `${i}: ${savedData.saveName} `;
+                        document.getElementById(`select-weapon-${num}`).textContent = savedData.weaponName;
+                        document.getElementById(`select-w-abi-${num}`).textContent = savedData.wAbi;
+                        document.getElementById(`plus-weapon-${num}`).value = savedData.wPlus;
+                        updatePhantomStats(num);
+                    } else {
+                        clickedBox.firstChild.textContent = i + " ";
+                    }
+                    closeDropdownMenu();
+                });
+
+            } else if (type === 'custom-armor') {
+                // 🛡️ 防具のときの処理（新しく追加）
+                const savedData = JSON.parse(localStorage.getItem(`customArmor_${i}`));
+                li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
+                
+                li.addEventListener('click', () => {
+                    if (savedData) {
+                        // マイ防具のボタンに「番号: 保存名」を表示
+                        clickedBox.firstChild.textContent = `${i}: ${savedData.saveName} `;
+                        
+                        // 防具名・付与アビ・強化値にデータを反映
+                        document.getElementById(`select-armor-${num}`).textContent = savedData.armorName;
+                        document.getElementById(`select-a-abi-${num}`).textContent = savedData.aAbi;
+                        document.getElementById(`plus-armor-${num}`).value = savedData.aPlus;
+                        
+                        // ステータス再計算関数（もしあれば）
+                        if (typeof updatePhantomStats === 'function') {
+                            updatePhantomStats(num);
+                        }
+                    } else {
+                        clickedBox.firstChild.textContent = i + " ";
+                    }
+                    closeDropdownMenu();
+                });
+            }
 
             dropdownItems.appendChild(li);
         }
 
-        // 3. ドロップダウンの位置と「横幅」の制御
+        // 共通のクローズ処理をスッキリさせるための補助関数
+        function closeDropdownMenu() {
+            dropdownMenu.style.display = 'none';
+            dropdownMenu.style.width = "";
+            document.removeEventListener('click', customCloseHandler);
+            customCloseHandler = null;
+        }
+
+        // 3. ドロップダウンの位置と「横幅」の制御（以下、いままで通り）
         const rect = clickedBox.getBoundingClientRect();
         dropdownMenu.style.position = 'absolute';
         dropdownMenu.style.top = `${window.scrollY + rect.bottom}px`;
@@ -706,23 +730,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const windowWidth = document.documentElement.clientWidth;
         dropdownMenu.style.right = `${windowWidth - (window.scrollX + rect.right)}px`;
         
-        // パッと表示する
         dropdownMenu.style.display = 'block';
 
-        // 🔄【修正】マイ装備専用の「外側クリック監視役」をここでセット
         customCloseHandler = (e) => {
-            // メニュー自体、またはクリックしたボタン以外を押した場合（外側クリック）
             if (!dropdownMenu.contains(e.target) && !clickedBox.contains(e.target)) {
-                dropdownMenu.style.display = 'none';
-                dropdownMenu.style.width = ""; // ★ここで確実に幅を消し去る！
-                
-                // 用が済んだので自分（監視役）を消す
-                document.removeEventListener('click', customCloseHandler);
-                customCloseHandler = null;
+                closeDropdownMenu();
             }
         };
 
-        // 誤作動防止のため、ほんの少しだけ遅らせて外側クリックの監視を開始
         setTimeout(() => {
             document.addEventListener('click', customCloseHandler);
         }, 50);
@@ -891,6 +906,155 @@ function handleWeaponOverwrite(num) {
 
     // 右側のマイ武器ボタンの表示名も、最新の「スロット番号: 新しい名前」に書き換える
     customWeaponBox.firstChild.textContent = `${targetSlotIndex}: ${newSaveName} `;
+
+    alert(`スロット ${targetSlotIndex} を「${newSaveName}」として上書き保存しました。`);
+}
+
+// マイ防具保存画面を閉じる関数
+function closeCustomArmorSaveModal() {
+    document.getElementById('custom-armor-save-modal').style.display = 'none';
+}
+
+/**
+ * マイ防具保存ボタンを押した時に画面を開く関数
+ * @param {number} num - 幻獣の番号 (1〜4)
+ */
+function openArmorSaveList(num) {
+    const modal = document.getElementById('custom-armor-save-modal');
+    const nameInput = document.getElementById('custom-armor-save-name');
+    const listContainer = document.getElementById('custom-armor-save-list');
+    
+    // 今画面に入力されている「防具名」を取得
+    let currentArmor = document.getElementById(`select-armor-${num}`).textContent.trim();
+    
+    // もし防具名に「:」や「：」が含まれていたら、それより後ろ（純粋な防具名）だけを抜き出す
+    if (currentArmor.includes(':')) {
+        currentArmor = currentArmor.split(':').pop().trim();
+    } else if (currentArmor.includes('：')) {
+        currentArmor = currentArmor.split('：').pop().trim();
+    }
+    
+    nameInput.value = "";
+    listContainer.innerHTML = '';
+
+    for (let i = 1; i <= 30; i++) {
+        const savedData = JSON.parse(localStorage.getItem(`customArmor_${i}`));
+        const li = document.createElement('li');
+        
+        li.textContent = savedData ? `${i}: ${savedData.saveName}` : `${i}: ---`;
+        
+        li.style.padding = "10px";
+        li.style.cursor = "pointer";
+        li.style.borderBottom = "1px solid #eee";
+
+        li.onclick = () => {
+            let typedName = nameInput.value.trim();
+
+            const currentAAbi = document.getElementById(`select-a-abi-${num}`).textContent.trim();
+            const currentAPlus = document.getElementById(`plus-armor-${num}`).value;
+
+            // 名前が空っぽのとき、アビ名を除いた「純粋な防具名」を使って自動命名
+            if (!typedName) {
+                typedName = `${currentArmor} ${currentAAbi} +${currentAPlus}`;
+            }
+            
+            const armorData = {
+                saveName: typedName,
+                armorName: document.getElementById(`select-armor-${num}`).textContent.trim(), // 反映用に元の「アビ名：防具名」で保存
+                aAbi: currentAAbi,
+                aPlus: currentAPlus
+            };
+
+            // localStorage に「customArmor_番号」で保存
+            localStorage.setItem(`customArmor_${i}`, JSON.stringify(armorData));
+            
+            // 保存した瞬間に、右側のマイ防具ボタンの表示も「i: 保存名」に書き換える
+            const customArmorBox = document.getElementById(`select-custom-armor-${num}`);
+            if (customArmorBox) {
+                customArmorBox.firstChild.textContent = `${i}: ${typedName} `;
+            }
+            
+            alert(`スロット ${i} に「${typedName}」を保存しました。`);
+            closeCustomArmorSaveModal();
+        };
+
+        listContainer.appendChild(li);
+    }
+
+    modal.style.display = 'flex';
+}
+
+/**
+ * マイ防具の上書きボタンを押した時の処理
+ * @param {number} num - 幻獣の番号 (1〜4)
+ */
+function handleArmorOverwrite(num) {
+    const customArmorBox = document.getElementById(`select-custom-armor-${num}`);
+    if (!customArmorBox) return;
+    
+    let currentDisplayName = customArmorBox.firstChild.textContent.trim();
+
+    // 何も選択されていない初期状態なら処理をしない
+    if (!currentDisplayName || currentDisplayName === "未設定" || currentDisplayName === "未選択" || !isNaN(currentDisplayName)) {
+        alert("マイ防具が選択されていないため、上書きできません。");
+        return;
+    }
+
+    // ボタンの表示が「1: 名前」になっているので、コロンより後ろの純粋な「保存名」だけを抜き出す
+    if (currentDisplayName.includes(':')) {
+        currentDisplayName = currentDisplayName.split(':').slice(1).join(':').trim();
+    }
+
+    // localStorage（1〜30）の中から一致するスロットを検索
+    let targetSlotIndex = null;
+    for (let i = 1; i <= 30; i++) {
+        const savedData = JSON.parse(localStorage.getItem(`customArmor_${i}`));
+        if (savedData && savedData.saveName === currentDisplayName) {
+            targetSlotIndex = i;
+            break;
+        }
+    }
+
+    if (targetSlotIndex === null) {
+        alert("一致する保存データが見つかりませんでした。新しく保存し直してください。");
+        return;
+    }
+
+    // 画面に文字入力ポップアップを出して名前を確認・変更できる
+    let newSaveName = prompt("保存名を確認・変更してください：", currentDisplayName);
+
+    // キャンセルされたら処理を中止
+    if (newSaveName === null) return; 
+
+    newSaveName = newSaveName.trim();
+
+    // 空欄にされた場合は自動命名
+    if (!newSaveName) {
+        let pureArmorName = document.getElementById(`select-armor-${num}`).textContent.trim();
+        if (pureArmorName.includes(':')) pureArmorName = pureArmorName.split(':').pop().trim();
+        if (pureArmorName.includes('：')) pureArmorName = pureArmorName.split('：').pop().trim();
+
+        const currentAAbi = document.getElementById(`select-a-abi-${num}`).textContent.trim();
+        const currentAPlus = document.getElementById(`plus-armor-${num}`).value;
+        newSaveName = `${pureArmorName} ${currentAAbi} +${currentAPlus}`;
+    }
+
+    const currentArmor = document.getElementById(`select-armor-${num}`).textContent.trim();
+    const currentAAbi = document.getElementById(`select-a-abi-${num}`).textContent.trim();
+    const currentAPlus = document.getElementById(`plus-armor-${num}`).value;
+
+    const updatedData = {
+        saveName: newSaveName,
+        armorName: currentArmor,
+        aAbi: currentAAbi,
+        aPlus: currentAPlus
+    };
+
+    // localStorage に上書き保存
+    localStorage.setItem(`customArmor_${targetSlotIndex}`, JSON.stringify(updatedData));
+
+    // 右側のマイ防具ボタンの表示名も、最新の「スロット番号: 新しい名前」に書き換える
+    customArmorBox.firstChild.textContent = `${targetSlotIndex}: ${newSaveName} `;
 
     alert(`スロット ${targetSlotIndex} を「${newSaveName}」として上書き保存しました。`);
 }
