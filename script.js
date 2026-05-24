@@ -390,15 +390,49 @@ window.addEventListener('change', (e) => {
 
 const MAX_SAVE_SLOTS = 30;
 
-/**
- * 1. 保存先スロットを選択するメニューを表示
- */
-function openSaveTargetList(num) {
-    openDropdown('save', num, event);
+// 幻獣保存画面を閉じる関数
+function closePhantomSaveModal() {
+    document.getElementById('phantom-save-modal').style.display = 'none';
 }
 
 /**
- * 2. 実際に localStorage へ保存
+ * 1. 保存先スロットを選択するメニューを表示（マイ武器と同じ見た目に大改造）
+ * @param {number} num - 幻獣の番号 (1〜4)
+ */
+function openSaveTargetList(num) {
+    const modal = document.getElementById('phantom-save-modal');
+    const listContainer = document.getElementById('phantom-save-list');
+    
+    listContainer.innerHTML = ''; // リストを一旦空にする
+
+    // 1〜30のスロットをループして生成
+    for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
+        const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${i}`));
+        const li = document.createElement('li');
+        
+        li.textContent = savedData ? `${i}: ${savedData.name}` : `${i}: ---`;
+        
+        // マイ武器保存と同じデザインスタイルを適用
+        li.style.padding = "10px";
+        li.style.cursor = "pointer";
+        li.style.borderBottom = "1px solid #eee";
+        li.style.color = "#333";
+        li.style.textAlign = "left";
+
+        li.onclick = () => {
+            // スロットがクリックされたら、今までの保存関数を実行
+            savePhantomData(num, i);
+            closePhantomSaveModal(); // 保存したらモーダルを閉じる
+        };
+
+        listContainer.appendChild(li);
+    }
+
+    modal.style.display = 'flex'; // モーダルを表示
+}
+
+/**
+ * 2. 実際に localStorage へ保存（アラート後の古いクローズ処理だけ修正）
  */
 let lastUsedSlot = { 1: null, 2: null, 3: null, 4: null };
 function savePhantomData(unitNum, slotIndex) {
@@ -417,75 +451,11 @@ function savePhantomData(unitNum, slotIndex) {
 
     localStorage.setItem(`savedPhantom_${slotIndex}`, JSON.stringify(data));
 
-  const nameInput = document.getElementById(`input-name-${unitNum}`).value || "名称未設定";
+    const nameInput = document.getElementById(`input-name-${unitNum}`).value || "名称未設定";
     document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${nameInput}`;
 
     lastUsedSlot[unitNum] = slotIndex;
     alert(`スロット ${slotIndex} に「${data.name}」を保存しました。`);
-    closeDropdown();
-}
-
-/**
- * 3. 保存済みリストから呼び出しメニューを表示
- */
-function openLoadList(num) {
-    openDropdown('load', num, event);
-}
-
-/**
- * 4. localStorage からデータを読み込んでフォームにセット
- */
-function loadPhantomData(unitNum, slotIndex) {
-    const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
-
-    lastUsedSlot[unitNum] = slotIndex;
-    if (!savedData) {
-        // ★ 空スロット(---)を押した時：すべての項目をデフォルトに戻す
-        
-        // 名称とスロット表示のリセット
-        document.getElementById(`input-name-${unitNum}`).value = "";
-        document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: 未設定`;
-        
-        // ステータスのリセット（0にする）
-        document.getElementById(`base-sta-${unitNum}`).value = "";
-        document.getElementById(`base-atk-${unitNum}`).value = "";
-        document.getElementById(`base-def-${unitNum}`).value = "";
-        document.getElementById(`base-luck-${unitNum}`).value = "";
-
-        // 装備・アビリティの表示を「未選択」に戻す
-        document.getElementById(`select-weapon-${unitNum}`).textContent = "未選択";
-        document.getElementById(`select-w-abi-${unitNum}`).textContent = "未選択";
-        document.getElementById(`select-armor-${unitNum}`).textContent = "未選択";
-        document.getElementById(`select-a-abi-${unitNum}`).textContent = "未選択";
-
-        // 属性をデフォルトに戻す
-        document.getElementById(`input-element-${unitNum}`).value = "獣";
-
-        // 計算を再実行して画面上の合計値もリセット
-        updatePhantomStats(unitNum);
-        closeDropdown();
-        return; 
-    }
-
-    // 保存された値をそれぞれの入力欄やボタンに反映させる
-    document.getElementById(`input-name-${unitNum}`).value = savedData.name;
-    document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${savedData.name}`;
-    document.getElementById(`input-element-${unitNum}`).value = savedData.element;
-    document.getElementById(`base-sta-${unitNum}`).value = savedData.baseSta;
-    document.getElementById(`base-atk-${unitNum}`).value = savedData.baseAtk;
-    document.getElementById(`base-def-${unitNum}`).value = savedData.baseDef;
-    document.getElementById(`base-luck-${unitNum}`).value = savedData.baseLuck;
-
-    // ボタンのテキスト表示も更新
-    document.getElementById(`select-weapon-${unitNum}`).textContent = savedData.weapon;
-    document.getElementById(`select-w-abi-${unitNum}`).textContent = savedData.wAbi;
-    document.getElementById(`select-armor-${unitNum}`).textContent = savedData.armor;
-    document.getElementById(`select-a-abi-${unitNum}`).textContent = savedData.aAbi;
-
-    // 反映後に再計算を行う
-    updatePhantomStats(unitNum);
-    // メニューを閉じる
-    closeDropdown();
 }
 
 /**
