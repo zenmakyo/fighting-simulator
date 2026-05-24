@@ -1024,3 +1024,43 @@ function handleArmorOverwrite(num) {
 
     alert(`スロット ${targetSlotIndex} を「${newSaveName}」として上書き保存しました。`);
 }
+
+/**
+ * リストで選択されたスロットからデータを読み込み、画面に反映する関数
+ * @param {number} unitNum - 幻獣の番号 (1〜4)
+ * @param {number} slotIndex - 保存先のスロット番号 (1〜30)
+ */
+function loadPhantomData(unitNum, slotIndex) {
+    // 1. localStorage から保存されたデータを取得
+    const savedData = JSON.parse(localStorage.getItem(`savedPhantom_${slotIndex}`));
+    
+    if (!savedData) {
+        alert(`スロット ${slotIndex} にはデータがありません。`);
+        return;
+    }
+
+    // 2. 各入力欄にデータを書き戻す
+    document.getElementById(`input-name-${unitNum}`).value = savedData.name || "";
+    document.getElementById(`input-element-${unitNum}`).value = savedData.element || "獣";
+    document.getElementById(`base-sta-${unitNum}`).value = savedData.baseSta || 0;
+    document.getElementById(`base-atk-${unitNum}`).value = savedData.baseAtk || 0;
+    document.getElementById(`base-def-${unitNum}`).value = savedData.baseDef || 0;
+    document.getElementById(`base-luck-${unitNum}`).value = savedData.baseLuck || 0;
+
+    // 3. ボタンの表示テキスト（選択された装備名やアビ名）を書き戻す
+    document.getElementById(`select-weapon-${unitNum}`).textContent = savedData.weapon || "未選択";
+    document.getElementById(`select-w-abi-${unitNum}`).textContent = savedData.wAbi || "未選択";
+    document.getElementById(`select-armor-${unitNum}`).textContent = savedData.armor || "未選択";
+    document.getElementById(`select-a-abi-${unitNum}`).textContent = savedData.aAbi || "未選択";
+
+    // 4. ヘッダーの「未設定▼」の部分の表示も「スロット番号: 名前」に更新
+    document.getElementById(`display-name-${unitNum}`).textContent = `${slotIndex}: ${savedData.name}`;
+
+    // 5. 上書きボタンが使えるように、最後に使ったスロット番号を記憶させる
+    if (typeof lastUsedSlot !== 'undefined') {
+        lastUsedSlot[unitNum] = slotIndex;
+    }
+
+    // 6. データをハメ込んだので、装備込みステータスを自動で再計算する
+    updatePhantomStats(unitNum);
+}
