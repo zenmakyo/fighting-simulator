@@ -9,6 +9,10 @@ function fetchBattleContext() {
         alert("討伐対象を選択してください！");
         return null;
     }
+    if (targetBtn.textContent.trim() === "名前を入力してください") {
+        alert("名前を入力してください！");
+        return null;
+    }
     // 1. 敵データの読み取り
     const enemy = {
         name: document.getElementById("targetSelectBtn").textContent.trim(),
