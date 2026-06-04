@@ -68,6 +68,7 @@ const weaponList = [
     { name: "回復：魔法使いの杖", grade: 3, baseAtk: 40, ability: "回復" },
     { name: "和属：アストラルスフィア", grade: 10, baseAtk: 650, ability: "和属" },
     { name: "和属：陸志の結扇", grade: 9, baseAtk: 180, ability: "和属" },
+    { name: "和属：洒落た管楽器", grade: 7, baseAtk: 120, abulity: "和属" },
     { name: "和属：エルテの宝杖", grade: 6, baseAtk: 110, ability: "和属" },
     { name: "獣属：獅子砕牙", grade: 8, baseAtk: 185, ability: "獣属" },
     { name: "獣属：猛獅子の証", grade: 5, baseAtk: 85, ability: "獣属" },
