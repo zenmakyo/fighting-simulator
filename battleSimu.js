@@ -292,7 +292,6 @@ function resolveAbilities(attacker, enemy, field) {
 function calculateDamage(attacker, enemy, field) {
     // 1. 基礎ダメージ算出
     let damage = attacker.currentAtk - enemy.currentDef;
-    if (damage < 1) damage = 1;
 
     // 2. 属性相性補正
     const elementMod = ELEMENT_MODIFIERS[attacker.element]?.[enemy.element] || 1.0;
@@ -305,6 +304,7 @@ function calculateDamage(attacker, enemy, field) {
     // 4. 101パターンの乱数補正 (1.000 〜 1.100)
     const randomMod = 1.0 + (Math.floor(Math.random() * 101) / 1000);
     damage = Math.ceil(damage * randomMod);
+    if (damage < 1) damage = 1;
 
     // 5. 最終ダメージの適用
     enemy.currentSta -= damage;
