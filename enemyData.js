@@ -5,7 +5,7 @@ const enemyData = [
  // { name: "Lv.77:スロットルン【紫】", attr: "魔", sta: 15000, atk: 300, def: 4000, ability: "高揚"},
  // { name: "Lv.77:スロットルン【赤】", attr: "魔", sta: 12100, atk: 180, def: 3500, ability: "高揚"},
  // { name: "Lv.77:スロットルン", attr: "魔", sta: 10000, atk: 100, def: 3000, ability: "高揚"},
-    { name: "Lv.250:真経津鏡【極】", attr: "無", sta: 231600, atk: 1200, def: 170000, ability: "高揚"},
+    { name: "Lv.250:真経津鏡【極】", attr: "無", sta: 231600, atk: 12000, def: 170000, ability: "高揚"},
     { name: "Lv.200:真経津鏡", attr: "無", sta: 103800, atk: 3500, def: 40000, ability: "粉砕"},
     { name: "カスタム敵", custom: true },
  // { name: "Lv.???:穢心の業・レイラク", attr: "魔", sta: lev => lev * 1080, atk: lev => lev * 64, def: lev => lev * 36, ability: "強打", levUp: true},
