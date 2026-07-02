@@ -24,6 +24,7 @@ const weaponList = [
     { name: "高揚：銀狐の絵筆", grade: 5, baseAtk: 10, ability: "高揚" },
     { name: "盟旗：天響の尖槍", grade: 7, baseAtk: 120, ability: "盟旗" },
     { name: "盟旗：虎将の軍配", grade: 5, baseAtk: 100, ability: "盟旗" },
+    { name: "不乱：神骸脊斧", grade: 10, baseAtk: 670, ability: "不乱" },
     { name: "不乱：天巴之御佩刀", grade: 9, baseAtk: 310, ability: "不乱" },
     { name: "不乱：仁双応", grade: 9, baseAtk: 220, ability: "不乱" },
     { name: "不乱：金狐の絵筆", grade: 5, baseAtk: 10, ability: "不乱" },
