@@ -346,7 +346,7 @@ const enemyData = [
     { name: "Lv.112:蜃", search: "縹色アサリ", attr: "魔", sta: 58962, atk: 1800, def: 5800, ability: "なし"},
     { name: "Lv.112:題名『画仙』", attr: "霊", sta: 65638, atk: 4200, def: 2200, ability: "強打"},
     { name: "Lv.111:ペインティール", attr: "無", sta: 76100, atk: 5000, def: 1111, ability: "高揚"},
-    { name: "Lv.110:狢【仮装】", search: "パンプキンポット", attr: "獣", sta: 61614, atk: 2875, def: 1216, ability: ""高揚},
+    { name: "Lv.110:狢【仮装】", search: "パンプキンポット", attr: "獣", sta: 61614, atk: 2875, def: 1216, ability: "高揚"},
     { name: "Lv.110:烏天狗", attr: "霊", sta: 49000, atk: 4500, def: 950, ability: "なし"},
     { name: "Lv.110:ココペリ", attr: "魔", sta: 62000, atk: 4400, def: 1050, ability: "なし"},
     { name: "Lv.110:ヤンヤン・テイテイ", attr: "地", sta: 79100, atk: 2300, def: 3000, ability: "高揚"},
