@@ -491,4 +491,5 @@ const enemyData = [
     { name: "Lv.55:フラッグペリタマ", attr: "獣", sta: 10000, atk: 1630, def: 820, ability: "なし"},
     { name: "Lv.55:コスモ", attr: "霊", sta: 9500, atk: 1100, def: 800, ability: "なし"},
     { name: "Lv.55:憤慨するタウマース", attr: "獣", sta: 8800, atk: 1500, def: 200, ability: "強打"},
+    { name: "Lv.54:グレートオックス", attr: "獣", sta: 6200, atk: 707, def: 397, ability: "なし"},
 ];
