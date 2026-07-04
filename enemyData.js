@@ -373,9 +373,4 @@ const enemyData = [
     { name: "Lv.100:タナトス", attr: "魔", sta: 32000, atk: 6500, def: 1000, ability: "なし"},
     { name: "Lv.100:猿飛", attr: "魔", sta: 48000, atk: 3700, def: 2000, ability: "強打"},
     { name: "Lv.100:時を統べる者【真似】", attr: "無", sta: 55200, atk: 4900, def: 1200, ability: "強打"},
-    { name: "Lv.100:", attr: "霊", sta: 40000, atk: 4200, def: 1700, ability: "高揚"},
-    { name: "Lv.100:", attr: "獣", sta: 50000, atk: 3000, def: 2300, ability: "高揚"},
-    { name: "Lv.100:", attr: "獣", sta: 31593, atk: 3750, def: 2050, ability: "高揚"},
-    { name: "Lv.100:", attr: "無", sta: 51100, atk: 5000, def: 1031, ability: "高揚"},
-    { name: "Lv.100:", attr: "地", sta: 31000, atk: 3000, def: 5000, ability: "高揚"},
 ];
