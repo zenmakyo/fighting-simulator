@@ -6,7 +6,6 @@ const enemyData = [
  // { name: "Lv.77:スロットルン【赤】", attr: "魔", sta: 12100, atk: 180, def: 3500, ability: "高揚"},
  // { name: "Lv.77:スロットルン", attr: "魔", sta: 10000, atk: 100, def: 3000, ability: "高揚"},
  // { name: "Lv.???:穢心の業・レイラク", attr: "魔", sta: lev => lev * 1080, atk: lev => lev * 64, def: lev => lev * 36, ability: "強打", levUp: true},
- // { name: "Lv.250:真経津鏡【極】", attr: "無", sta: 231600, atk: 12000, def: 170000, ability: "高揚"},
     { name: "Lv.220:旗に擬態した巨大蟲", attr: "地", sta: 131700, atk: 24110, def: 9020, ability: "高揚"},
     { name: "Lv.200:黒き魔弾", attr: "魔", sta: 136700, atk: 11610, def: 6350, ability: "粉砕"},
     { name: "Lv.150:もふもふランナーズ", attr: "獣", sta: 49900, atk: 8200, def: 5560, ability: "強打"},
