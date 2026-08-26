@@ -6,7 +6,7 @@ const enemyData = [
  // { name: "Lv.77:スロットルン【赤】", attr: "魔", sta: 12100, atk: 180, def: 3500, ability: "高揚"},
  // { name: "Lv.77:スロットルン", attr: "魔", sta: 10000, atk: 100, def: 3000, ability: "高揚"},
  // { name: "Lv.???:怨み累ねし怨霊", attr: "霊", sta: lev => lev * 1127, atk: lev => lev * 56, def: lev => lev * 40, ability: "強打", levUp: true},
-    { name: "Lv.245:純真舞戯ハルピュイア（綿密な花冠）", attr: "獣", sta: 255500, atk: 30110, def: 8650, ability: "高揚"},
+    { name: "Lv.245:純真舞戯ハルピュイア", attr: "獣", sta: 255500, atk: 30110, def: 8650, ability: "高揚"},
     { name: "Lv.240:エレクトラ（綿密な花冠）", attr: "獣", sta: 233400, atk: 25000, def: 8150, ability: "高揚"},
     { name: "Lv.180:ケライノー（綿密な花冠）", attr: "獣", sta: 143700, atk: 20140, def: 4520, ability: "高揚"},
     { name: "Lv.150:タウマース（綿密な花冠）", attr: "獣", sta: 67500, atk: 11140, def: 3220, ability: "粉砕"},
