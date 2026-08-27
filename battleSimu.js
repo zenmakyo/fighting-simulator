@@ -579,6 +579,8 @@ function startSimulation(count) {
         const currentContext = fetchBattleContext();
         if (!currentContext) return;
 
+        applyRanbuEnemyToContext(currentContext);
+
         const isLastRun = (i === count - 1);
 
         if (isLastRun) {
@@ -652,3 +654,36 @@ document.getElementById("reset-stats-btn").onclick = function() {
     document.getElementById("battle-log").innerHTML = "";      // ログも消去
     document.getElementById("battle-log-container").style.display = "none";
 };
+
+/**
+ * 画面選択が「乱舞」の場合、内部データを抽選された敵の情報に差し替える
+ */
+function applyRanbuEnemyToContext(context) {
+    if (!context || !context.enemy) return;
+
+    // 画面で選ばれた敵の名前を取得
+    const btnText = context.enemy.name;
+
+    // 対象フラグ（キー）を判定
+    let ranbuKey = null;
+    if (btnText.includes("幻獣乱舞の儀【虹】")) ranbuKey = "ranbuR";
+    if (btnText.includes("幻獣乱舞の儀【銀】")) ranbuKey = "ranbuS";
+
+    // 乱舞じゃなければ何もしない
+    if (!ranbuKey) return;
+
+    // enemyData から対象の敵（ranbuR: true など）を抽出
+    const targets = enemyData.filter(e => e[ranbuKey] === true);
+    if (targets.length === 0) return;
+
+    // ランダムに1体選択
+    const selected = targets[Math.floor(Math.random() * targets.length)];
+
+    // 計算用データ（context.enemy）を選ばれた実データで上書き
+    context.enemy.name = selected.name; // 戦闘ログには個別の名前が出ます
+    context.enemy.element = selected.attr;
+    context.enemy.sta = typeof selected.sta === 'function' ? selected.sta(100) : selected.sta;
+    context.enemy.atk = typeof selected.atk === 'function' ? selected.atk(100) : selected.atk;
+    context.enemy.def = typeof selected.def === 'function' ? selected.def(100) : selected.def;
+    context.enemy.ability = selected.ability;
+}
