@@ -272,6 +272,7 @@ const enemyData = [
     { name: "Lv.150:一反木綿", search: "空飛ぶ白布...？", attr: "無", sta: 50790, atk: 8500, def: 6000, ability: "高揚"},
     { name: "Lv.150:牛魔神", search: "葡萄の絵画", attr: "魔", sta: 38900, atk: 6400, def: 1250, ability: "強打"},
     { name: "Lv.150:ゲンペイボタル", attr: "霊", sta: 52100, atk: 5000, def: 5000, ability: "高揚", ranbuR: true},
+    { name: "Lv.150:格上喰らいの蹴獣", search: "ゴング", attr: "獣", sta: 51100, atk: 7790, def: 5320, ability: "高揚"},
     { name: "Lv.146:地を穿つ魔【熱波】", search: "ONSTAGE！", attr: "魔", sta: 85956, atk: 6986, def: 5300, ability: "高揚"},
     { name: "Lv.146:我来也・朧【仮装】", search: "パンプキンポット", attr: "魔", sta: 79125, atk: 5009, def:6309 , ability: "強打"},
     { name: "Lv.146:ヴィシュヌ", search: "林檎の絵画", attr: "霊", sta: 91064, atk: 7800, def: 5480, ability: "強打"},
