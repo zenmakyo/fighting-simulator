@@ -735,18 +735,89 @@ h1 {
     border: 1px solid #444;
 }
 
-/* 左上のホームロゴ */
+/* =========================
+   サイトメニュー
+   ========================= */
+
+/* 右上のロゴボタン */
 .site-logo {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 4px;
+    right: 4px;
     display: block;
-    width: 47px;
-    z-index: 1000;
+    width: 60px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 3000;
 }
 
 .site-logo img {
     display: block;
     width: 100%;
     height: auto;
+}
+
+/* 画面全体を覆う白色半透明の背景 */
+.site-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 12px 20px;
+    background: rgba(255, 255, 255, 0.85);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* hidden属性が付いている間は非表示 */
+.site-menu-overlay[hidden] {
+    display: none;
+}
+
+/* メニュー本体 */
+.site-menu {
+    width: 100%;
+    max-width: 500px;
+    padding: 0;
+    margin-top: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+/* 各メニューボタン */
+.site-menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 16px;
+    margin-bottom: 6px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fff;
+    color: #333;
+    font-size: 16px;
+    text-align: left;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/* 最後のボタンは下の余白をなくす */
+.site-menu-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 右端の矢印 */
+.site-menu-arrow {
+    flex-shrink: 0;
+    color: #777;
+    font-size: 14px;
 }
