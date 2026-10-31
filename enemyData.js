@@ -6,6 +6,7 @@ const enemyData = [
  // { name: "Lv.77:スロットルン【赤】", attr: "魔", sta: 12100, atk: 180, def: 3500, ability: "高揚"},
  // { name: "Lv.77:スロットルン", attr: "魔", sta: 10000, atk: 100, def: 3000, ability: "高揚"},
  // { name: "Lv.???:怨み累ねし怨霊", attr: "霊", sta: lev => lev * 1127, atk: lev => lev * 56, def: lev => lev * 40, ability: "強打", levUp: true},
+    { name: "Lv.190:双幽デッドワーズ", attr: "魔", sta: 123100, atk: 15300, def: 2200, ability: "高揚"},
     { name: "Lv.200:死の呪い", attr: "魔", sta: 116100, atk: 13700, def: 6666, ability: "粉砕"},
     { name: "カスタム敵", custom: true },
     { name: "Lv.???:幻獣乱舞の儀【虹】", attr: "-", sta: "???", atk: "???", def: "???", ability: "-"},
