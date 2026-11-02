@@ -373,7 +373,7 @@ function applyAbility(stats, abiName, plusValue) {
  */
 window.addEventListener('input', (e) => {
     // 幻獣の入力欄（base-sta-1など）が変更されたら計算
-    if (e.target.id && e.target.id.includes('base-')) {
+    if (e.target.id && (e.target.id.includes('base-') || e.target.id.includes('input-element-'))) {
         const num = e.target.id.split('-').pop();
         updatePhantomStats(num);
     }
