@@ -137,6 +137,7 @@ const armorList = [
     { name: "未選択", grade: 0, baseDef: 0, ability: "なし" },
     { name: "猛皇：蚩尤ノ冥煌鎧", grade: 10, baseDef: 245, ability: "猛皇" },
     { name: "猛将：飛翔の武冠", grade: 9, baseDef: 35, ability: "猛将" },
+    { name: "澪猛：澪猛の揺飾", grade: 9, baseDef: 80, ability: "澪猛" },
     { name: "虎咆：虎乗の覇気", grade: 6, baseDef: 10, ability: "虎咆" },
     { name: "闘争：ネメアーの獅子冠", grade: 9, baseDef: 40, ability: "闘争" },
     { name: "闘争：豪傑な下駄", grade: 7, baseDef: 15, ability: "闘争" },
@@ -363,6 +364,20 @@ const ABILITY_MASTER = {
             def: 0,
             luck: 0
         })
+    },
+
+    "澪猛": {
+        logic: (s, p) => {
+            if (["霊", "無"].includes(s.element)) {
+                return {
+                    sta: 0,
+                    atk: Math.ceil(s.atk * (p * 0.025)),
+                    def: 0,
+                    luck: 100
+                };
+            }
+            return { sta: 0, atk: 0, def: 0, luck: 0 };
+        }
     },
 
     "虎咆": {
