@@ -257,7 +257,7 @@ const enemyData = [
     { name: "Lv.160:シュバリエディオン", search: "西瓜の絵画", attr: "地", sta: 72000, atk: 6580, def: 3400, ability: "強打"},
     { name: "Lv.160:孟極", search: "蜜柑の絵画", attr: "獣", sta: 198210, atk: 9400, def: 3000, ability: "高揚"},
     { name: "Lv.160:宇迦之御魂神", search: "西瓜の絵画", attr: "地", sta: 122551, atk: 3500, def: 6000, ability: "高揚"},
-    { name: "Lv.160:キュベレー", attr: "地", sta: 179678, atk: 9151, def: 1515, ability: "高揚", ranbuR: true},
+    { name: "Lv.160:キュベレー", attr: "地", sta: 179700, atk: 9000, def: 1500, ability: "高揚", ranbuR: true},
     { name: "Lv.160:薬を作ろう！", attr: "獣", sta: 94400, atk: 3500, def: 3500, ability: "高揚"},
     { name: "Lv.160:アルモ・ワンダラーズ", attr: "無", sta: 105100, atk: 4000, def: 3500, ability: "高揚"},
     { name: "Lv.155:百花仙子【真夏】", search: "ONSTAGE！", attr: "霊", sta: 73830, atk: 8800, def: 7000, ability: "高揚"},
